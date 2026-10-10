@@ -1,0 +1,62 @@
+Stand: 2026-10-11 (YYYY-MM-DD)
+
+**1. Wer ist verantwortlich?**
+Anbieter der App WATT ist Hans-Joachim Steudel, E-Mail: hans-joachim.steudel@tum.de.
+
+**2. Das Wichtigste in Kürze**
+WATT ist so gebaut, dass wir als Anbieter **keine** Daten von dir erhalten. Alles, was du in WATT erfasst, bleibt verschlüsselt auf deinem Gerät. Es gibt kein Konto, keinen Server von uns, kein Tracking und keine Analyse- oder Absturzdienste. Daten verlassen dein Gerät nur in den unten genannten Fällen, und jeweils nur, weil du es einstellst oder auslöst.
+
+**3. Welche Daten WATT auf deinem Gerät speichert**
+- Arbeitszeiten mit Tätigkeiten, Notizen und Zeitpunkten der Erfassung
+- Einstellungen zu deiner Arbeitszeit (z. B. Land, Schulart, Amt, bei Referendar:innen der Beginn des Vorbereitungsdienstes, Beschäftigungsumfang), deine Funktionen mit Anrechnungsstunden und Gültigkeit, Fach und Klasse deiner Einträge, Kategorien, Stundenplan, Ferien und Feiertage
+- Dein Geburtsjahr und das Halbjahr deiner Geburt (nicht den Tag und nicht den Monat). WATT braucht sie, um Stunden- und Deputatsermäßigungen wegen Alters zu berücksichtigen.
+- Freiwillig die Stufe deines Grads der Behinderung (GdB). Das ist ein Gesundheitsdatum und besonders geschützt. WATT fragt danach, damit heutige und künftige Erleichterungen nach dem Schwerbehindertenrecht und dem Recht deines Landes richtig berücksichtigt werden. Ab einem GdB von 50 entspricht die Stufe dem genauen Wert. Wählst du ‚keine Angabe‘, rechnet WATT ohne diese Erleichterungen; du kannst die Abweichung dann selbst berücksichtigen, gedanklich oder durch manuelle Nacharbeit im Export.
+- Dein Deputatskonto mit Startwert und eingetragenen Ausgleichen.
+- Abwesenheiten, z. B. Krankheitstage. Das sind Gesundheitsdaten, die besonders geschützt sind.
+- ein Änderungsprotokoll mit Prüfsummen für deine Arbeitszeiten und Abwesenheiten, das nachvollziehbar macht, wann sie erfasst, geändert oder gelöscht wurden, einschließlich des Inhalts gelöschter Einträge (siehe Abschnitt 7). Einstellungen stehen nicht darin.
+- Deine Basisangaben zu Überlastungsanzeigen (z. B. Name, Schule, Adressat), erzeugte Überlastungsanzeigen sowie Telefon- und Gesprächsnotizen. Auch das können besonders geschützte Daten sein, etwa wenn eine Überlastungsanzeige gesundheitliche Auswirkungen beschreibt.
+
+**Hinweis zum letzten Punkt:** Diese Daten können, abhängig von deinen Eingaben und Speichereinstellungen, auch personenbezogene Daten anderer Personen enthalten, z. B. von Gesprächspartner:innen. Bitte erfasse nur, was du tatsächlich brauchst, und stelle sicher, dass du berechtigt bist, diese Daten zu erfassen und zu speichern.
+
+Diese Daten sind auf dem Gerät mit AES-256 verschlüsselt. Der Schlüssel ist mit einem Schlüssel aus dem geschützten Schlüsselspeicher von Android gesichert und kann nur auf diesem Gerät verwendet werden. In der App siehst du deine Daten erst nach dem Entsperren mit deiner Gerätesperre bzw. Biometrie. Für Funktionen im Hintergrund (z. B. Timer, Stundenplan, Sicherung) greift WATT auch ohne Entsperren auf die Daten zu, ausschließlich auf deinem Gerät.
+
+Reine Bedienzustände der App, etwa welche Hinweise du schon gesehen hast, liegen unverschlüsselt im geschützten Speicherbereich der App. Sie enthalten keine Angaben über dich oder deine Arbeit.
+
+**4. Was andere auf deinem Gerät sehen können**
+- **Benachrichtigungen:** Solange ein Timer läuft oder eine Erinnerung oder ein Hinweis ansteht, zeigt WATT eine Benachrichtigung. Auf dem Sperrbildschirm zeigt WATT, soweit es deine Android-Einstellungen zulassen, nur „WATT“ oder einen allgemeinen Hinweis ohne persönliche Angaben oder Werte, z. B. die Frage, ob du für heute noch etwas nachtragen möchtest, oder ein Hinweis auf Auffälligkeiten in deiner Woche. Bei entsperrtem Gerät sind die Inhalte sichtbar, z. B. die laufende Tätigkeit. Mit der Einstellung ‚Details anzeigen‘ legst du fest, ob Meldungen auch bei entsperrtem Gerät Tätigkeiten, Uhrzeiten und Werte zeigen. Benachrichtigungen kannst du jederzeit in den Android-Einstellungen für WATT ganz oder teilweise abschalten; dort legst du auch fest, was der Sperrbildschirm zeigt.
+- **Dynamisches App-Symbol:** Ist das dynamische App-Symbol eingeschaltet, zeigt das Symbol von WATT auf dem Startbildschirm deine aktuelle Auslastung an. Das kann jede:r sehen, der deinen Startbildschirm sieht. Du kannst das dynamische App-Symbol in den Einstellungen von WATT ausschalten.
+- **Widget:** Hast du das WATT-Widget eingerichtet, zeigt es auf einer der Seiten deines Startbildschirms die gewählten Tätigkeiten und gegebenenfalls, welche gerade läuft und seit wann. Das kann jede:r sehen, der diese Seite sieht. Du kannst das Widget jederzeit entfernen.
+- **Kurzbefehle und Schnelleinstellungen:** Hältst du das WATT-Symbol gedrückt, zeigt Android die zuletzt genutzten Tätigkeiten. Die WATT-Kachel in den Schnelleinstellungen zeigt bei entsperrtem Gerät die laufende Tätigkeit und seit wann; bei gesperrtem Gerät nur, ob ein Timer läuft. Die Kachel kannst du in den Schnelleinstellungen entfernen.
+- **Bildschirmfotos:** WATT verhindert Bildschirmfotos und Bildschirmaufnahmen und zeigt in der Übersicht der zuletzt verwendeten Apps keine Inhalte.
+
+**5. Wann Daten dein Gerät verlassen**
+
+**a) Exporte, Überlastungsanzeigen und Teilen (nur, wenn du sie aktiv nutzt)**
+Wenn du Daten exportierst, eine Überlastungsanzeige an eine Mail-App übergibst, ein PDF speicherst oder druckst, entscheidest du, wohin die Daten gehen. WATT übergibt sie dazu an die von dir gewählte App bzw. den Speicherort. Überlastungsanzeigen, Berichte und Aktenauszüge enthalten außerdem einen Prüfvermerk mit der Anzahl der Einträge im Änderungsprotokoll, dem Zeitpunkt und einer Prüfsumme, auch als QR-Code; persönliche Inhalte des Protokolls enthält er nicht. Berichte und Exporte enthalten dein Soll, aber keine Angaben zu Alter, Schwerbehinderung und Ermäßigungen, außer du schaltest das beim Export ausdrücklich ein. Der vollständige Klartext-Export enthält alle Daten; WATT weist vorher darauf hin. **Die Daten sind dabei nicht verschlüsselt**, sondern für die empfangende App und alle, die darauf Zugriff haben, lesbar. Es gelten die (Datenschutz-)Bedingungen der App, an die du die Daten übergibst. Siehe hierzu auch den nachfolgenden Punkt zur Nutzung von Cloud-Diensten.
+
+**b) Sicherung in einen Ordner (nur, wenn du sie aktiv nutzt oder die Automatik aktivierst)**
+Wählst du für die Sicherung einen Ordner, speichert WATT dort verschlüsselte Sicherungsdateien. Liegt dieser Ordner bei einem Cloud-Dienst, lädt dessen App die Dateien hoch. Dafür gelten die Bedingungen dieses Dienstes. Den Inhalt der Dateien kann ohne deine Passphrase bzw. dein Notfallblatt niemand lesen.
+
+**c) Sicherung über die Sicherungsfunktion deines Geräts (nur, wenn du die Automatik aktivierst)**
+Wählst du die automatische Sicherung über dein Gerät, legt WATT eine verschlüsselte Sicherungsdatei an. Die Sicherungsfunktion deines Geräts speichert sie, bei den meisten Geräten in deinem Google-Konto, und überträgt sie beim Umzug auf ein neues Gerät mit. WATT selbst baut dafür keine Verbindung auf. Gesichert wird ausschließlich diese Datei; in eine Cloud nur, wenn die Sicherung Ende-zu-Ende verschlüsselt werden kann. Weder der Anbieter der Sicherung noch wir können ihren Inhalt lesen. Für die Speicherung gelten die Bedingungen des jeweiligen Anbieters.
+
+**d) Abruf von Daten aus dem Internet (nur, wenn du die Funktion aktiv nutzt oder die Automatik aktivierst)**
+WATT kann Daten aus dem Internet laden, derzeit die Ferientermine von der Website der Kultusministerkonferenz. Dabei erfährt der jeweilige Server wie bei jedem Aufruf im Browser technisch notwendige Daten: deine IP-Adresse, den Zeitpunkt und Angaben zur anfragenden Software. Im Schulnetz kann die IP-Adresse z. B. auf deine Schule hinweisen. Aus WATT werden dabei **keine** Daten übertragen. Für die Verarbeitung auf ihren Servern sind die jeweiligen Anbieter verantwortlich; es gelten deren Datenschutzerklärungen.
+
+**Für alle Fälle in diesem Abschnitt gilt:** Automatische Funktionen kannst du jederzeit in den Einstellungen von WATT deaktivieren. Manuelle Funktionen laufen nur, wenn du sie selbst auslöst, in der Regel mit einer Auswahl, wohin die Daten gehen. Vor dem ersten Abruf von Daten aus dem Internet fragt WATT dich ausdrücklich.
+
+**6. Berechtigungen und Zugriffe**
+- **Daten und Dateien:** WATT speichert seine verschlüsselten Daten im geschützten Speicherbereich der App, auf den andere Apps keinen Zugriff haben; dafür ist keine Berechtigung nötig. Darüber hinaus greift WATT nur auf Dateien und Ordner zu, die du selbst auswählst, z. B. für Importe, Exporte oder die Sicherung in einen Ordner. Eine allgemeine Speicherberechtigung gibt es nicht.
+- **Internet:** ausschließlich für den Abruf von Daten nach Abschnitt 5 d)
+- **Benachrichtigungen:** für den laufenden Timer und Erinnerungen (siehe Abschnitt 4)
+- **Start nach Neustart des Geräts:** damit Timer, Erinnerungen und geplante Aufgaben nach einem Neustart weiterlaufen
+- **Biometrie bzw. Gerätesperre:** zum Entsperren der App. WATT erhält dabei keine biometrischen Daten.
+
+**7. Speicherdauer und Löschung**
+Deine Daten bleiben auf dem Gerät, bis du die App deinstallierst, eine Sicherung einspielst, die den Datenbestand ersetzt, oder ein Update den Datenbestand zurücksetzt. Deine Basisangaben zu Überlastungsanzeigen kannst du jederzeit ändern oder löschen. Löschst du in WATT Arbeitszeiten oder Abwesenheiten, verschwinden sie aus allen Ansichten und Auswertungen. Zum Nachweis bleiben Arbeitszeiten und Abwesenheiten wie Krankheitstage jedoch mit ihrem Inhalt und einer optionalen Begründung im Änderungsprotokoll erhalten, damit nachvollziehbar ist, was wann geändert wurde; das gilt auch für Sicherungen. Dienstfreie Tage zählen wie Feiertage zu den Einstellungen und werden vollständig gelöscht. Ausnahme: Löschst du einen Eintrag, den du gerade selbst angelegt und noch nicht bearbeitet hast, und ist seitdem nichts anderes in WATT geschehen – auch nicht automatisch –, wird er in der Regel vollständig entfernt. Ob das zutrifft, zeigt dir der Löschdialog. Das gesamte Änderungsprotokoll – inklusive der gelöschten Daten – kannst du in den Einstellungen löschen; es beginnt dann neu, und frühere Nachweise lassen sich nicht mehr gegen dieses Gerät prüfen. Löschst du eine gesendete Überlastungsanzeige oder eine Gesprächsnotiz, wird ihr Inhalt entfernt; erhalten bleibt nur ein Vermerk, dass es sie gab. Nicht gesendete Entwürfe werden vollständig gelöscht. Sicherungsdateien in einem Ordner bleiben dort, bis du sie löschst oder WATT sie nach der eingestellten Anzahl durch neuere ersetzt, und enthalten den Stand zum Zeitpunkt der Sicherung. Eine Sicherung über dein Gerät löschst du in den Einstellungen deines Geräts bzw. deines Google-Kontos.
+
+**8. Deine Rechte**
+Da wir keine Daten von dir erhalten, liegen bei uns keine Daten vor, die wir dir auskunften, berichtigen oder löschen könnten. Alles liegt in deiner Hand, direkt in der App. Fragen kannst du uns trotzdem jederzeit stellen: hans-joachim.steudel@tum.de. Du hast außerdem das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, z. B. beim Bayerischen Landesamt für Datenschutzaufsicht.
+
+**9. Änderungen**
+Ändert sich, wie WATT mit Daten umgeht, passen wir diese Erklärung an und weisen in der App darauf hin.
