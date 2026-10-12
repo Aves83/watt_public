@@ -1,4 +1,4 @@
-Stand: 2026-10-11 (YYYY-MM-DD)
+Stand: 2026-10-12 (YYYY-MM-DD)
 
 **1. Wer ist verantwortlich?**
 Anbieter der App WATT ist Hans-Joachim Steudel, E-Mail: hans-joachim.steudel@tum.de.
@@ -27,7 +27,7 @@ Reine Bedienzustände der App, etwa welche Hinweise du schon gesehen hast, liege
 - **Dynamisches App-Symbol:** Ist das dynamische App-Symbol eingeschaltet, zeigt das Symbol von WATT auf dem Startbildschirm deine aktuelle Auslastung an. Das kann jede:r sehen, der deinen Startbildschirm sieht. Du kannst das dynamische App-Symbol in den Einstellungen von WATT ausschalten.
 - **Widget:** Hast du das WATT-Widget eingerichtet, zeigt es auf einer der Seiten deines Startbildschirms die gewählten Tätigkeiten und gegebenenfalls, welche gerade läuft und seit wann. Das kann jede:r sehen, der diese Seite sieht. Du kannst das Widget jederzeit entfernen.
 - **Kurzbefehle und Schnelleinstellungen:** Hältst du das WATT-Symbol gedrückt, zeigt Android die zuletzt genutzten Tätigkeiten. Die WATT-Kachel in den Schnelleinstellungen zeigt bei entsperrtem Gerät die laufende Tätigkeit und seit wann; bei gesperrtem Gerät nur, ob ein Timer läuft. Die Kachel kannst du in den Schnelleinstellungen entfernen.
-- **Bildschirmfotos:** WATT verhindert Bildschirmfotos und Bildschirmaufnahmen und zeigt in der Übersicht der zuletzt verwendeten Apps keine Inhalte.
+- **Bildschirmfotos:** WATT verhindert Bildschirmfotos und Bildschirmaufnahmen und zeigt in der Übersicht der zuletzt verwendeten Apps keine Inhalte. Erlaubst du Bildschirmfotos in den Einstellungen von WATT, z. B. um einen Fehler zu melden, zeigen sie alles, was gerade auf dem Bildschirm steht. Sie landen dann in deiner Galerie und je nach deinen Einstellungen in deren Cloud-Sicherung, außerhalb des Schutzes von WATT. Auf Android 12 und älter kann die Übersicht der zuletzt verwendeten Apps dann den letzten Bildschirm zeigen. Du kannst Bildschirmfotos jederzeit wieder sperren.
 
 **5. Wann Daten dein Gerät verlassen**
 
