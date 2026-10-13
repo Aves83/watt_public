@@ -1,4 +1,4 @@
-Stand: 2026-10-12 (YYYY-MM-DD)
+Stand: 2026-10-13 (YYYY-MM-DD)
 
 **1. Wer ist verantwortlich?**
 Anbieter der App WATT ist Hans-Joachim Steudel, E-Mail: hans-joachim.steudel@tum.de.
@@ -41,7 +41,7 @@ Wählst du für die Sicherung einen Ordner, speichert WATT dort verschlüsselte 
 Wählst du die automatische Sicherung über dein Gerät, legt WATT eine verschlüsselte Sicherungsdatei an. Die Sicherungsfunktion deines Geräts speichert sie, bei den meisten Geräten in deinem Google-Konto, und überträgt sie beim Umzug auf ein neues Gerät mit. WATT selbst baut dafür keine Verbindung auf. Gesichert wird ausschließlich diese Datei; in eine Cloud nur, wenn die Sicherung Ende-zu-Ende verschlüsselt werden kann. Weder der Anbieter der Sicherung noch wir können ihren Inhalt lesen. Für die Speicherung gelten die Bedingungen des jeweiligen Anbieters.
 
 **d) Abruf von Daten aus dem Internet (nur, wenn du die Funktion aktiv nutzt oder die Automatik aktivierst)**
-WATT kann Daten aus dem Internet laden, derzeit die Ferientermine von der Website der Kultusministerkonferenz. Dabei erfährt der jeweilige Server wie bei jedem Aufruf im Browser technisch notwendige Daten: deine IP-Adresse, den Zeitpunkt und Angaben zur anfragenden Software. Im Schulnetz kann die IP-Adresse z. B. auf deine Schule hinweisen. Aus WATT werden dabei **keine** Daten übertragen. Für die Verarbeitung auf ihren Servern sind die jeweiligen Anbieter verantwortlich; es gelten deren Datenschutzerklärungen.
+WATT kann Daten aus dem Internet laden, z. B. Ferientermine von der Website der Kultusministerkonferenz oder deinen Stundenplan über einen Kalenderlink von Untis bzw. dem Anbieter, den deine Schule nutzt. Dabei erfährt der jeweilige Server wie bei jedem Aufruf im Browser technisch notwendige Daten: deine IP-Adresse, den Zeitpunkt und Angaben zur anfragenden Software. Im Schulnetz kann die IP-Adresse z. B. auf deine Schule hinweisen. Bei einem Kalenderlink erkennt der Anbieter außerdem am Link, welcher Stundenplan abgerufen wird; diese Daten liegen dort ohnehin vor. Aus WATT werden dabei **keine** Daten übertragen. Für die Verarbeitung auf ihren Servern sind die jeweiligen Anbieter verantwortlich; es gelten deren Datenschutzerklärungen.
 
 **Für alle Fälle in diesem Abschnitt gilt:** Automatische Funktionen kannst du jederzeit in den Einstellungen von WATT deaktivieren. Manuelle Funktionen laufen nur, wenn du sie selbst auslöst, in der Regel mit einer Auswahl, wohin die Daten gehen. Vor dem ersten Abruf von Daten aus dem Internet fragt WATT dich ausdrücklich.
 
