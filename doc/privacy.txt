@@ -1,4 +1,4 @@
-Stand: 2026-10-13 (YYYY-MM-DD)
+Stand: 2026-10-16 (YYYY-MM-DD)
 
 **1. Wer ist verantwortlich?**
 Anbieter der App WATT ist Hans-Joachim Steudel, E-Mail: hans-joachim.steudel@tum.de.
@@ -32,7 +32,7 @@ Reine Bedienzustände der App, etwa welche Hinweise du schon gesehen hast, liege
 **5. Wann Daten dein Gerät verlassen**
 
 **a) Exporte, Überlastungsanzeigen und Teilen (nur, wenn du sie aktiv nutzt)**
-Wenn du Daten exportierst, eine Überlastungsanzeige an eine Mail-App übergibst, ein PDF speicherst oder druckst, entscheidest du, wohin die Daten gehen. WATT übergibt sie dazu an die von dir gewählte App bzw. den Speicherort. Überlastungsanzeigen, Berichte und Aktenauszüge enthalten außerdem einen Prüfvermerk mit der Anzahl der Einträge im Änderungsprotokoll, dem Zeitpunkt und einer Prüfsumme, auch als QR-Code; persönliche Inhalte des Protokolls enthält er nicht. Berichte und Exporte enthalten dein Soll, aber keine Angaben zu Alter, Schwerbehinderung und Ermäßigungen, außer du schaltest das beim Export ausdrücklich ein. Der vollständige Klartext-Export enthält alle Daten; WATT weist vorher darauf hin. **Die Daten sind dabei nicht verschlüsselt**, sondern für die empfangende App und alle, die darauf Zugriff haben, lesbar. Es gelten die (Datenschutz-)Bedingungen der App, an die du die Daten übergibst. Siehe hierzu auch den nachfolgenden Punkt zur Nutzung von Cloud-Diensten.
+Wenn du Daten exportierst, eine Überlastungsanzeige an eine Mail-App übergibst, ein PDF speicherst oder druckst, entscheidest du, wohin die Daten gehen. WATT übergibt sie dazu an die von dir gewählte App bzw. den Speicherort. Überlastungsanzeigen, Berichte und Aktenauszüge enthalten außerdem einen Prüfvermerk mit der Anzahl der Einträge im Änderungsprotokoll, dem Zeitpunkt und einer Prüfsumme, auch als QR-Code; persönliche Inhalte des Protokolls enthält er nicht. Berichte und Exporte enthalten dein Soll und auch Angaben zu Urlaub, Alter (Geburtszeitraum), Schwerbehinderung, Ermäßigungen und Deputat, außer du schaltest das beim Export aus. Der vollständige Klartext-Export (JSON oder XML) enthält alle Daten; WATT weist vorher darauf hin. **Die Daten sind dabei nicht verschlüsselt**, sondern für die empfangende App und alle, die darauf Zugriff haben, lesbar. Es gelten die (Datenschutz-)Bedingungen der App, an die du die Daten übergibst. Siehe hierzu auch den nachfolgenden Punkt zur Nutzung von Cloud-Diensten.
 
 **b) Sicherung in einen Ordner (nur, wenn du sie aktiv nutzt oder die Automatik aktivierst)**
 Wählst du für die Sicherung einen Ordner, speichert WATT dort verschlüsselte Sicherungsdateien. Liegt dieser Ordner bei einem Cloud-Dienst, lädt dessen App die Dateien hoch. Dafür gelten die Bedingungen dieses Dienstes. Den Inhalt der Dateien kann ohne deine Passphrase bzw. dein Notfallblatt niemand lesen.
