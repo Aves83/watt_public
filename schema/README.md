@@ -1,4 +1,4 @@
-Stand: 2026-10-16 (YYYY-MM-DD)
+Stand: 2026-10-17 (YYYY-MM-DD)
 
 # Schnittstellen von WATT: Datenformat `watt-daten` als JSON und XML
 
@@ -8,7 +8,7 @@ WATT (Workload Analysis & Time-Tracking for Teachers) exportiert alle Daten eine
 | --- | --- |
 | `watt-daten-17.schema.json` | JSON Schema (Draft 2020-12) der Formatversion 17 (seit 12.10.2026, Fassung „Bergamotte“ und folgende) |
 | `watt-daten-16.schema.json` | JSON Schema (Draft 2020-12) der Formatversion 16 (11.10.2026 bis 12.10.2026, Fassung „Apfel“) |
-| `watt-daten-17.xsd` | XML Schema (XSD 1.0) der XML-Darstellung der Formatversion 17 |
+| `watt-daten-17.xsd` | XML Schema (XSD 1.0) der XML-Darstellung der Formatversion 17 (seit 16.10.2026 die erste Version mit XML-Export) |
 
 Die vollständige Beschreibung der Felder, der Hash-Ketten und der verschlüsselten Sicherung steht im Repository von WATT in `docs/DATENFORMAT.md`; die öffentliche Kopie dieses Ordners liegt unter https://github.com/Aves83/watt_public/tree/main/schema.
 
@@ -50,7 +50,7 @@ xmllint --noout --schema watt-daten-17.xsd WATT_2026-10-16.xml
 
 ## Versionen
 
-Jede Formatversion erhält ein eigenes Schema; ältere Dateien bleiben lesbar (siehe `docs/DATENFORMAT.md`, Tabelle der Versionen). Zu jeder an Testende ausgelieferten Fassung von WATT liegt im Repository eine Beispieldatei, die ein Test gegen das Schema ihrer Version prüft.
+Jede Formatversion ab 16 erhält ein eigenes JSON Schema und jede Formatversion ab 17 ein eigenes XML Schema (`watt-daten-<Version>.schema.json`, `watt-daten-<Version>.xsd`); die Schemas älterer Versionen bleiben dauerhaft liegen, eine neue Formatversion bringt neue Dateien dazu. Ältere Dateien bleiben lesbar (siehe `docs/DATENFORMAT.md`, Tabelle der Versionen). Zu jeder an Testende ausgelieferten Fassung von WATT liegt im Repository eine Beispieldatei, die ein Test gegen das JSON Schema und, ab Version 17, gegen das XML Schema ihrer Version prüft.
 
 ## Lizenz
 
