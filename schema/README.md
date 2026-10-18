@@ -1,28 +1,21 @@
-Stand: 2026-10-17 (YYYY-MM-DD)
+Stand: 2026-10-18 (YYYY-MM-DD)
 
-# Schnittstellen von WATT: Datenformat `watt-daten` als JSON und XML
+# Datenformat `watt-daten`
 
-WATT (Workload Analysis & Time-Tracking for Teachers) exportiert alle Daten einer Lehrkraft auf Wunsch als Klartext im offenen Datenformat `watt-daten`, wahlweise als JSON oder als XML (in der App unter „Mehr → Daten, Sicherheit & Export → Export → Klartext“). Beide Dateien haben denselben Inhalt und dieselbe Formatversion. Dieser Ordner enthält die Schemas dazu, damit sich die Dateien ohne WATT prüfen und in Tabellenkalkulationen, Skripten oder anderen Programmen weiterverarbeiten lassen.
+WATT exportiert die erfassten Daten im Format `watt-daten` als JSON oder als XML. Hier findest du die Schemas aller veröffentlichten Formatversionen, den Zusammenhang zwischen XML und JSON, eine Anleitung zum Prüfen einer Datei und die Änderungen je Version.
 
-| Datei | Inhalt |
-| --- | --- |
-| `watt-daten-17.schema.json` | JSON Schema (Draft 2020-12) der Formatversion 17 (seit 12.10.2026, Fassung „Bergamotte“ und folgende) |
-| `watt-daten-16.schema.json` | JSON Schema (Draft 2020-12) der Formatversion 16 (11.10.2026 bis 12.10.2026, Fassung „Apfel“) |
+## Versionen
 
-Die vollständige Beschreibung der Felder, der Hash-Ketten und der verschlüsselten Sicherung steht im Repository von WATT in `docs/DATENFORMAT.md`; die öffentliche Kopie dieses Ordners liegt unter https://github.com/Aves83/watt_public/tree/main/schema.
+| Version | Schemata | Genutzt von | JSON einlesbar bis |
+| --- | --- | --- | --- |
+| 17 | `watt-daten-17.schema.json` | WATT 0.8.100 „Bergamotte“ | WATT 0.8.100 „Bergamotte“ |
+| 16 | `watt-daten-16.schema.json` | WATT 0.8.94 „Apfel“ | WATT 0.8.100 „Bergamotte“ |
 
-## Was die Dateien enthalten
+„Genutzt von“ nennt die Fassungen von WATT, die diese Version schreiben, „JSON einlesbar bis“ die neueste Fassung, die eine JSON-Datei dieser Version einlesen kann.
 
-Eine Datei enthält den gesamten Datenbestand: Profil und Beschäftigungsumfang, Kategorien, Ferien, unterrichtsfreie Tage, Stundenplan, alle erfassten Tätigkeiten, Abwesenheiten, das Änderungsprotokoll der Arbeitszeiten (Arbeitszeitkette), den laufenden Timer, Einstellungen der Auswertung, Funktionen, die Nachweise (Überlastungsanzeigen samt PDF-Dokumenten als Base64, Gesprächsnotizen, Nachweiskette) und seit Version 17 den Kalenderlink mit Zuordnungen und Entscheidungen. Der Klartext-Export ist nicht für Dritte gedacht; WATT weist vor dem Export darauf hin.
+Nachfolgend die allgemeinen Regeln für beide Formate und die Änderungen je Version.
 
-## Grundregeln
-
-- Zeitpunkte stehen als ISO 8601 in UTC, z. B. `2026-09-29T08:00:00.123Z`; Kalendertage als `JJJJ-MM-TT` und Uhrzeiten als `HH:MM`, beide in der Zeitzone `Europe/Berlin`.
-- Aufzählungen stehen als Name der Konstante, z. B. `KRANKHEIT`.
-- Der Export enthält alle Felder, auch leere (`null`); WATT übergeht beim Einlesen unbekannte Felder. Die Schemas beschreiben deshalb genau die Felder, die WATT schreibt (`additionalProperties: false`); Pflichtfelder sind die, ohne die WATT eine Datei ablehnt.
-- Die Hash-Ketten lassen sich ohne WATT nachrechnen: Für jedes Glied werden die Felder in der dokumentierten Reihenfolge jeweils als `<Länge in UTF-8-Bytes>:<Wert>` aneinandergehängt; `hash` ist SHA-256 darüber, `prev` der `hash` des Vorgängers (beim ersten Glied `0`).
-
-## XML-Darstellung
+## Zusammenhang von XML und JSON
 
 Die XML-Datei bildet das JSON eins zu eins ab:
 
@@ -31,20 +24,34 @@ Die XML-Datei bildet das JSON eins zu eins ab:
 - Das Verzeichnis `antworten` mit freien Schlüsseln wird zu einem Element mit einem Kindelement `antwort` je Paar; der Schlüssel steht im Attribut `schluessel`.
 - Text steht als Inhalt des Elements, Zahlen und Wahrheitswerte in der Schreibweise des JSON (`22.5`, `true`); ein fehlender Wert (`null`) ist ein leeres Element mit `xsi:nil="true"`.
 
-WATT liest XML nicht ein; Daten kommen nur über die verschlüsselte Sicherung oder den JSON-Klartext zurück.
+XML und JSON können aus WATT direkt exportiert werden, importiert werden kann aber nur JSON.
 
 ## Prüfen
 
 JSON Schema, z. B. mit [ajv](https://ajv.js.org/):
 
 ```
-npx ajv-cli validate -s watt-daten-17.schema.json -d WATT_2026-10-16.json --spec=draft2020
+npx ajv-cli validate -s watt-daten-<Version>.schema.json -d <Datei>.json --spec=draft2020
 ```
 
-## Versionen
+XML Schema, z. B. mit xmllint:
 
-Jede Formatversion ab 16 erhält ein eigenes JSON Schema und jede Formatversion ab 17 ein eigenes XML Schema (`watt-daten-<Version>.schema.json`, `watt-daten-<Version>.xsd`); die Schemas älterer Versionen bleiben dauerhaft liegen, eine neue Formatversion bringt neue Dateien dazu. Ältere Dateien bleiben lesbar (siehe `docs/DATENFORMAT.md`, Tabelle der Versionen). Zu jeder an Testende ausgelieferten Fassung von WATT liegt im Repository eine Beispieldatei, die ein Test gegen das JSON Schema und, ab Version 17, gegen das XML Schema ihrer Version prüft.
+```
+xmllint --noout --schema watt-daten-<Version>.xsd <Datei>.xml
+```
+
+## Änderungen je Version
+
+### Version 17
+
+- Neue Felder: `kalenderlink`, `kalenderZuordnungen`, `kalenderEntscheidungen`.
+- Neue Felder in `stundenplan`: `quelle`; in `stundenplan.eintraege[]`: `ausKalenderlink`.
+- Neuer Wert `KALENDERLINK` in `eintraege[].quelle`.
+
+### Version 16
+
+- Erste veröffentlichte Version.
 
 ## Lizenz
 
-Die Dateien in diesem Ordner (Schemas und diese Beschreibung) stehen unter der Lizenz [Creative Commons Namensnennung 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.de). Namensnennung: „Hans-Joachim Steudel, WATT – Workload Analysis & Time-Tracking for Teachers“. WATT selbst ist proprietär; die Nutzungsbedingungen stehen in der App unter „Mehr → Rechtliches → Nutzungsbedingungen“.
+Die Dateien in diesem Ordner (Schemas und diese Beschreibung) stehen unter der Lizenz [Creative Commons Namensnennung 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.de). Namensnennung: „Hans-Joachim Steudel, WATT – Workload Analysis & Time-Tracking for Teachers“. WATT selbst ist proprietär; es gelten die Nutzungsbedingungen in [`LICENSE_WATT`](../LICENSE_WATT).
