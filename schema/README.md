@@ -8,7 +8,6 @@ WATT (Workload Analysis & Time-Tracking for Teachers) exportiert alle Daten eine
 | --- | --- |
 | `watt-daten-17.schema.json` | JSON Schema (Draft 2020-12) der Formatversion 17 (seit 12.10.2026, Fassung „Bergamotte“ und folgende) |
 | `watt-daten-16.schema.json` | JSON Schema (Draft 2020-12) der Formatversion 16 (11.10.2026 bis 12.10.2026, Fassung „Apfel“) |
-| `watt-daten-17.xsd` | XML Schema (XSD 1.0) der XML-Darstellung der Formatversion 17 (seit 16.10.2026 die erste Version mit XML-Export) |
 
 Die vollständige Beschreibung der Felder, der Hash-Ketten und der verschlüsselten Sicherung steht im Repository von WATT in `docs/DATENFORMAT.md`; die öffentliche Kopie dieses Ordners liegt unter https://github.com/Aves83/watt_public/tree/main/schema.
 
@@ -40,12 +39,6 @@ JSON Schema, z. B. mit [ajv](https://ajv.js.org/):
 
 ```
 npx ajv-cli validate -s watt-daten-17.schema.json -d WATT_2026-10-16.json --spec=draft2020
-```
-
-XML Schema, z. B. mit xmllint:
-
-```
-xmllint --noout --schema watt-daten-17.xsd WATT_2026-10-16.xml
 ```
 
 ## Versionen
