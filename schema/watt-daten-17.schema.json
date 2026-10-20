@@ -155,7 +155,7 @@
       "required": ["id", "art", "von", "bis", "quelle"],
       "properties": {
         "id": { "type": "integer" },
-        "art": { "type": "string", "enum": ["SOMMER", "ALLERHEILIGEN", "WEIHNACHTEN", "FRUEHJAHR", "OSTERN", "PFINGSTEN", "SONSTIGE"] },
+        "art": { "type": "string", "enum": ["SOMMER", "ALLERHEILIGEN", "WEIHNACHTEN", "WINTER", "FRUEHJAHR", "OSTERN", "PFINGSTEN", "EINZELTAG", "SONSTIGE"] },
         "von": { "$ref": "#/$defs/tag" },
         "bis": { "$ref": "#/$defs/tag" },
         "name": { "$ref": "#/$defs/textOderNull" },

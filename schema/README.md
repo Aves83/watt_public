@@ -1,4 +1,4 @@
-Stand: 2026-10-18 (YYYY-MM-DD)
+Stand: 2026-10-20 (YYYY-MM-DD)
 
 # Datenformat `watt-daten`
 
@@ -47,10 +47,12 @@ xmllint --noout --schema watt-daten-<Version>.xsd <Datei>.xml
 - Neue Felder: `kalenderlink`, `kalenderZuordnungen`, `kalenderEntscheidungen`.
 - Neue Felder in `stundenplan`: `quelle`; in `stundenplan.eintraege[]`: `ausKalenderlink`.
 - Neuer Wert `KALENDERLINK` in `eintraege[].quelle`.
+- Korrektur (20.10.2026): Ferienarten `WINTER` und `EINZELTAG` in `ferien[].art` ergänzt, die WATT schon schrieb (JSON Schema und XSD).
 
 ### Version 16
 
 - Erste veröffentlichte Version.
+- Korrektur (20.10.2026): Ferienarten `WINTER` und `EINZELTAG` in `ferien[].art` ergänzt, die WATT schon schrieb.
 
 ## Lizenz
 
