@@ -1,0 +1,562 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Aves83/watt_public/schema/watt-daten-18.schema.json",
+  "title": "WATT Datenformat watt-daten, Version 18",
+  "description": "Klartext-Export und Inhalt der verschlüsselten Sicherung von WATT (Workload Analysis & Time-Tracking for Teachers), Formatversion 18 (seit 17.10.2026). Mit umfang BUCHUNGEN nur die Buchungsdaten eines Zeitraums (seit 18.10.2026): Profil, Stundenplan, Einstellungen, Timer und Nachweise null, Protokoll, Funktionen und Kalenderlisten leer. Beschreibung in docs/DATENFORMAT.md. Zeitpunkte in UTC (ISO 8601), Kalendertage und Uhrzeiten in der Zeitzone Europe/Berlin. Lizenz: CC BY 4.0, Hans-Joachim Steudel.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "exportiertAm", "appVersion", "kategorien", "ferien", "sonderTage", "eintraege", "abwesenheiten", "protokoll"],
+  "properties": {
+    "format": { "const": "watt-daten" },
+    "version": { "const": 18 },
+    "exportiertAm": { "$ref": "#/$defs/zeitpunkt", "description": "Zeitpunkt des Exports" },
+    "appVersion": { "type": "string", "description": "Version der App, z. B. 0.8.123; leer beim Nachrechnen der Prüfsumme eines Neubeginns" },
+    "umfang": { "type": "string", "enum": ["VOLLSTAENDIG", "BUCHUNGEN"], "default": "VOLLSTAENDIG", "description": "VOLLSTAENDIG: alle Daten; BUCHUNGEN: nur Einträge, Abwesenheiten, Tagesmarkierungen und Ferien eines Zeitraums mit den benutzten Kategorien (angezeigter Name in name). Fehlt das Feld, gilt VOLLSTAENDIG. Zeitraum und Filter stehen nicht in der Datei." },
+    "profil": { "oneOf": [{ "$ref": "#/$defs/profil" }, { "type": "null" }], "description": "Bei umfang BUCHUNGEN null" },
+    "kategorien": { "type": "array", "items": { "$ref": "#/$defs/kategorie" }, "description": "Oberkategorien in der Reihenfolge der Anzeige" },
+    "ferien": { "type": "array", "items": { "$ref": "#/$defs/ferienabschnitt" } },
+    "sonderTage": { "type": "array", "items": { "$ref": "#/$defs/sonderTag" }, "description": "Unterrichtsfreie Tage (Tagesmarkierung)" },
+    "stundenplan": { "oneOf": [{ "$ref": "#/$defs/stundenplan" }, { "type": "null" }], "description": "Bei umfang BUCHUNGEN null" },
+    "eintraege": { "type": "array", "items": { "$ref": "#/$defs/eintrag" }, "description": "Erfasste Tätigkeiten" },
+    "abwesenheiten": { "type": "array", "items": { "$ref": "#/$defs/abwesenheit" } },
+    "protokoll": { "type": "array", "items": { "$ref": "#/$defs/glied" }, "description": "Änderungsprotokoll der Arbeitszeiten (Arbeitszeitkette) mit SHA-256-Hash-Kette" },
+    "laufenderTimer": { "oneOf": [{ "$ref": "#/$defs/timer" }, { "type": "null" }], "default": null },
+    "einstellungen": { "oneOf": [{ "$ref": "#/$defs/einstellungen" }, { "type": "null" }], "description": "Bei umfang BUCHUNGEN null" },
+    "nachweise": { "oneOf": [{ "$ref": "#/$defs/nachweise" }, { "type": "null" }], "default": null, "description": "Nachweise mit Nachweiskette (seit Version 4)" },
+    "funktionen": { "type": "array", "items": { "$ref": "#/$defs/funktion" }, "default": [], "description": "Funktionen mit Gültigkeit und Anrechnungsstunden (seit Version 12)" },
+    "kalenderlink": { "type": ["string", "null"], "default": null, "description": "Kalenderlink des Stundenplans (seit Version 17); im Klartext-Export immer null, der Link selbst steht nur in der verschlüsselten Sicherung" },
+    "kalenderZuordnungen": { "type": "array", "items": { "$ref": "#/$defs/kalenderZuordnung" }, "default": [], "description": "Zuordnung je Fach aus dem Kalenderlink (seit Version 17)" },
+    "kalenderEntscheidungen": { "type": "array", "items": { "$ref": "#/$defs/kalenderEntscheidung" }, "default": [], "description": "Entscheidungen zu Vorschlägen aus dem Kalenderlink (seit Version 17)" }
+  },
+  "if": { "properties": { "umfang": { "const": "BUCHUNGEN" } }, "required": ["umfang"] },
+  "then": {
+    "properties": {
+      "profil": { "type": "null" },
+      "stundenplan": { "type": "null" },
+      "einstellungen": { "type": "null" },
+      "laufenderTimer": { "type": "null" },
+      "nachweise": { "type": "null" },
+      "kalenderlink": { "type": "null" },
+      "protokoll": { "maxItems": 0 },
+      "funktionen": { "maxItems": 0 },
+      "kalenderZuordnungen": { "maxItems": 0 },
+      "kalenderEntscheidungen": { "maxItems": 0 }
+    }
+  },
+  "else": {
+    "required": ["profil", "stundenplan", "nachweise"],
+    "properties": {
+      "profil": { "$ref": "#/$defs/profil" },
+      "stundenplan": { "$ref": "#/$defs/stundenplan" },
+      "einstellungen": { "$ref": "#/$defs/einstellungen" },
+      "nachweise": { "$ref": "#/$defs/nachweise", "description": "Pflicht in vollständigen Dateien; ohne Nachweise lehnt WATT die Datei ab (seit 19.10.2026, B-6)" }
+    }
+  },
+  "$defs": {
+    "zeitpunkt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,9})?Z$",
+      "description": "Zeitpunkt in UTC nach ISO 8601, z. B. 2026-09-29T08:00:00.123Z"
+    },
+    "zeitpunktOderNull": { "oneOf": [{ "$ref": "#/$defs/zeitpunkt" }, { "type": "null" }] },
+    "tag": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Kalendertag JJJJ-MM-TT in der Zeitzone Europe/Berlin"
+    },
+    "tagOderNull": { "oneOf": [{ "$ref": "#/$defs/tag" }, { "type": "null" }] },
+    "monat": { "type": "string", "pattern": "^\\d{4}-\\d{2}$", "description": "Monat JJJJ-MM" },
+    "uhrzeit": { "type": "string", "pattern": "^\\d{2}:\\d{2}$", "description": "Uhrzeit HH:MM in der Zeitzone Europe/Berlin" },
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256, hexadezimal in Kleinbuchstaben" },
+    "textOderNull": { "type": ["string", "null"] },
+    "gdbStufe": {
+      "type": "string",
+      "enum": ["KEINER", "GDB_30_40", "GDB_30_40_GLEICHGESTELLT", "GDB_50", "GDB_60", "GDB_70", "GDB_80", "GDB_90", "GDB_100", "KEINE_ANGABE"]
+    },
+    "profil": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["beschaeftigung"],
+      "properties": {
+        "beschaeftigung": { "type": "array", "items": { "$ref": "#/$defs/beschaeftigungsabschnitt" }, "description": "Beschäftigungsumfang ab einem Tag" },
+        "regionaleFeiertage": { "type": ["array", "null"], "items": { "type": "string" }, "default": null, "description": "Kennungen der eingeschalteten regionalen Feiertage des Landes; null: Standard des Landes" },
+        "bundesland": {
+          "type": "string",
+          "enum": ["BADEN_WUERTTEMBERG", "BAYERN", "BERLIN", "BRANDENBURG", "BREMEN", "HAMBURG", "HESSEN", "MECKLENBURG_VORPOMMERN", "NIEDERSACHSEN", "NORDRHEIN_WESTFALEN", "RHEINLAND_PFALZ", "SAARLAND", "SACHSEN", "SACHSEN_ANHALT", "SCHLESWIG_HOLSTEIN", "THUERINGEN"],
+          "default": "BAYERN"
+        },
+        "schulart": { "$ref": "#/$defs/textOderNull", "description": "Kennung einer Schulart des Landes" },
+        "unterart": { "$ref": "#/$defs/textOderNull", "description": "Kennung einer Unterart der Schulart" },
+        "amt": { "$ref": "#/$defs/textOderNull", "description": "Kennung eines Amts des Landes, SONSTIGES oder null" },
+        "amtsform": { "type": ["string", "null"], "enum": ["WEIBLICH", "MAENNLICH", "NEUTRAL", null] },
+        "amtBezeichnung": { "type": "string", "default": "", "description": "Bezeichnung bei SONSTIGES, sonst leer" },
+        "funktionenBestaetigt": { "type": "boolean", "default": false },
+        "vorbereitungsdienstBeginn": { "$ref": "#/$defs/tagOderNull" },
+        "vorbereitungsdienstEnde": { "$ref": "#/$defs/tagOderNull", "description": "Erwartetes Ende nach „Nein, er dauert länger“, Monatserster" },
+        "geburtHalbjahr": { "oneOf": [{ "$ref": "#/$defs/monat" }, { "type": "null" }], "description": "Beginn des Halbjahresfensters der Geburt: JJJJ-02 oder JJJJ-08" },
+        "geburtMonat": { "oneOf": [{ "$ref": "#/$defs/monat" }, { "type": "null" }], "description": "Geburtsmonat JJJJ-MM, sobald eine Regel des Landes ihn braucht (Hessen, 40 Stunden ab 60); sonst null" },
+        "geburtTag": { "$ref": "#/$defs/textOderNull", "description": "Vorbereitet, bisher null" },
+        "gdbAnfang": { "oneOf": [{ "$ref": "#/$defs/gdbStufe" }, { "type": "null" }], "description": "GdB-Stufe ohne Datum („schon immer“)" },
+        "gdbAenderungen": { "type": "array", "default": [], "items": { "$ref": "#/$defs/gdbAenderung" } },
+        "antworten": { "type": "object", "default": {}, "additionalProperties": { "type": "integer" }, "description": "Antworten zu Regeln des Landes je Kennung: Urlaubstage auf Antrag, 0/1 für Ja/Nein-Fragen, Stunden der Ermäßigungen auf Antrag (SB_BESCHEID in halben Stunden)" },
+        "unterrichtVd": { "type": "array", "default": [], "items": { "$ref": "#/$defs/unterrichtVdAbschnitt" } },
+        "deputatStartwert": { "type": "integer", "default": 0, "description": "Startwert des Deputatskontos in Einzelstunden" },
+        "deputatAusgleiche": { "type": "array", "default": [], "items": { "$ref": "#/$defs/deputatAusgleich" } }
+      }
+    },
+    "beschaeftigungsabschnitt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ab"],
+      "properties": {
+        "ab": { "$ref": "#/$defs/tag" },
+        "pflichtstunden": { "type": ["number", "null"], "default": null, "description": "Gewählte Pflichtstunden vor Ermäßigungen" },
+        "pflichtstundenMinuten": { "type": ["integer", "null"], "default": null, "description": "Länge einer Unterrichtsstunde in Minuten, Standard 45" },
+        "teilzeitStunden": { "type": ["number", "null"], "default": null, "description": "null für Vollzeit" },
+        "altersteilzeit": { "type": "boolean", "default": false },
+        "pflichtstundenAnderer": { "type": "boolean", "default": false, "description": "Die Pflichtstunden sind ein frei eingegebener „Anderer Wert“ (seit Version 16)" }
+      }
+    },
+    "gdbAenderung": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seit", "stufe"],
+      "properties": {
+        "seit": { "$ref": "#/$defs/monat" },
+        "stufe": { "$ref": "#/$defs/gdbStufe" }
+      }
+    },
+    "unterrichtVdAbschnitt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ab", "stunden"],
+      "properties": {
+        "ab": { "$ref": "#/$defs/tag" },
+        "stunden": { "type": "number", "minimum": 0, "maximum": 20, "description": "Unterricht je Woche im Vorbereitungsdienst, halbe Stunden" }
+      }
+    },
+    "deputatAusgleich": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "tag", "einzelstunden"],
+      "properties": {
+        "id": { "type": "string" },
+        "tag": { "$ref": "#/$defs/tag" },
+        "einzelstunden": { "type": "integer", "description": "Mit Vorzeichen" },
+        "notiz": { "type": "string", "default": "" }
+      }
+    },
+    "kategorie": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "farbe", "hoechstdauerMinuten", "aktiv", "unterkategorien"],
+      "properties": {
+        "id": { "type": "string", "description": "Stabile Kennung, vorgepflegte z. B. unterricht" },
+        "name": { "$ref": "#/$defs/textOderNull", "description": "Eigener Name; null: Bezeichnung der App" },
+        "farbe": { "type": "string", "pattern": "^#[0-9A-Fa-f]{8}$", "description": "#AARRGGBB" },
+        "hoechstdauerMinuten": { "type": "integer", "minimum": 1, "description": "Höchstdauer eines Timer-Laufs" },
+        "aktiv": { "type": "boolean" },
+        "unterkategorien": { "type": "array", "items": { "$ref": "#/$defs/unterkategorie" } },
+        "symbolKey": { "$ref": "#/$defs/textOderNull", "description": "Name des Material Symbols, z. B. co_present (seit Version 2)" },
+        "vorbild": { "$ref": "#/$defs/textOderNull", "description": "„Ähnlich wie …“: Kennung einer vorgepflegten Unterkategorie (seit Version 14)" }
+      }
+    },
+    "unterkategorie": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "aktiv"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "$ref": "#/$defs/textOderNull" },
+        "aktiv": { "type": "boolean" },
+        "vorbild": { "$ref": "#/$defs/textOderNull" }
+      }
+    },
+    "ferienabschnitt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "art", "von", "bis", "quelle"],
+      "properties": {
+        "id": { "type": "integer" },
+        "art": { "type": "string", "enum": ["SOMMER", "ALLERHEILIGEN", "WEIHNACHTEN", "WINTER", "FRUEHJAHR", "OSTERN", "PFINGSTEN", "EINZELTAG", "SONSTIGE"] },
+        "von": { "$ref": "#/$defs/tag" },
+        "bis": { "$ref": "#/$defs/tag" },
+        "name": { "$ref": "#/$defs/textOderNull" },
+        "quelle": { "type": "string", "enum": ["KMK", "ICS", ""], "description": "KMK: Abruf bei der KMK bzw. mitgeliefert, ICS: iCal-Datei, leer: manuell (seit Version 5)" }
+      }
+    },
+    "sonderTag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "art"],
+      "properties": {
+        "tag": { "$ref": "#/$defs/tag" },
+        "art": { "type": "string", "enum": ["UNTERRICHTSFREI"] },
+        "name": { "$ref": "#/$defs/textOderNull" },
+        "grund": { "type": ["string", "null"], "enum": ["PAEDAGOGISCHER_TAG", "PRUEFUNGSTAG", "SCHULVERANSTALTUNG", "SONSTIGES", "SCHULFAHRT", null], "description": "Art des unterrichtsfreien Tages (seit Version 5); SCHULFAHRT (seit Version 18, F-230) markiert jeden Kalendertag einer Schulfahrt" }
+      }
+    },
+    "stundenplan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["aktiv", "abWochenAktiv", "abFerienwochenUeberspringen", "raster", "eintraege", "bloecke", "ausgesetzteTage", "verworfen"],
+      "properties": {
+        "aktiv": { "type": "boolean", "description": "Automatik an" },
+        "abWochenAktiv": { "type": "boolean", "description": "Zyklus länger als eine Woche" },
+        "zykluslaenge": { "type": ["integer", "null"], "minimum": 1, "maximum": 6, "default": null, "description": "Wochen bis zur Wiederholung (A bis F, seit Version 7)" },
+        "abBezugstag": { "$ref": "#/$defs/tagOderNull", "description": "Ein Tag in der Referenzwoche (Woche A)" },
+        "abFerienwochenUeberspringen": { "type": "boolean" },
+        "uebernommenBis": { "$ref": "#/$defs/tagOderNull", "description": "Letzter Tag, bis zu dem der Plan übernommen ist" },
+        "raster": { "type": "array", "items": { "$ref": "#/$defs/rasterstunde" } },
+        "eintraege": { "type": "array", "items": { "$ref": "#/$defs/planEintrag" } },
+        "bloecke": { "type": "array", "items": { "$ref": "#/$defs/block" } },
+        "ausgesetzteTage": { "type": "array", "items": { "$ref": "#/$defs/tag" } },
+        "verworfen": { "type": "array", "items": { "$ref": "#/$defs/verwerfung" } },
+        "quelle": { "type": ["string", "null"], "enum": ["HAND", "KALENDERLINK", null], "default": null, "description": "Quelle der wöchentlichen Stunden (seit Version 17); null gilt als HAND" }
+      }
+    },
+    "rasterstunde": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nummer", "von", "bis"],
+      "properties": {
+        "nummer": { "type": "integer", "minimum": 1 },
+        "von": { "$ref": "#/$defs/uhrzeit" },
+        "bis": { "$ref": "#/$defs/uhrzeit" }
+      }
+    },
+    "planEintrag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "typ", "bezeichnung", "kategorieId", "deaktiviert"],
+      "properties": {
+        "id": { "type": "string" },
+        "typ": { "type": "string", "enum": ["WOECHENTLICH", "EINZELTERMIN"] },
+        "wochentag": { "type": ["integer", "null"], "minimum": 1, "maximum": 7, "default": null, "description": "1 = Montag bis 7 = Sonntag, nur bei WOECHENTLICH" },
+        "tag": { "$ref": "#/$defs/tagOderNull", "description": "Nur bei EINZELTERMIN" },
+        "stundeVon": { "type": ["integer", "null"], "default": null, "description": "Rasterstunde" },
+        "stundeBis": { "type": ["integer", "null"], "default": null, "description": "Rasterstunde" },
+        "beginn": { "oneOf": [{ "$ref": "#/$defs/uhrzeit" }, { "type": "null" }], "default": null, "description": "Freie Uhrzeit ohne Rasterstunden" },
+        "ende": { "oneOf": [{ "$ref": "#/$defs/uhrzeit" }, { "type": "null" }], "default": null },
+        "woche": { "type": ["string", "null"], "enum": ["A", "B", "C", "D", "E", "F", null], "default": null, "description": "Woche im Zyklus; null: jede Woche" },
+        "blockId": { "$ref": "#/$defs/textOderNull" },
+        "bezeichnung": { "type": "string" },
+        "kategorieId": { "type": "string" },
+        "unterkategorieId": { "$ref": "#/$defs/textOderNull" },
+        "gueltigAb": { "$ref": "#/$defs/tagOderNull" },
+        "gueltigBis": { "$ref": "#/$defs/tagOderNull" },
+        "deaktiviert": { "type": "boolean" },
+        "fach": { "type": "string", "default": "" },
+        "klasse": { "type": "string", "default": "" },
+        "raum": { "type": "string", "default": "" },
+        "ausKalenderlink": { "type": "boolean", "default": false, "description": "Musterstunde aus dem Kalenderlink (seit Version 17)" }
+      }
+    },
+    "block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "zeitraeume"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "zeitraeume": { "type": "array", "items": { "$ref": "#/$defs/zeitraum" } }
+      }
+    },
+    "zeitraum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["von", "bis"],
+      "properties": {
+        "von": { "$ref": "#/$defs/tag" },
+        "bis": { "$ref": "#/$defs/tag" }
+      }
+    },
+    "verwerfung": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planRef", "begruendung", "zeitpunkt"],
+      "properties": {
+        "planRef": { "type": "string" },
+        "begruendung": { "type": "string" },
+        "zeitpunkt": { "$ref": "#/$defs/zeitpunkt" }
+      }
+    },
+    "eintrag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "tag", "kategorieId", "dauerMinuten", "notiz", "quelle", "erfasstAm"],
+      "properties": {
+        "id": { "type": "string" },
+        "tag": { "$ref": "#/$defs/tag", "description": "Kalendertag, zu dem der Eintrag zählt (Tag des Beginns)" },
+        "kategorieId": { "type": "string" },
+        "unterkategorieId": { "$ref": "#/$defs/textOderNull" },
+        "beginn": { "$ref": "#/$defs/zeitpunktOderNull", "description": "null bei einem Tagesblock" },
+        "ende": { "$ref": "#/$defs/zeitpunktOderNull" },
+        "dauerMinuten": { "type": "integer", "minimum": 0, "description": "Dauer des Tagesblocks, sonst 0" },
+        "notiz": { "type": "string" },
+        "quelle": { "type": "string", "enum": ["MANUELL", "TIMER", "PLAN", "KALENDERLINK"] },
+        "planRef": { "$ref": "#/$defs/textOderNull", "description": "Herkunft im Stundenplan bzw. Referenz des Kalendertermins" },
+        "erfasstAm": { "$ref": "#/$defs/zeitpunkt" },
+        "geaendertAm": { "$ref": "#/$defs/zeitpunktOderNull" },
+        "fach": { "type": "string", "default": "" },
+        "klasse": { "type": "string", "default": "" },
+        "plausibilitaetBestaetigt": { "type": "boolean", "default": false },
+        "importiertAm": { "$ref": "#/$defs/zeitpunktOderNull", "default": null, "description": "Zeitpunkt des Einlesens aus einer Datei mit umfang BUCHUNGEN (seit 18.10.2026); null für Einträge dieses Geräts" }
+      }
+    },
+    "abwesenheit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tag", "art"],
+      "properties": {
+        "tag": { "$ref": "#/$defs/tag" },
+        "art": { "type": "string", "enum": ["KRANKHEIT", "SONDERURLAUB", "DIENSTBEFREIUNG", "DIENSTFREI", "ARZTBESUCH"], "description": "ARZTBESUCH (stundenweise, seit Version 18, F-229) mit beginn und ende" },
+        "beginn": { "$ref": "#/$defs/zeitpunktOderNull", "default": null, "description": "Beginn eines Arztbesuchs (seit Version 18); null bei ganztägigen Arten" },
+        "ende": { "$ref": "#/$defs/zeitpunktOderNull", "default": null, "description": "Ende eines Arztbesuchs am selben Kalendertag (seit Version 18); null bei ganztägigen Arten" },
+        "importiertAm": { "$ref": "#/$defs/zeitpunktOderNull", "default": null, "description": "Zeitpunkt des Einlesens aus einer Datei mit umfang BUCHUNGEN (seit 18.10.2026); sonst null" }
+      }
+    },
+    "glied": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seq", "zeitpunkt", "aktion", "objektArt", "objektId", "daten", "prev", "hash"],
+      "description": "Glied der Arbeitszeitkette: hash = SHA-256 über seq, zeitpunkt, aktion, objektArt, objektId, daten, prev, je als <Länge in UTF-8-Bytes>:<Wert> aneinandergehängt",
+      "properties": {
+        "seq": { "type": "integer", "minimum": 1 },
+        "zeitpunkt": { "$ref": "#/$defs/zeitpunkt" },
+        "aktion": { "type": "string", "enum": ["ANGELEGT", "GEAENDERT", "GELOESCHT"] },
+        "objektArt": { "type": "string", "description": "Seit Version 13 eintrag, abwesenheit, wiederherstellung, neubeginn, uhr_ruecksprung, seit 20.10.2026 auch uhr_abweichung (Timer: Beginn nach der Monotonuhr korrigiert oder Neustart während des Laufs); ältere Ketten auch profil, funktion, ferien, sondertag, kategorie, unterkategorie, stundenplan" },
+        "objektId": { "type": "string" },
+        "daten": { "type": "string", "description": "Stand des Objekts als JSON-Text" },
+        "prev": { "type": "string", "oneOf": [{ "const": "0" }, { "$ref": "#/$defs/hash" }], "description": "hash des vorherigen Glieds, beim ersten 0" },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "timer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kategorieId", "beginn"],
+      "properties": {
+        "kategorieId": { "type": "string" },
+        "unterkategorieId": { "$ref": "#/$defs/textOderNull" },
+        "beginn": { "$ref": "#/$defs/zeitpunkt" }
+      }
+    },
+    "einstellungen": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "unterkategorienEingeblendet": { "type": "array", "default": [], "items": { "type": "string" }, "description": "Oberkategorien, deren Unterkategorien in Auswertung, Export und Bericht erscheinen" },
+        "schlagworteEingeblendet": { "type": "array", "default": [], "items": { "type": "string", "enum": ["FACH", "KLASSE"] } }
+      }
+    },
+    "funktion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "art", "gueltigAb", "unterkategorieId"],
+      "properties": {
+        "id": { "type": "string" },
+        "art": {
+          "type": "string",
+          "enum": ["KLASSENLEITUNG", "FACHBETREUUNG", "KOORDINATION", "AUSBILDUNG_MENTORING", "SYSTEMBETREUUNG", "BERATUNG", "BEAUFTRAGUNG", "INTERESSENVERTRETUNG", "SCHULLEITUNG", "STELLVERTRETENDE_SCHULLEITUNG", "ERWEITERTE_SCHULLEITUNG", "WEITERE"]
+        },
+        "gueltigAb": { "$ref": "#/$defs/tag" },
+        "gueltigBis": { "$ref": "#/$defs/tagOderNull" },
+        "anrechnungsstunden": { "type": ["number", "null"], "minimum": 0, "maximum": 30, "default": null },
+        "anzahlKlassen": { "type": ["integer", "null"], "default": null },
+        "fach": { "type": "string", "default": "" },
+        "bezeichnung": { "type": "string", "default": "" },
+        "unterkategorieId": { "type": "string" },
+        "instanz": { "type": "string", "default": "", "description": "Kennung bei mehrfach anlegbaren Arten, sonst leer" }
+      }
+    },
+    "kalenderZuordnung": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fach", "kategorieId"],
+      "properties": {
+        "fach": { "type": "string" },
+        "kategorieId": { "type": "string" },
+        "unterkategorieId": { "$ref": "#/$defs/textOderNull" },
+        "nurVorschlag": { "type": "boolean", "default": false }
+      }
+    },
+    "kalenderEntscheidung": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "stand", "zeitpunkt", "tag", "von", "bis"],
+      "properties": {
+        "ref": { "type": "string", "description": "<UID>@<Beginn> bzw. ohne-uid:<Fach>@<Beginn>" },
+        "stand": { "type": "string", "enum": ["UEBERNOMMEN", "VERWORFEN", "VERFALLEN"] },
+        "zeitpunkt": { "$ref": "#/$defs/zeitpunkt" },
+        "tag": { "$ref": "#/$defs/tag" },
+        "von": { "$ref": "#/$defs/uhrzeit" },
+        "bis": { "$ref": "#/$defs/uhrzeit" },
+        "fach": { "type": "string", "default": "" },
+        "raum": { "type": "string", "default": "" }
+      }
+    },
+    "nachweise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["meineDaten", "anzeigen", "gespraeche", "kette"],
+      "properties": {
+        "meineDaten": { "$ref": "#/$defs/meineDaten" },
+        "anzeigen": { "type": "array", "items": { "$ref": "#/$defs/anzeige" } },
+        "gespraeche": { "type": "array", "items": { "$ref": "#/$defs/gespraech" } },
+        "kette": { "type": "array", "items": { "$ref": "#/$defs/nachweisglied" }, "description": "Nachweiskette, alle Glieder in Reihenfolge" }
+      }
+    },
+    "meineDaten": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "schule", "adressat", "empfaengerEmail", "kopien"],
+      "description": "Basisangaben zu Überlastungsanzeigen",
+      "properties": {
+        "name": { "type": "string" },
+        "schule": { "type": "string" },
+        "adressat": { "type": "string" },
+        "empfaengerEmail": { "type": "string" },
+        "kopien": { "type": "array", "items": { "$ref": "#/$defs/kopieEinstellung" }, "description": "Kopie-Stellen, immer alle drei" }
+      }
+    },
+    "kopieStelle": { "type": "string", "enum": ["PERSONALRAT", "SCHWERBEHINDERTENVERTRETUNG", "GLEICHSTELLUNGSBEAUFTRAGTE"] },
+    "kopieEinstellung": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stelle", "aktiv", "email"],
+      "properties": {
+        "stelle": { "$ref": "#/$defs/kopieStelle" },
+        "aktiv": { "type": "boolean" },
+        "email": { "type": "string" }
+      }
+    },
+    "anzeige": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "stufe", "angabenArt", "angabenEntfernt", "empfaenger", "kopien", "betreff", "anschreiben", "datum", "dokumente", "notizen"],
+      "properties": {
+        "id": { "type": "string" },
+        "erzeugtAm": { "$ref": "#/$defs/zeitpunktOderNull", "description": "null nach dem Markieren als gesendet" },
+        "stufe": { "type": "string", "enum": ["AUSSAGE", "ZUSAMMENFASSUNG", "NACHWEIS"] },
+        "zeitraumVon": { "$ref": "#/$defs/tagOderNull" },
+        "zeitraumBis": { "$ref": "#/$defs/tagOderNull" },
+        "angabenArt": { "type": "string", "enum": ["PLATZHALTER", "EINMALIG", "MEINE_DATEN"] },
+        "angabenEntfernt": { "type": "boolean" },
+        "empfaenger": { "type": "string" },
+        "kopien": { "type": "array", "items": { "$ref": "#/$defs/anzeigeKopie" } },
+        "betreff": { "type": "string" },
+        "anschreiben": { "type": "string" },
+        "datum": { "$ref": "#/$defs/tag" },
+        "gesendetAn": { "$ref": "#/$defs/textOderNull" },
+        "gesendetAm": { "$ref": "#/$defs/zeitpunktOderNull" },
+        "pruefsumme": { "oneOf": [{ "$ref": "#/$defs/hash" }, { "type": "null" }], "description": "SHA-256 über den Gesamtstand beim Markieren, null bei Entwürfen" },
+        "wiedervorlageAm": { "$ref": "#/$defs/tagOderNull" },
+        "wiedervorlageErledigt": { "type": "boolean", "default": false },
+        "wiederhergestelltAm": { "$ref": "#/$defs/zeitpunktOderNull" },
+        "backupVom": { "$ref": "#/$defs/zeitpunktOderNull" },
+        "dokumente": { "type": "array", "items": { "$ref": "#/$defs/dokument" } },
+        "notizen": { "type": "array", "items": { "$ref": "#/$defs/notiz" } },
+        "pruefverfahren": { "type": "integer", "enum": [1, 2], "default": 1 },
+        "kettenkopf": { "oneOf": [{ "$ref": "#/$defs/kettenkopf" }, { "type": "null" }], "default": null }
+      }
+    },
+    "anzeigeKopie": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stelle", "email"],
+      "properties": {
+        "stelle": { "$ref": "#/$defs/kopieStelle" },
+        "email": { "type": "string" }
+      }
+    },
+    "kettenkopf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anzahl", "hash", "zeitpunkt"],
+      "description": "Kopf der Arbeitszeitkette beim Erzeugen; bei leerem Protokoll anzahl 0 und hash 0",
+      "properties": {
+        "anzahl": { "type": "integer", "minimum": 0 },
+        "hash": { "type": "string", "oneOf": [{ "const": "0" }, { "$ref": "#/$defs/hash" }] },
+        "zeitpunkt": { "$ref": "#/$defs/zeitpunkt" }
+      }
+    },
+    "dokument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["art", "dateiname", "inhalt"],
+      "properties": {
+        "art": { "type": "string", "enum": ["ANSCHREIBEN", "ZUSAMMENFASSUNG", "DETAILNACHWEIS"] },
+        "dateiname": { "type": "string" },
+        "inhalt": { "type": "string", "contentEncoding": "base64", "contentMediaType": "application/pdf", "description": "Base64 (Standardalphabet mit Auffüllung) der unveränderten PDF-Datei" }
+      }
+    },
+    "notiz": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "erstelltAm", "fest", "nachVersand"],
+      "properties": {
+        "id": { "type": "integer" },
+        "text": { "type": "string" },
+        "erstelltAm": { "$ref": "#/$defs/zeitpunkt" },
+        "fest": { "type": "boolean", "description": "Gehört zum Nachweis" },
+        "nachVersand": { "type": "boolean" }
+      }
+    },
+    "gespraech": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "art", "zeitpunkt", "partner", "anwesende", "anlass", "inhalt", "zusagen", "erfasstAm", "pruefsumme", "nachtraege"],
+      "properties": {
+        "id": { "type": "string" },
+        "art": { "type": "string", "enum": ["TELEFONAT", "PERSOENLICH", "VIDEOKONFERENZ"] },
+        "zeitpunkt": { "$ref": "#/$defs/zeitpunkt" },
+        "dauerMinuten": { "type": ["integer", "null"], "default": null },
+        "partner": { "type": "string" },
+        "anwesende": { "type": "string" },
+        "anlass": { "type": "string" },
+        "inhalt": { "type": "string" },
+        "zusagen": { "type": "string" },
+        "frist": { "$ref": "#/$defs/tagOderNull" },
+        "erfasstAm": { "$ref": "#/$defs/zeitpunkt" },
+        "pruefsumme": { "$ref": "#/$defs/hash" },
+        "wiedervorlageAm": { "$ref": "#/$defs/tagOderNull" },
+        "wiedervorlageErledigt": { "type": "boolean", "default": false },
+        "wiederhergestelltAm": { "$ref": "#/$defs/zeitpunktOderNull" },
+        "backupVom": { "$ref": "#/$defs/zeitpunktOderNull" },
+        "nachtraege": { "type": "array", "items": { "$ref": "#/$defs/nachtrag" } }
+      }
+    },
+    "nachtrag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "erfasstAm", "pruefsumme"],
+      "properties": {
+        "id": { "type": "string", "description": "<ID der Notiz>:<Kennung>" },
+        "text": { "type": "string" },
+        "erfasstAm": { "$ref": "#/$defs/zeitpunkt" },
+        "pruefsumme": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "nachweisglied": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seq", "zeitpunkt", "ereignis", "referenzId", "pruefsumme", "prev", "hash"],
+      "description": "Glied der Nachweiskette: hash = SHA-256 über seq, zeitpunkt, ereignis, referenzId, pruefsumme, prev, je als <Länge in UTF-8-Bytes>:<Wert>",
+      "properties": {
+        "seq": { "type": "integer", "minimum": 1 },
+        "zeitpunkt": { "$ref": "#/$defs/zeitpunkt" },
+        "ereignis": {
+          "type": "string",
+          "enum": ["ANZEIGE_GESENDET", "ANZEIGE_GELOESCHT", "GESPRAECHSNOTIZ_GESPEICHERT", "NACHTRAG", "GESPRAECHSNOTIZ_GELOESCHT", "WIEDERHERSTELLUNG", "WIEDERHERSTELLUNG_UNTERBROCHEN"]
+        },
+        "referenzId": { "type": "string" },
+        "pruefsumme": { "type": "string", "description": "Prüfsumme des Inhalts; bei Wiederherstellungen SHA-256 der eingespielten Datei" },
+        "prev": { "type": "string", "oneOf": [{ "const": "0" }, { "$ref": "#/$defs/hash" }] },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

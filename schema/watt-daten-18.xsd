@@ -1,0 +1,978 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  WATT Datenformat watt-daten, Version 18, XML-Darstellung des Klartext-Exports (F-223).
+  Dieselbe Struktur wie das JSON (watt-daten-18.schema.json): jedes Feld ein gleichnamiges Element in der Reihenfolge
+  des JSON, Listen als Element mit einem Kindelement je Eintrag (Name im Singular), das Verzeichnis "antworten" mit
+  einem Element "antwort" je Paar und dem Schluessel im Attribut "schluessel", fehlende Werte (null) als leeres
+  Element mit xsi:nil="true". Mit umfang BUCHUNGEN (nur Buchungsdaten eines Zeitraums) sind profil, stundenplan,
+  einstellungen, laufenderTimer, nachweise und kalenderlink nil und die uebrigen Listen leer; bei VOLLSTAENDIG (oder ohne
+  umfang) sind profil und stundenplan gesetzt. XML Schema 1.0 kann das nicht an umfang binden; es steht hier und in
+  docs/DATENFORMAT.md. Lizenz: CC BY 4.0, Hans-Joachim Steudel.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+  <xs:element name="wattDaten" type="WattDaten"/>
+
+  <xs:complexType name="WattDaten">
+    <xs:sequence>
+      <xs:element name="format" type="Format"/>
+      <xs:element name="version" type="Version"/>
+      <xs:element name="exportiertAm" type="Zeitpunkt"/>
+      <xs:element name="appVersion" type="xs:string"/>
+      <xs:element name="umfang" type="Umfang" minOccurs="0"/>
+      <xs:element name="profil" type="Profil" nillable="true"/>
+      <xs:element name="kategorien" type="Kategorien"/>
+      <xs:element name="ferien" type="Ferien"/>
+      <xs:element name="sonderTage" type="SonderTage"/>
+      <xs:element name="stundenplan" type="Stundenplan" nillable="true"/>
+      <xs:element name="eintraege" type="Eintraege"/>
+      <xs:element name="abwesenheiten" type="Abwesenheiten"/>
+      <xs:element name="protokoll" type="Protokoll"/>
+      <xs:element name="laufenderTimer" type="Timer" nillable="true" minOccurs="0"/>
+      <xs:element name="einstellungen" type="Einstellungen" nillable="true" minOccurs="0"/>
+      <xs:element name="nachweise" type="Nachweise" nillable="true" minOccurs="0"/>
+      <xs:element name="funktionen" type="Funktionen" minOccurs="0"/>
+      <xs:element name="kalenderlink" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="kalenderZuordnungen" type="KalenderZuordnungen" minOccurs="0"/>
+      <xs:element name="kalenderEntscheidungen" type="KalenderEntscheidungen" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Grundtypen -->
+
+  <xs:simpleType name="Umfang">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VOLLSTAENDIG"/>
+      <xs:enumeration value="BUCHUNGEN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Format">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="watt-daten"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Version">
+    <xs:restriction base="xs:int">
+      <xs:enumeration value="18"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Zeitpunkt in UTC nach ISO 8601, z. B. 2026-09-29T08:00:00.123Z -->
+  <xs:simpleType name="Zeitpunkt">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,9})?Z"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Kalendertag JJJJ-MM-TT in der Zeitzone Europe/Berlin -->
+  <xs:simpleType name="Tag">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}-\d{2}-\d{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Monat">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}-\d{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Uhrzeit HH:MM in der Zeitzone Europe/Berlin -->
+  <xs:simpleType name="Uhrzeit">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{2}:\d{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- SHA-256, hexadezimal in Kleinbuchstaben -->
+  <xs:simpleType name="Hash">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9a-f]{64}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- hash des vorherigen Glieds, beim ersten Glied 0 -->
+  <xs:simpleType name="Vorgaenger">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="0|[0-9a-f]{64}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="GdbStufe">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="KEINER"/>
+      <xs:enumeration value="GDB_30_40"/>
+      <xs:enumeration value="GDB_30_40_GLEICHGESTELLT"/>
+      <xs:enumeration value="GDB_50"/>
+      <xs:enumeration value="GDB_60"/>
+      <xs:enumeration value="GDB_70"/>
+      <xs:enumeration value="GDB_80"/>
+      <xs:enumeration value="GDB_90"/>
+      <xs:enumeration value="GDB_100"/>
+      <xs:enumeration value="KEINE_ANGABE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Profil -->
+
+  <xs:complexType name="Profil">
+    <xs:sequence>
+      <xs:element name="beschaeftigung" type="Beschaeftigung"/>
+      <xs:element name="regionaleFeiertage" type="RegionaleFeiertage" nillable="true" minOccurs="0"/>
+      <xs:element name="bundesland" type="Bundesland" minOccurs="0"/>
+      <xs:element name="schulart" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="unterart" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="amt" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="amtsform" type="Amtsform" nillable="true" minOccurs="0"/>
+      <xs:element name="amtBezeichnung" type="xs:string" minOccurs="0"/>
+      <xs:element name="funktionenBestaetigt" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="vorbereitungsdienstBeginn" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="vorbereitungsdienstEnde" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="geburtHalbjahr" type="Monat" nillable="true" minOccurs="0"/>
+      <xs:element name="geburtMonat" type="Monat" nillable="true" minOccurs="0"/>
+      <xs:element name="geburtTag" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="gdbAnfang" type="GdbStufe" nillable="true" minOccurs="0"/>
+      <xs:element name="gdbAenderungen" type="GdbAenderungen" minOccurs="0"/>
+      <xs:element name="antworten" type="Antworten" minOccurs="0"/>
+      <xs:element name="unterrichtVd" type="UnterrichtVd" minOccurs="0"/>
+      <xs:element name="deputatStartwert" type="xs:int" minOccurs="0"/>
+      <xs:element name="deputatAusgleiche" type="DeputatAusgleiche" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="Bundesland">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BADEN_WUERTTEMBERG"/>
+      <xs:enumeration value="BAYERN"/>
+      <xs:enumeration value="BERLIN"/>
+      <xs:enumeration value="BRANDENBURG"/>
+      <xs:enumeration value="BREMEN"/>
+      <xs:enumeration value="HAMBURG"/>
+      <xs:enumeration value="HESSEN"/>
+      <xs:enumeration value="MECKLENBURG_VORPOMMERN"/>
+      <xs:enumeration value="NIEDERSACHSEN"/>
+      <xs:enumeration value="NORDRHEIN_WESTFALEN"/>
+      <xs:enumeration value="RHEINLAND_PFALZ"/>
+      <xs:enumeration value="SAARLAND"/>
+      <xs:enumeration value="SACHSEN"/>
+      <xs:enumeration value="SACHSEN_ANHALT"/>
+      <xs:enumeration value="SCHLESWIG_HOLSTEIN"/>
+      <xs:enumeration value="THUERINGEN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Amtsform">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="WEIBLICH"/>
+      <xs:enumeration value="MAENNLICH"/>
+      <xs:enumeration value="NEUTRAL"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Beschaeftigung">
+    <xs:sequence>
+      <xs:element name="abschnitt" type="Beschaeftigungsabschnitt" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Beschaeftigungsabschnitt">
+    <xs:sequence>
+      <xs:element name="ab" type="Tag"/>
+      <xs:element name="pflichtstunden" type="xs:decimal" nillable="true" minOccurs="0"/>
+      <xs:element name="pflichtstundenMinuten" type="xs:int" nillable="true" minOccurs="0"/>
+      <xs:element name="teilzeitStunden" type="xs:decimal" nillable="true" minOccurs="0"/>
+      <xs:element name="altersteilzeit" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="pflichtstundenAnderer" type="xs:boolean" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RegionaleFeiertage">
+    <xs:sequence>
+      <xs:element name="feiertag" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="GdbAenderungen">
+    <xs:sequence>
+      <xs:element name="gdbAenderung" type="GdbAenderung" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="GdbAenderung">
+    <xs:sequence>
+      <xs:element name="seit" type="Monat"/>
+      <xs:element name="stufe" type="GdbStufe"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Verzeichnis mit freien Schluesseln: je Paar ein Element "antwort" mit dem Schluessel als Attribut -->
+  <xs:complexType name="Antworten">
+    <xs:sequence>
+      <xs:element name="antwort" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:int">
+              <xs:attribute name="schluessel" type="xs:string" use="required"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="UnterrichtVd">
+    <xs:sequence>
+      <xs:element name="abschnitt" type="UnterrichtVdAbschnitt" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="UnterrichtVdAbschnitt">
+    <xs:sequence>
+      <xs:element name="ab" type="Tag"/>
+      <xs:element name="stunden" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DeputatAusgleiche">
+    <xs:sequence>
+      <xs:element name="deputatAusgleich" type="DeputatAusgleich" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DeputatAusgleich">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="tag" type="Tag"/>
+      <xs:element name="einzelstunden" type="xs:int"/>
+      <xs:element name="notiz" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Kategorien -->
+
+  <xs:complexType name="Kategorien">
+    <xs:sequence>
+      <xs:element name="kategorie" type="Kategorie" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Kategorie">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="name" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="farbe" type="Farbe"/>
+      <xs:element name="hoechstdauerMinuten" type="xs:int"/>
+      <xs:element name="aktiv" type="xs:boolean"/>
+      <xs:element name="unterkategorien" type="Unterkategorien"/>
+      <xs:element name="symbolKey" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="vorbild" type="xs:string" nillable="true" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Farbe als #AARRGGBB -->
+  <xs:simpleType name="Farbe">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="#[0-9A-Fa-f]{8}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Unterkategorien">
+    <xs:sequence>
+      <xs:element name="unterkategorie" type="Unterkategorie" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Unterkategorie">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="name" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="aktiv" type="xs:boolean"/>
+      <xs:element name="vorbild" type="xs:string" nillable="true" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Ferien und Sondertage -->
+
+  <xs:complexType name="Ferien">
+    <xs:sequence>
+      <xs:element name="ferienabschnitt" type="Ferienabschnitt" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Ferienabschnitt">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="art" type="FerienArt"/>
+      <xs:element name="von" type="Tag"/>
+      <xs:element name="bis" type="Tag"/>
+      <xs:element name="name" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="quelle" type="FerienQuelle"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="FerienArt">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SOMMER"/>
+      <xs:enumeration value="ALLERHEILIGEN"/>
+      <xs:enumeration value="WEIHNACHTEN"/>
+      <xs:enumeration value="WINTER"/>
+      <xs:enumeration value="FRUEHJAHR"/>
+      <xs:enumeration value="OSTERN"/>
+      <xs:enumeration value="PFINGSTEN"/>
+      <xs:enumeration value="EINZELTAG"/>
+      <xs:enumeration value="SONSTIGE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- KMK: Abruf bei der KMK bzw. mitgeliefert, ICS: iCal-Datei, leer: manuell -->
+  <xs:simpleType name="FerienQuelle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="KMK"/>
+      <xs:enumeration value="ICS"/>
+      <xs:enumeration value=""/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="SonderTage">
+    <xs:sequence>
+      <xs:element name="sonderTag" type="SonderTag" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="SonderTag">
+    <xs:sequence>
+      <xs:element name="tag" type="Tag"/>
+      <xs:element name="art" type="SonderTagArt"/>
+      <xs:element name="name" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="grund" type="UnterrichtsfreiArt" nillable="true" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="SonderTagArt">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UNTERRICHTSFREI"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="UnterrichtsfreiArt">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PAEDAGOGISCHER_TAG"/>
+      <xs:enumeration value="PRUEFUNGSTAG"/>
+      <xs:enumeration value="SCHULVERANSTALTUNG"/>
+      <xs:enumeration value="SONSTIGES"/>
+      <xs:enumeration value="SCHULFAHRT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Stundenplan -->
+
+  <xs:complexType name="Stundenplan">
+    <xs:sequence>
+      <xs:element name="aktiv" type="xs:boolean"/>
+      <xs:element name="abWochenAktiv" type="xs:boolean"/>
+      <xs:element name="zykluslaenge" type="Zykluslaenge" nillable="true" minOccurs="0"/>
+      <xs:element name="abBezugstag" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="abFerienwochenUeberspringen" type="xs:boolean"/>
+      <xs:element name="uebernommenBis" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="raster" type="Raster"/>
+      <xs:element name="eintraege" type="PlanEintraege"/>
+      <xs:element name="bloecke" type="Bloecke"/>
+      <xs:element name="ausgesetzteTage" type="AusgesetzteTage"/>
+      <xs:element name="verworfen" type="Verworfen"/>
+      <xs:element name="quelle" type="Planquelle" nillable="true" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="Zykluslaenge">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="6"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Planquelle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="HAND"/>
+      <xs:enumeration value="KALENDERLINK"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Raster">
+    <xs:sequence>
+      <xs:element name="stunde" type="Rasterstunde" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Rasterstunde">
+    <xs:sequence>
+      <xs:element name="nummer" type="xs:int"/>
+      <xs:element name="von" type="Uhrzeit"/>
+      <xs:element name="bis" type="Uhrzeit"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PlanEintraege">
+    <xs:sequence>
+      <xs:element name="eintrag" type="PlanEintrag" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PlanEintrag">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="typ" type="PlanTyp"/>
+      <xs:element name="wochentag" type="Wochentag" nillable="true" minOccurs="0"/>
+      <xs:element name="tag" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="stundeVon" type="xs:int" nillable="true" minOccurs="0"/>
+      <xs:element name="stundeBis" type="xs:int" nillable="true" minOccurs="0"/>
+      <xs:element name="beginn" type="Uhrzeit" nillable="true" minOccurs="0"/>
+      <xs:element name="ende" type="Uhrzeit" nillable="true" minOccurs="0"/>
+      <xs:element name="woche" type="Zykluswoche" nillable="true" minOccurs="0"/>
+      <xs:element name="blockId" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="bezeichnung" type="xs:string"/>
+      <xs:element name="kategorieId" type="xs:string"/>
+      <xs:element name="unterkategorieId" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="gueltigAb" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="gueltigBis" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="deaktiviert" type="xs:boolean"/>
+      <xs:element name="fach" type="xs:string" minOccurs="0"/>
+      <xs:element name="klasse" type="xs:string" minOccurs="0"/>
+      <xs:element name="raum" type="xs:string" minOccurs="0"/>
+      <xs:element name="ausKalenderlink" type="xs:boolean" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="PlanTyp">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="WOECHENTLICH"/>
+      <xs:enumeration value="EINZELTERMIN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- 1 = Montag bis 7 = Sonntag -->
+  <xs:simpleType name="Wochentag">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="7"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Zykluswoche">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="B"/>
+      <xs:enumeration value="C"/>
+      <xs:enumeration value="D"/>
+      <xs:enumeration value="E"/>
+      <xs:enumeration value="F"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Bloecke">
+    <xs:sequence>
+      <xs:element name="block" type="Block" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Block">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="zeitraeume" type="Zeitraeume"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Zeitraeume">
+    <xs:sequence>
+      <xs:element name="zeitraum" type="Zeitraum" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Zeitraum">
+    <xs:sequence>
+      <xs:element name="von" type="Tag"/>
+      <xs:element name="bis" type="Tag"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="AusgesetzteTage">
+    <xs:sequence>
+      <xs:element name="tag" type="Tag" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Verworfen">
+    <xs:sequence>
+      <xs:element name="verwerfung" type="Verwerfung" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Verwerfung">
+    <xs:sequence>
+      <xs:element name="planRef" type="xs:string"/>
+      <xs:element name="begruendung" type="xs:string"/>
+      <xs:element name="zeitpunkt" type="Zeitpunkt"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Eintraege und Abwesenheiten -->
+
+  <xs:complexType name="Eintraege">
+    <xs:sequence>
+      <xs:element name="eintrag" type="Eintrag" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Eintrag">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="tag" type="Tag"/>
+      <xs:element name="kategorieId" type="xs:string"/>
+      <xs:element name="unterkategorieId" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="beginn" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="ende" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="dauerMinuten" type="xs:int"/>
+      <xs:element name="notiz" type="xs:string"/>
+      <xs:element name="quelle" type="EintragQuelle"/>
+      <xs:element name="planRef" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="erfasstAm" type="Zeitpunkt"/>
+      <xs:element name="geaendertAm" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="fach" type="xs:string" minOccurs="0"/>
+      <xs:element name="klasse" type="xs:string" minOccurs="0"/>
+      <xs:element name="plausibilitaetBestaetigt" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="importiertAm" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="EintragQuelle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MANUELL"/>
+      <xs:enumeration value="TIMER"/>
+      <xs:enumeration value="PLAN"/>
+      <xs:enumeration value="KALENDERLINK"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Abwesenheiten">
+    <xs:sequence>
+      <xs:element name="abwesenheit" type="Abwesenheit" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Abwesenheit">
+    <xs:sequence>
+      <xs:element name="tag" type="Tag"/>
+      <xs:element name="art" type="AbwesenheitsArt"/>
+      <xs:element name="beginn" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="ende" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="importiertAm" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="AbwesenheitsArt">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="KRANKHEIT"/>
+      <xs:enumeration value="SONDERURLAUB"/>
+      <xs:enumeration value="DIENSTBEFREIUNG"/>
+      <xs:enumeration value="DIENSTFREI"/>
+      <xs:enumeration value="ARZTBESUCH"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Aenderungsprotokoll (Arbeitszeitkette) -->
+
+  <xs:complexType name="Protokoll">
+    <xs:sequence>
+      <xs:element name="glied" type="Glied" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- hash = SHA-256 ueber seq, zeitpunkt, aktion, objektArt, objektId, daten, prev, je als <Laenge in UTF-8-Bytes>:<Wert> -->
+  <xs:complexType name="Glied">
+    <xs:sequence>
+      <xs:element name="seq" type="xs:long"/>
+      <xs:element name="zeitpunkt" type="Zeitpunkt"/>
+      <xs:element name="aktion" type="ProtokollAktion"/>
+      <xs:element name="objektArt" type="xs:string"/>
+      <xs:element name="objektId" type="xs:string"/>
+      <xs:element name="daten" type="xs:string"/>
+      <xs:element name="prev" type="Vorgaenger"/>
+      <xs:element name="hash" type="Hash"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="ProtokollAktion">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ANGELEGT"/>
+      <xs:enumeration value="GEAENDERT"/>
+      <xs:enumeration value="GELOESCHT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Timer und Einstellungen -->
+
+  <xs:complexType name="Timer">
+    <xs:sequence>
+      <xs:element name="kategorieId" type="xs:string"/>
+      <xs:element name="unterkategorieId" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="beginn" type="Zeitpunkt"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Einstellungen">
+    <xs:sequence>
+      <xs:element name="unterkategorienEingeblendet" type="KategorieIds" minOccurs="0"/>
+      <xs:element name="schlagworteEingeblendet" type="Schlagwortarten" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="KategorieIds">
+    <xs:sequence>
+      <xs:element name="kategorieId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Schlagwortarten">
+    <xs:sequence>
+      <xs:element name="art" type="Schlagwortart" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="Schlagwortart">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FACH"/>
+      <xs:enumeration value="KLASSE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Funktionen -->
+
+  <xs:complexType name="Funktionen">
+    <xs:sequence>
+      <xs:element name="funktion" type="Funktion" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Funktion">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="art" type="Funktionsart"/>
+      <xs:element name="gueltigAb" type="Tag"/>
+      <xs:element name="gueltigBis" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="anrechnungsstunden" type="xs:decimal" nillable="true" minOccurs="0"/>
+      <xs:element name="anzahlKlassen" type="xs:int" nillable="true" minOccurs="0"/>
+      <xs:element name="fach" type="xs:string" minOccurs="0"/>
+      <xs:element name="bezeichnung" type="xs:string" minOccurs="0"/>
+      <xs:element name="unterkategorieId" type="xs:string"/>
+      <xs:element name="instanz" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="Funktionsart">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="KLASSENLEITUNG"/>
+      <xs:enumeration value="FACHBETREUUNG"/>
+      <xs:enumeration value="KOORDINATION"/>
+      <xs:enumeration value="AUSBILDUNG_MENTORING"/>
+      <xs:enumeration value="SYSTEMBETREUUNG"/>
+      <xs:enumeration value="BERATUNG"/>
+      <xs:enumeration value="BEAUFTRAGUNG"/>
+      <xs:enumeration value="INTERESSENVERTRETUNG"/>
+      <xs:enumeration value="SCHULLEITUNG"/>
+      <xs:enumeration value="STELLVERTRETENDE_SCHULLEITUNG"/>
+      <xs:enumeration value="ERWEITERTE_SCHULLEITUNG"/>
+      <xs:enumeration value="WEITERE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Kalenderlink -->
+
+  <xs:complexType name="KalenderZuordnungen">
+    <xs:sequence>
+      <xs:element name="kalenderZuordnung" type="KalenderZuordnung" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="KalenderZuordnung">
+    <xs:sequence>
+      <xs:element name="fach" type="xs:string"/>
+      <xs:element name="kategorieId" type="xs:string"/>
+      <xs:element name="unterkategorieId" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="nurVorschlag" type="xs:boolean" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="KalenderEntscheidungen">
+    <xs:sequence>
+      <xs:element name="kalenderEntscheidung" type="KalenderEntscheidung" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="KalenderEntscheidung">
+    <xs:sequence>
+      <xs:element name="ref" type="xs:string"/>
+      <xs:element name="stand" type="Vorschlagsstand"/>
+      <xs:element name="zeitpunkt" type="Zeitpunkt"/>
+      <xs:element name="tag" type="Tag"/>
+      <xs:element name="von" type="Uhrzeit"/>
+      <xs:element name="bis" type="Uhrzeit"/>
+      <xs:element name="fach" type="xs:string" minOccurs="0"/>
+      <xs:element name="raum" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="Vorschlagsstand">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UEBERNOMMEN"/>
+      <xs:enumeration value="VERWORFEN"/>
+      <xs:enumeration value="VERFALLEN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Nachweise -->
+
+  <xs:complexType name="Nachweise">
+    <xs:sequence>
+      <xs:element name="meineDaten" type="MeineDaten"/>
+      <xs:element name="anzeigen" type="Anzeigen"/>
+      <xs:element name="gespraeche" type="Gespraeche"/>
+      <xs:element name="kette" type="Nachweiskette"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Basisangaben zu Ueberlastungsanzeigen -->
+  <xs:complexType name="MeineDaten">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="schule" type="xs:string"/>
+      <xs:element name="adressat" type="xs:string"/>
+      <xs:element name="empfaengerEmail" type="xs:string"/>
+      <xs:element name="kopien" type="KopieEinstellungen"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="KopieStelle">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PERSONALRAT"/>
+      <xs:enumeration value="SCHWERBEHINDERTENVERTRETUNG"/>
+      <xs:enumeration value="GLEICHSTELLUNGSBEAUFTRAGTE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="KopieEinstellungen">
+    <xs:sequence>
+      <xs:element name="kopie" type="KopieEinstellung" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="KopieEinstellung">
+    <xs:sequence>
+      <xs:element name="stelle" type="KopieStelle"/>
+      <xs:element name="aktiv" type="xs:boolean"/>
+      <xs:element name="email" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Anzeigen">
+    <xs:sequence>
+      <xs:element name="anzeige" type="Anzeige" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Anzeige">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="erzeugtAm" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="stufe" type="Inhaltsstufe"/>
+      <xs:element name="zeitraumVon" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="zeitraumBis" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="angabenArt" type="AngabenArt"/>
+      <xs:element name="angabenEntfernt" type="xs:boolean"/>
+      <xs:element name="empfaenger" type="xs:string"/>
+      <xs:element name="kopien" type="AnzeigeKopien"/>
+      <xs:element name="betreff" type="xs:string"/>
+      <xs:element name="anschreiben" type="xs:string"/>
+      <xs:element name="datum" type="Tag"/>
+      <xs:element name="gesendetAn" type="xs:string" nillable="true" minOccurs="0"/>
+      <xs:element name="gesendetAm" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="pruefsumme" type="Hash" nillable="true" minOccurs="0"/>
+      <xs:element name="wiedervorlageAm" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="wiedervorlageErledigt" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="wiederhergestelltAm" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="backupVom" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="dokumente" type="Dokumente"/>
+      <xs:element name="notizen" type="Notizen"/>
+      <xs:element name="pruefverfahren" type="Pruefverfahren" minOccurs="0"/>
+      <xs:element name="kettenkopf" type="Kettenkopf" nillable="true" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="Inhaltsstufe">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AUSSAGE"/>
+      <xs:enumeration value="ZUSAMMENFASSUNG"/>
+      <xs:enumeration value="NACHWEIS"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="AngabenArt">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PLATZHALTER"/>
+      <xs:enumeration value="EINMALIG"/>
+      <xs:enumeration value="MEINE_DATEN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Pruefverfahren">
+    <xs:restriction base="xs:int">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="AnzeigeKopien">
+    <xs:sequence>
+      <xs:element name="kopie" type="AnzeigeKopie" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="AnzeigeKopie">
+    <xs:sequence>
+      <xs:element name="stelle" type="KopieStelle"/>
+      <xs:element name="email" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Kopf der Arbeitszeitkette beim Erzeugen; bei leerem Protokoll anzahl 0 und hash 0 -->
+  <xs:complexType name="Kettenkopf">
+    <xs:sequence>
+      <xs:element name="anzahl" type="xs:long"/>
+      <xs:element name="hash" type="Vorgaenger"/>
+      <xs:element name="zeitpunkt" type="Zeitpunkt"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Dokumente">
+    <xs:sequence>
+      <xs:element name="dokument" type="Dokument" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Dokument">
+    <xs:sequence>
+      <xs:element name="art" type="DokumentArt"/>
+      <xs:element name="dateiname" type="xs:string"/>
+      <!-- Base64 (Standardalphabet mit Auffuellung) der unveraenderten PDF-Datei -->
+      <xs:element name="inhalt" type="xs:base64Binary"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="DokumentArt">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ANSCHREIBEN"/>
+      <xs:enumeration value="ZUSAMMENFASSUNG"/>
+      <xs:enumeration value="DETAILNACHWEIS"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Notizen">
+    <xs:sequence>
+      <xs:element name="notiz" type="Notiz" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Notiz">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="text" type="xs:string"/>
+      <xs:element name="erstelltAm" type="Zeitpunkt"/>
+      <xs:element name="fest" type="xs:boolean"/>
+      <xs:element name="nachVersand" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Gespraeche">
+    <xs:sequence>
+      <xs:element name="gespraech" type="Gespraech" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Gespraech">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="art" type="GespraechsArt"/>
+      <xs:element name="zeitpunkt" type="Zeitpunkt"/>
+      <xs:element name="dauerMinuten" type="xs:int" nillable="true" minOccurs="0"/>
+      <xs:element name="partner" type="xs:string"/>
+      <xs:element name="anwesende" type="xs:string"/>
+      <xs:element name="anlass" type="xs:string"/>
+      <xs:element name="inhalt" type="xs:string"/>
+      <xs:element name="zusagen" type="xs:string"/>
+      <xs:element name="frist" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="erfasstAm" type="Zeitpunkt"/>
+      <xs:element name="pruefsumme" type="Hash"/>
+      <xs:element name="wiedervorlageAm" type="Tag" nillable="true" minOccurs="0"/>
+      <xs:element name="wiedervorlageErledigt" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="wiederhergestelltAm" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="backupVom" type="Zeitpunkt" nillable="true" minOccurs="0"/>
+      <xs:element name="nachtraege" type="Nachtraege"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="GespraechsArt">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TELEFONAT"/>
+      <xs:enumeration value="PERSOENLICH"/>
+      <xs:enumeration value="VIDEOKONFERENZ"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="Nachtraege">
+    <xs:sequence>
+      <xs:element name="nachtrag" type="Nachtrag" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Nachtrag">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="text" type="xs:string"/>
+      <xs:element name="erfasstAm" type="Zeitpunkt"/>
+      <xs:element name="pruefsumme" type="Hash"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Nachweiskette">
+    <xs:sequence>
+      <xs:element name="glied" type="Nachweisglied" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- hash = SHA-256 ueber seq, zeitpunkt, ereignis, referenzId, pruefsumme, prev, je als <Laenge in UTF-8-Bytes>:<Wert> -->
+  <xs:complexType name="Nachweisglied">
+    <xs:sequence>
+      <xs:element name="seq" type="xs:long"/>
+      <xs:element name="zeitpunkt" type="Zeitpunkt"/>
+      <xs:element name="ereignis" type="NachweisEreignis"/>
+      <xs:element name="referenzId" type="xs:string"/>
+      <xs:element name="pruefsumme" type="xs:string"/>
+      <xs:element name="prev" type="Vorgaenger"/>
+      <xs:element name="hash" type="Hash"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="NachweisEreignis">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ANZEIGE_GESENDET"/>
+      <xs:enumeration value="ANZEIGE_GELOESCHT"/>
+      <xs:enumeration value="GESPRAECHSNOTIZ_GESPEICHERT"/>
+      <xs:enumeration value="NACHTRAG"/>
+      <xs:enumeration value="GESPRAECHSNOTIZ_GELOESCHT"/>
+      <xs:enumeration value="WIEDERHERSTELLUNG"/>
+      <xs:enumeration value="WIEDERHERSTELLUNG_UNTERBROCHEN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
