@@ -1,0 +1,66 @@
+WATT – Quellen zum App-Vergleich in watt-ueberblick.pdf (Folie 11 „Was andere Apps nicht verbinden“)
+
+Stand: 22.10.2026. Alle Seiten und Bilder am 22.10.2026 abgerufen (Deutschland, Sprache Deutsch).
+Zeichen: ● vorhanden (auch als Beta) · ◐ teilweise · – nicht vorhanden · ? nicht bekannt (vom Anbieter nicht genannt)
+
+Ohne Gewähr: Die Angaben stammen aus öffentlich zugänglichen Quellen. Anbieter entwickeln ihre Produkte weiter – bitte selbst prüfen. Hinweise auf Fehler gern an hans-joachim.steudel@tum.de.
+
+
+QUELLEN
+
+[1] LehrZeit, Produktseite – https://info.lehrzeit.app/
+[2] LehrZeit, Google Play, Beschreibung und Bilder 1–5 – https://play.google.com/store/apps/details?id=app.lehrzeit
+[3] GEW, „Mit diesen Apps erfassen Lehrkräfte ihre Arbeitszeit selbst“, 18.08.2026 – https://www.gew.de/aktuelles/detailseite/mit-diesen-apps-erfassen-lehrkraefte-ihre-arbeitszeit-selbst
+[4] App Store und Google Play, Suche nach „LehrZeit“ und „Stundenwart“
+[5] Stundenwart, Produktseite – https://www.stundenwart.de/ – und Audit – https://www.stundenwart.de/audit
+[6] MiZei, Seite für Lehrkräfte – https://mizei.de/lehrer/
+[7] MiZei, Google Play, Beschreibung und Bilder 1–7 – https://play.google.com/store/apps/details?id=com.mizei.app.mizei_app
+[8] MiZei, App Store, Beschreibung und Bilder 1–7 – https://apps.apple.com/de/app/mizei/id6448945057
+
+
+BEWERTUNGEN UND IHRE HERKUNFT
+
+WATT
+- App für Android / App für Apple / Webseite ● / – / –: geschlossener Test bei Google Play (Beta)
+
+LehrZeit
+- Tätigkeitsgenaue Kategorien ●: acht Kategorien [1][2]
+- Stundenplan-Automatik ●: wiederkehrende Einträge „vollautomatisch“ [1]
+- Soll-Rechnung je Land, Amt, Teilzeit ◐: Land, Deputat, Sonderdeputate, Beschäftigungsumfang; Amt nicht genannt [1][2]
+- 48-Stunden-Prüfung ?: nicht genannt [1][2]
+- Daten nur auf dem Gerät –: Server in Deutschland, alle Geräte auf demselben Stand [1]
+- Zugriff nur durch dich selbst ●: „ausschließlich die Lehrkraft selbst“, „Kein Schulleitungs-Zugriff“ [1]
+- Integritäts-Nachweis ?: nicht genannt [1][2]
+- Überlastungsanzeige erstellen ●: Knopf „Überlastungsanzeige erstellen“ [2, Bild 5]; „drei vorformulierte Nachrichten“ [3]
+- Export PDF / Excel / CSV / weitere ● / ● / ? / ?: „Stundennachweis als PDF“, „Export nach Excel“ [2]; CSV und weitere nicht genannt
+- Gesprächs- und Telefonnotizen ?: nicht genannt [1][2]
+- App für Android / App für Apple / Webseite ● / – / ●: Google Play [2]; iPhone-App angekündigt, im App Store nicht gefunden [1][4]; Browser auf PC, Tablet und Smartphone [1]
+- Kostenlos –: Einzellizenz 4 €/Monat [1]; für Mitglieder der GEW Hessen kostenlos, GEW Berlin und Baden-Württemberg stellen Mitgliedern einen Zugang bereit [3]
+
+Stundenwart
+- Tätigkeitsgenaue Kategorien ●: zehn vorkonfigurierte Tätigkeiten [5]
+- Stundenplan-Automatik ●: Pflichtstunden entstehen automatisch aus dem Stundenplan [5]
+- Soll-Rechnung je Land, Amt, Teilzeit ◐: Wochenübersicht gegen das Soll; Land, Amt, Teilzeit nicht genannt [5]
+- 48-Stunden-Prüfung ?: nicht genannt [5]
+- Daten nur auf dem Gerät ●: „100 % offline“, Audit ohne Netzwerkaufrufe [5]
+- Zugriff nur durch dich selbst ●: keine Datenübertragung, kein Server [5]
+- Integritäts-Nachweis ?: nicht genannt [5]
+- Überlastungsanzeige erstellen ?: nicht genannt [5]
+- Export PDF / Excel / CSV / weitere ● / ● / ● / ?: „CSV, Excel oder PDF“ [5]; weitere nicht genannt
+- Gesprächs- und Telefonnotizen ?: nicht genannt [5]
+- App für Android / App für Apple / Webseite ● / ● / –: Beta ab Oktober 2026 für Android und iPhone, noch in keinem Store [4][5]; keine Web-Version genannt [5]
+- Kostenlos –: 30 Tage Test, dann 2,99 €/Monat [5]
+
+MiZei
+- Tätigkeitsgenaue Kategorien ◐: Schlagwörter und Schulfach je Eintrag [6][7][8]
+- Stundenplan-Automatik ?: nicht genannt [6][7][8]
+- Soll-Rechnung je Land, Amt, Teilzeit ◐: Soll individuell, Vollzeit, Teilzeit, Feiertage je Land [7, Bild 2][8, Bild 2]
+- 48-Stunden-Prüfung ?: nicht genannt [6][7][8]
+- Daten nur auf dem Gerät –: cloudbasiert [7][8]
+- Zugriff nur durch dich selbst ◐ (abhängig von der Lizenz): bei Schul- oder Ministeriumslizenz Dashboard mit Übersicht aller Nutzer:innen [6][7, Bild 4]; als Einzelnutzer:in „Einsicht deiner Daten ausschließlich für dich“ [8, Bild 6]
+- Integritäts-Nachweis ?: nicht genannt [6][7][8]
+- Überlastungsanzeige erstellen ?: nicht genannt [6][7][8]
+- Export PDF / Excel / CSV / weitere ● / ● / ● / ●: CSV, Excel, PDF und API [7, Bild 7][8, Bild 7]; „Schnittstellen zu bestehenden Systemen“ [6]
+- Gesprächs- und Telefonnotizen ?: nicht genannt [6][7][8]
+- App für Android / App für Apple / Webseite ● / ● / ●: Google Play [7], App Store [8], „in jedem beliebigen Browser“ [7][8]
+- Kostenlos –: 1 €/Monat bzw. 10 €/Jahr [6]; GEW Bayern übernimmt für Mitglieder die Kosten für ein Schuljahr [3]
