@@ -54,13 +54,16 @@ ol.schritte{counter-reset:schritt}
 .hinweis strong{display:block;margin-bottom:.2rem}
 ul.liste{margin:0;padding-left:1.2rem}
 ul.liste li{margin:.35rem 0}
-details.intern{margin:0 0 .4rem}
-details.intern summary{cursor:pointer;padding-left:.15rem;min-height:44px;display:flex;align-items:center;gap:.5rem;font-weight:600;list-style:none}
-details.intern summary::-webkit-details-marker{display:none}
-details.intern summary::before{content:"";flex:none;width:.5rem;height:.5rem;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin-right:.2rem}
-details.intern[open] summary::before{transform:rotate(45deg)}
-details.intern p{margin:.2rem 0 .6rem 1.3rem;color:var(--leise)}
-details.intern a{color:var(--text);font-weight:600}
+details.falt{margin:0 0 .4rem}
+details.falt summary{cursor:pointer;padding-left:.15rem;min-height:44px;display:flex;align-items:center;gap:.5rem;font-weight:600;list-style:none}
+details.falt summary::-webkit-details-marker{display:none}
+details.falt summary::before{content:"";flex:none;width:.5rem;height:.5rem;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin-right:.2rem}
+details.falt[open] summary::before{transform:rotate(45deg)}
+details.falt p{margin:.2rem 0 .6rem 1.3rem;color:var(--leise)}
+details.falt a{color:var(--text);font-weight:600}
+ul.material{margin:.2rem 0 .6rem 1.3rem;padding-left:1.1rem;color:var(--leise)}
+ul.material li{margin:.3rem 0}
+.hinweis a{color:inherit;font-weight:600}
 .wichtig{color:var(--rot);font-weight:700}
 footer{max-width:760px;margin:2.4rem auto 0;padding:18px 16px 36px;border-top:1px solid var(--linie);color:var(--leise);font-size:.92rem}
 footer nav{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:.8rem}
@@ -90,10 +93,18 @@ footer p{margin:.3rem 0}
 
   <div class="hinweis">
     <strong>Bevor du anfängst</strong>
-    Verwende überall dasselbe Google-Konto, mit dem du auf deinem Handy den Play Store nutzt. Du brauchst Android 8 oder neuer.
+    Verwende überall dasselbe Google-Konto, mit dem du auf deinem Handy den Play Store nutzt. Du brauchst Android 8 oder neuer.<br>Fürs iPhone gibt es WATT leider noch nicht. Ist das Interesse groß genug, ziehen wir eine iPhone-Version in Betracht – <a href="mailto:hans-joachim.steudel@tum.de?subject=WATT%20f%C3%BCrs%20iPhone">schreib uns gern</a>.
   </div>
 
-  <details class="intern">
+  <details class="falt">
+    <summary>Watt is WATT denn überhaupt?</summary>
+    <ul class="material">
+      <li><a href="info/watt-funktionen.pdf">Funktionsüberblick</a> (PDF, 13 Folien) – alle Bereiche der App mit Bildschirmfotos.</li>
+      <li><a href="info/watt-onepager-a3.pdf">WATT auf einen Blick</a> (PDF, A3, 2 Seiten) – zum Ausdrucken und Aushängen.</li>
+    </ul>
+  </details>
+
+  <details class="falt">
     <summary>Du bist bereits Tester:in im INTERNEN Test?</summary>
     <p>Dann verlasse ihn zuerst: Öffne <a href="https://play.google.com/apps/internaltest/4699682833936922091">die Seite des internen Tests</a> und tippe auf „Test verlassen“. Danach geht es mit den drei Schritten unten weiter. <span class="wichtig">Die App dabei nicht deinstallieren</span> – sonst sind deine Daten weg. Du hast schon die aktuelle Version, es ändert sich also erst einmal nichts.</p>
   </details>
