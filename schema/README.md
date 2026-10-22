@@ -1,4 +1,4 @@
-Stand: 2026-10-21 (YYYY-MM-DD)
+Stand: 2026-10-22 (YYYY-MM-DD)
 
 # Datenformat `watt-daten`
 
@@ -68,4 +68,4 @@ xmllint --noout --schema watt-daten-<Version>.xsd <Datei>.xml
 
 ## Lizenz
 
-Die Dateien in diesem Ordner (Schemas und diese Beschreibung) stehen unter der Lizenz [Creative Commons Namensnennung 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.de). Namensnennung: „Hans-Joachim Steudel, WATT – Workload Analysis & Time-Tracking for Teachers“. WATT selbst ist proprietär; es gelten die Nutzungsbedingungen in [`LICENSE_WATT`](../LICENSE_WATT).
+Die Dateien in diesem Ordner (Schemas und diese Beschreibung) stehen unter der Lizenz [Creative Commons Namensnennung 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.de). Namensnennung: „Hans-Joachim Steudel, WATT – Workload Analysis & Time-Tracking for Teachers“. WATT selbst ist proprietär; es gelten die [Nutzungsbedingungen](../doc/license.txt).
