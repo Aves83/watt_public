@@ -21,7 +21,7 @@ Nachfolgend die allgemeinen Regeln für beide Formate und die Änderungen je Ver
 
 ## Zusammenhang von XML und JSON
 
-Die XML-Datei bildet das JSON eins zu eins ab:
+WATT exportiert XML ab Formatversion 18 (WATT 0.8.109 „Cherimoya“); ein XML Schema gibt es ab dieser Version, ein JSON Schema ab Version 16. Die XML-Datei bildet das JSON eins zu eins ab:
 
 - Das JSON-Objekt der Datei wird zum Wurzelelement `wattDaten`; jedes Feld eines Objekts wird zu einem gleichnamigen Kindelement in der Reihenfolge des JSON.
 - Eine Liste wird zu einem Element mit dem Feldnamen, jedes Listenelement zu einem Kindelement mit dem Namen im Singular (z. B. `eintraege` → `eintrag`, `protokoll` → `glied`, `kette` → `glied`, `raster` → `stunde`); eine leere Liste ist ein leeres Element.
