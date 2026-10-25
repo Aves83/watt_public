@@ -68,7 +68,7 @@ Die Prüfsumme jedes Protokolleintrags lässt sich mit Standardwerkzeugen nachre
 - Geheime Werte: keine; kein Seed, kein Salt
 - Verfahrensversion: Die Arbeitszeitkette hat ein Verfahren in zwei Formen, die sich an der Zahl der Felder unterscheiden: Einträge bis zum 24.10.2026 haben sieben Felder, Einträge seitdem zusätzlich den Uhrstand (neustarts, autoZeit, 4.7). Ältere Einträge werden unverändert nach der Form mit sieben Feldern geprüft; ein Eintrag mit nur einem der beiden Felder des Uhrstands gilt als Bruch.
 - Felder in dieser Reihenfolge: seq, zeitpunkt, aktion, objektArt, objektId, daten, prev, bei Einträgen mit Uhrstand dahinter neustarts (Dezimalzahl, -1 ohne Bezug) und autoZeit (true oder false). Jedes Feld steht als \<Länge>:\<Wert>; die Länge ist die Zahl der Bytes des Werts in UTF-8 als Dezimalzahl, danach folgen ein Doppelpunkt und der Wert in UTF-8. Die Felder folgen ohne Trennzeichen aufeinander. Die Längenangaben machen die Feldgrenzen eindeutig; Werte werden nicht maskiert. Umlaute zählen zwei Bytes, „Überlastungsanzeige“ ist 20 Bytes lang. Ein leerer Wert steht als 0:.
-- Darstellung der Werte: Zeitpunkte nach ISO 8601 in UTC mit Z, immer mit Sekunden, Sekundenbruchteile nur, wenn sie nicht null sind, dann mit drei Ziffern (z. B. 2026-09-28T16:05:00Z oder 2026-09-28T16:05:00.123Z). Zahlen dezimal ohne führende Nullen und ohne Tausendertrennzeichen. Aktion als Name (ANGELEGT, GEAENDERT, GELOESCHT). daten ist der gespeicherte JSON-Text ohne Leerzeichen zwischen den Elementen; darin stehen Wahrheitswerte als true und false, fehlende Werte als null, Texte in Anführungszeichen mit JSON-Maskierung. Das Ergebnis hängt nicht von Sprache, Zeitzone oder Plattform des Geräts ab.
+- Darstellung der Werte: Zeitpunkte nach ISO 8601 in UTC mit Z, immer mit Sekunden, Sekundenbruchteile nur, wenn sie nicht null sind, dann mit drei Ziffern (z. B. 2026-09-28T16:05:00Z oder 2026-09-28T16:05:00.123Z). Zahlen dezimal ohne führende Nullen und ohne Tausendertrennzeichen. Aktion als Name (ANGELEGT, GEAENDERT, GELOESCHT). daten ist der gespeicherte JSON-Text ohne Leerzeichen zwischen den Elementen; darin stehen Wahrheitswerte als true und false, fehlende Werte als null, Texte in Anführungszeichen, maskiert nach der Regel in 4.6 (Abschnitt Maskierung). Das Ergebnis hängt nicht von Sprache, Zeitzone oder Plattform des Geräts ab.
 - Vorgänger: prev ist die Prüfsumme (hash) des vorherigen Eintrags als 64 Zeichen Hex; beim ersten Eintrag einer Kette ist prev der Text 0.
 
 Formel: hash(n) = SHA-256( L(seq) ‖ L(zeitpunkt) ‖ L(aktion) ‖ L(objektArt) ‖ L(objektId) ‖ L(daten) ‖ L(prev) ) mit L(x) = Länge von x in UTF-8-Bytes, ein Doppelpunkt und x; ‖ heißt aneinanderhängen ohne Trennzeichen; prev = hash(n − 1), beim ersten Eintrag prev = 0. Bei Einträgen mit Uhrstand (4.7): hash(n) = SHA-256( … ‖ L(prev) ‖ L(neustarts) ‖ L(autoZeit) ).
@@ -267,6 +267,60 @@ Bestandsprüfsumme eines Eintrags: die ersten 32 Hex-Zeichen (128 Bit) der SHA-2
   hashlib.sha256('{"id":"e1","tag":"2026-09-28","kategorieId":"korrektur","unterkategorieId":null,"beginn":"2026-09-28T14:00:00Z","ende":"2026-09-28T15:30:00Z","dauerMinuten":0,"notiz":"Schulaufgabe 10b","quelle":"MANUELL","planRef":null,"erfasstAm":"2026-09-28T16:05:00Z","geaendertAm":null,"fach":"","klasse":""}'.encode('utf-8')).hexdigest()
   ```
 
+Maskierung: Dieselbe Regel gilt für die kanonische Form der Bestandsprüfsumme, für den Klartext-Export, über den bestand gerechnet wird, und für daten der Einträge (4.2); WATT schreibt alle drei mit der Bibliothek kotlinx.serialization. Ein Text steht in doppelten Anführungszeichen. Maskiert werden genau das Anführungszeichen, der umgekehrte Schrägstrich und die Steuerzeichen U+0000 bis U+001F; fünf Steuerzeichen haben eine Kurzform, die übrigen stehen als \u mit vier Hexadezimalziffern in Kleinbuchstaben:
+
+```
+Zeichen                      maskiert
+"  (U+0022)                  \"
+\  (U+005C)                  \\
+U+0008 Rückschritt           \b
+U+0009 Tabulator             \t
+U+000A Zeilenvorschub        \n
+U+000C Seitenvorschub        \f
+U+000D Wagenrücklauf         \r
+übrige U+0000 bis U+001F     \u0000 bis \u001f, z. B. U+001B als \u001b
+```
+
+Alle anderen Zeichen stehen unverändert in UTF-8, nie als \u-Folge: Umlaute und ß (je zwei Bytes), das Eurozeichen (drei Bytes), Zeichen außerhalb der Basisebene wie Emoji (vier Bytes, kein Ersatzpaar), der Schrägstrich /, U+007F sowie U+2028 und U+2029. Ein einzelnes Ersatzzeichen (ungültiges UTF-16, über die Oberfläche praktisch nicht einzugeben) wird bei der Umwandlung in UTF-8 zu einem Fragezeichen (Byte 0x3F). In Python entsteht dieselbe Form mit json.dumps(…, ensure_ascii=False, separators=(',', ':')); mit ensure_ascii=True (Standard in Python) oder einer Bibliothek, die Nicht-ASCII-Zeichen oder den Schrägstrich maskiert, ergibt sich eine andere Prüfsumme.
+
+Rechenbeispiel für einen Eintrag mit Umlauten, Anführungszeichen und Tabulator (Kennung e3, Notiz Aufsatz "Märchen", ein Tabulator und Größe, Fach Französisch, Klasse 7c). Die Befehle setzen voraus, dass die Konsole die Umlaute als Unicode bzw. UTF-8 übergibt; Python braucht r'…', damit die umgekehrten Schrägstriche erhalten bleiben:
+
+- Eingabe (B13):
+
+  ```
+  {"id":"e3","tag":"2026-09-29","kategorieId":"korrektur","unterkategorieId":null,"beginn":"2026-09-29T14:00:00Z","ende":"2026-09-29T15:00:00Z","dauerMinuten":0,"notiz":"Aufsatz \"Märchen\"\tGröße","quelle":"MANUELL","planRef":null,"erfasstAm":"2026-09-29T15:10:00Z","geaendertAm":null,"fach":"Französisch","klasse":"7c"}
+  ```
+
+- SHA-256 (B13):
+
+  ```
+  be0f6e05b619d12dadb72adddb87c1c0d1c6a6ddf4c32ddb3c0fdd844e43db2e
+  ```
+
+- Bestandsprüfsumme (B13):
+
+  ```
+  be0f6e05b619d12dadb72adddb87c1c0
+  ```
+
+- bash (B13):
+
+  ```
+  printf '%s' '{"id":"e3","tag":"2026-09-29","kategorieId":"korrektur","unterkategorieId":null,"beginn":"2026-09-29T14:00:00Z","ende":"2026-09-29T15:00:00Z","dauerMinuten":0,"notiz":"Aufsatz \"Märchen\"\tGröße","quelle":"MANUELL","planRef":null,"erfasstAm":"2026-09-29T15:10:00Z","geaendertAm":null,"fach":"Französisch","klasse":"7c"}' | sha256sum
+  ```
+
+- PowerShell (B13):
+
+  ```
+  [BitConverter]::ToString([System.Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes('{"id":"e3","tag":"2026-09-29","kategorieId":"korrektur","unterkategorieId":null,"beginn":"2026-09-29T14:00:00Z","ende":"2026-09-29T15:00:00Z","dauerMinuten":0,"notiz":"Aufsatz \"Märchen\"\tGröße","quelle":"MANUELL","planRef":null,"erfasstAm":"2026-09-29T15:10:00Z","geaendertAm":null,"fach":"Französisch","klasse":"7c"}'))).Replace('-','').ToLower()
+  ```
+
+- Python (B13):
+
+  ```
+  hashlib.sha256(r'{"id":"e3","tag":"2026-09-29","kategorieId":"korrektur","unterkategorieId":null,"beginn":"2026-09-29T14:00:00Z","ende":"2026-09-29T15:00:00Z","dauerMinuten":0,"notiz":"Aufsatz \"Märchen\"\tGröße","quelle":"MANUELL","planRef":null,"erfasstAm":"2026-09-29T15:10:00Z","geaendertAm":null,"fach":"Französisch","klasse":"7c"}'.encode('utf-8')).hexdigest()
+  ```
+
 Rechenbeispiel für einen kleinsten Datenbestand (Standardprofil, keine Kategorien, kein Zeitraster, keine Einträge, leere Nachweise); es gilt unverändert, wenn ein Kalenderlink gesetzt ist, denn Eingabe und Prüfsumme bleiben gleich (kalenderlink null). In der Eingabe ist jeder Zeilenumbruch als \n geschrieben; die Befehle setzen ihn wieder ein.
 
 - Eingabe (B3):
@@ -303,13 +357,13 @@ Rechenbeispiel für einen kleinsten Datenbestand (Standardprofil, keine Kategori
 
 Uhrstand je Eintrag: Jeder seit dem 24.10.2026 angelegte Eintrag trägt zwei weitere Felder, die in seine Prüfsumme eingehen (4.2): neustarts, die Anzahl der Neustarts des Geräts seit dem vorigen Eintrag nach dem Zähler BOOT_COUNT von Android (beim ersten Eintrag einer Kette 0; -1, wenn es keinen Bezug gibt, etwa beim ersten Eintrag nach dem Update, nach einer Wiederherstellung oder ohne Zähler), und autoZeit, ob „Datum und Uhrzeit automatisch“ eingeschaltet war. Schreibt ein Vorgang mehrere Einträge, nennt der erste die Neustarts, die folgenden 0. Ältere Einträge haben die Felder nicht und rechnen unverändert mit sieben Feldern.
 
-Verstellung der Geräteuhr (uhr_verstellt): Zum jüngsten Eintrag merkt sich WATT auf dem Gerät Wanduhr, Monotonuhr (Millisekunden seit dem Start des Geräts, die ein Verstellen der Uhrzeit nicht verändert) und Neustartzähler; diese Werte stehen nie in Sicherung, Export oder Prüfsumme. Ohne Neustart seitdem muss die verstrichene Wanduhrzeit der verstrichenen Monotonuhr entsprechen. Weicht sie um mehr als 2 Minuten ab, in eine der beiden Richtungen, entsteht ein Eintrag uhr_verstellt: aktion ANGELEGT, daten {"vorher":"…","nachher":"…","abweichungSekunden":n,"richtung":"vor"} bzw. "zurueck", mit der Zeit, die die Uhr ohne Verstellung zeigen müsste, und der Zeit, die sie zeigte (UTC); die Abweichung ist positiv bei vorgestellter Uhr. objektId nennt den Anlass: glied (vor einem neuen Eintrag, der unmittelbar folgt), zeitsignal (Android meldet eine Änderung der Uhrzeit; geprüft und vermerkt auch im Hintergrund ohne Entsperren), timer, nachweis oder start (Start eines Timers, Festhalten eines Nachweises, Start der App). Zeitzone und Sommerzeit verschieben die Zeitpunkte in UTC nicht und lösen nichts aus. Abweichungen bis 2 Minuten, etwa Korrekturen der Netzzeit, setzen nur den Bezug neu; ist die automatische Uhrzeit aus, summiert WATT ihre Beträge seit dem letzten Eintrag, und liegt die Summe über 2 Minuten, entsteht uhr_verstellt mit der Summe und dem Feld schritte, damit sich die Uhr nicht in vielen kleinen Schritten unbemerkt verstellen lässt. Läuft dabei ein Timer, korrigiert WATT seinen Beginn nach seiner eigenen Monotonuhr im selben Eintrag (timerBeginnVorher, timerBeginnNachher); ein Ereignis ergibt genau einen Eintrag. Nach einem Neustart gibt es keinen Bezug; dann gilt für Rücksprünge weiter uhr_ruecksprung (4.1).
+Verstellung der Geräteuhr (uhr_verstellt): Zum jüngsten Eintrag merkt sich WATT auf dem Gerät Wanduhr, Monotonuhr (Millisekunden seit dem Start des Geräts, die ein Verstellen der Uhrzeit nicht verändert) und Neustartzähler; diese Werte stehen nie in Sicherung, Export oder Prüfsumme. Ohne Neustart seitdem muss die verstrichene Wanduhrzeit der verstrichenen Monotonuhr entsprechen. Weicht sie um mehr als 2 Minuten ab, in eine der beiden Richtungen, entsteht ein Eintrag uhr_verstellt: aktion ANGELEGT, daten {"vorher":"…","nachher":"…","abweichungSekunden":n,"richtung":"vor"} bzw. "zurueck", mit der Zeit, die die Uhr ohne Verstellung zeigen müsste, und der Zeit, die sie zeigte (UTC). abweichungSekunden trägt ein Vorzeichen: Es ist nachher − vorher in ganzen Sekunden, zur Null hin gekürzt, also positiv bei richtung vor und negativ bei richtung zurueck (eine um eine Stunde zurückgestellte Uhr ergibt etwa -3600); der Betrag ist immer mindestens 120. richtung ist genau dann vor, wenn abweichungSekunden positiv ist. Bei summierten kleinen Schritten (schritte, unten) nennt abweichungSekunden die Summe ihrer Beträge mit dem Vorzeichen der Gesamtrichtung (Summe der Schritte mit Vorzeichen); heben sich die Schritte genau auf, gilt vor. objektId nennt den Anlass: glied (vor einem neuen Eintrag, der unmittelbar folgt), zeitsignal (Android meldet eine Änderung der Uhrzeit; geprüft und vermerkt auch im Hintergrund ohne Entsperren), timer, nachweis oder start (Start eines Timers, Festhalten eines Nachweises, Start der App). Zeitzone und Sommerzeit verschieben die Zeitpunkte in UTC nicht und lösen nichts aus. Abweichungen bis 2 Minuten, etwa Korrekturen der Netzzeit, setzen nur den Bezug neu; ist die automatische Uhrzeit aus, summiert WATT ihre Beträge seit dem letzten Eintrag, und liegt die Summe über 2 Minuten, entsteht uhr_verstellt mit der Summe und dem Feld schritte, damit sich die Uhr nicht in vielen kleinen Schritten unbemerkt verstellen lässt. Läuft dabei ein Timer, korrigiert WATT seinen Beginn nach seiner eigenen Monotonuhr im selben Eintrag (timerBeginnVorher, timerBeginnNachher); ein Ereignis ergibt genau einen Eintrag. Nach einem Neustart gibt es keinen Bezug; dann gilt für Rücksprünge weiter uhr_ruecksprung (4.1).
 
 Zeitpunkt des Eintrags uhr_verstellt: Er entsteht erst, wenn WATT die Verstellung erkennt, also nach ihr, und trägt die Zeit der verstellten Uhr in diesem Moment; zeitpunkt gleicht nachher. Bei objektId glied ist das zugleich der Zeitpunkt des unmittelbar folgenden Eintrags, bei zeitsignal liegt er in der Regel wenige Sekunden nach der Verstellung, bei den übrigen Anlässen beim Start des Timers, beim Festhalten des Nachweises bzw. beim Start der App. Alle Einträge davor tragen die Zeit der Uhr vor der Verstellung, alle danach die der verstellten Uhr. Einen Zeitsprung zwischen dem vorigen Eintrag und dem Eintrag uhr_verstellt erklären Prüfende so:
 
 zeitpunkt(uhr_verstellt) − zeitpunkt(voriger Eintrag) = (vorher − zeitpunkt(voriger Eintrag)) + (nachher − vorher).
 
-Der erste Teil ist die tatsächlich verstrichene Zeit nach der Monotonuhr, bis auf unvermerkte Abweichungen von höchstens 2 Minuten, weil WATT den Bezug bei Prüfungen ohne Befund fortschreibt; er ist nie negativ. Der zweite Teil ist die Verstellung: Er gleicht abweichungSekunden (in ganzen Sekunden, zur Null hin gekürzt), bei summierten kleinen Schritten (schritte) der Summe mit Vorzeichen, während abweichungSekunden dann die Summe der Beträge nennt. Ein Rücksprung von mehr als 2 Minuten bis zum Eintrag uhr_verstellt mit richtung zurueck ist damit erklärt; ein uhr_ruecksprung folgt nicht.
+Der erste Teil ist die verstrichene Zeit nach der Monotonuhr plus die Abweichungen, die WATT seit dem vorigen Eintrag bei Prüfungen ohne Befund unvermerkt in den Bezug übernommen hat (jede höchstens 2 Minuten). Bei ausgeschalteter automatischer Uhrzeit summiert WATT diese Abweichungen (oben); solange ihre Beträge zusammen höchstens 2 Minuten ergeben, bleiben sie unvermerkt, darüber entsteht uhr_verstellt mit schritte. Daraus folgt die Prüfregel: Der erste Teil ist nicht kleiner als −2 Minuten (−120 Sekunden, Grenze eingeschlossen); bei summierten kleinen Schritten (schritte) stehen die Schritte vollständig im zweiten Teil, und der erste Teil ist die verstrichene Zeit nach der Monotonuhr, also nicht negativ. Ausgenommen sind Korrekturen der Uhr zurück bei eingeschalteter automatischer Uhrzeit (Netzzeit): WATT summiert sie nicht, jede beträgt höchstens 2 Minuten, in der Praxis Sekunden. Liegt der erste Teil unter der Grenze, ist das ein Hinweis zur Klärung, kein Beleg einer Manipulation; autoZeit des Eintrags uhr_verstellt zeigt, ob die automatische Uhrzeit bei der Erkennung eingeschaltet war. Der zweite Teil ist die Verstellung: Er gleicht abweichungSekunden (in ganzen Sekunden, zur Null hin gekürzt), bei summierten kleinen Schritten (schritte) der Summe mit Vorzeichen, während abweichungSekunden dann die Summe der Beträge nennt. Ein Rücksprung von mehr als 2 Minuten bis zum Eintrag uhr_verstellt mit richtung zurueck ist damit erklärt; ein uhr_ruecksprung folgt nicht.
 
 Schlüssel: Für jede Kette lässt WATT Android auf dem Gerät einen Schlüssel erzeugen (EC P-256, nur zum Signieren, SHA256withECDSA) im Android-Schlüsselspeicher in geschützter Hardware (TEE, bewusst nicht StrongBox), ohne Bindung an die Anmeldung. Der private Schlüssel verlässt das Gerät nie und steht in keiner Datei. Android bestätigt den Schlüssel mit einer Zertifikatskette (Key Attestation): Das Blattzertifikat enthält den öffentlichen Schlüssel und die Erweiterung 1.3.6.1.4.1.11129.2.1.17 mit Sicherheitsstufe, Challenge, der App (Paketname und SHA-256 ihres Signaturzertifikats), Android-Version, Stand der Sicherheitsupdates und RootOfTrust (verifizierter Start, Bootloader gesperrt); Gerätekennungen fordert WATT nicht an. Die Challenge (attestationChallenge) ist immer genau 32 Bytes lang:
 
@@ -322,7 +376,7 @@ Signatur und Deutung: Nach jedem Vorgang, der Einträge anhängt, signiert WATT 
 
 Prüfverfahren für die Signaturen (WATTest, 8., oder eigenes Werkzeug):
 
-1. Zertifikatskette jedes Schlüssels bis zu einer Wurzel von Google prüfen: der RSA-Wurzel für Geräte mit Werksschlüsseln oder der Wurzel „Key Attestation CA1“ (ECDSA P-384), die Google seit 2026 für neu bereitgestellte Schlüssel nutzt; jedes Zertifikat muss vom nächsten signiert sein. Die Gültigkeitszeiträume zum Zeitpunkt der Erzeugung prüfen (Zeitpunkt des Eintrags schluessel bzw. creationDateTime, beide nach der Geräteuhr).
+1. Zertifikatskette jedes Schlüssels bis zu einer Wurzel von Google prüfen: der RSA-Wurzel für Geräte mit Werksschlüsseln oder der Wurzel „Key Attestation CA1“ (ECDSA P-384), die Google seit 2026 für neu bereitgestellte Schlüssel nutzt; jedes Zertifikat muss vom nächsten signiert sein. Die Gültigkeitszeiträume (notBefore bis notAfter, Grenzen eingeschlossen) aller Zertifikate der Kette zu einem einzigen Bezugszeitpunkt prüfen, dem Zeitpunkt der Erzeugung nach der Geräteuhr. Maßgeblich ist der zeitpunkt des Eintrags schluessel; WATT erzeugt den Schlüssel unmittelbar vor diesem Eintrag. Einzige Ausnahme ist der im Voraus erzeugte Schlüssel einer leeren Kette (der Eintrag schluessel mit challenge): Sein Eintrag entsteht erst mit dem ersten eigentlichen Eintrag, unter Umständen Tage nach der Erzeugung; dort ist creationDateTime aus der Attestierung maßgeblich (Tag 701 der Erweiterung, Millisekunden seit 1970 in UTC), und nur wenn es fehlt, der zeitpunkt des Eintrags. Sonst dient creationDateTime nur der Ergänzung: Eine Abweichung vom zeitpunkt des Eintrags ist kein Befund, beide stammen von der Geräteuhr. Für das Blattzertifikat setzt WATT keine eigenen Grenzen; Android trägt dann seine Standardwerte ein (01.01.1970 bis 01.01.2048), entscheidend sind also die Zwischenzertifikate.
 2. Sperrliste https://android.googleapis.com/attestation/status: Kein Zertifikat der Kette darf darin stehen.
 3. attestationApplicationId: Paketname de.achim.watt und SHA-256 des App-Signaturzertifikats 4accbc1ff7bb15f57a2364e39906568e01c4e4b53e4e5d63e77148eb3bfa99d9 (dasselbe Zertifikat signiert die Installationen aus Google Play).
 4. RootOfTrust: verifiedBootState Verified und deviceLocked true.
@@ -333,7 +387,7 @@ Prüfverfahren für die Signaturen (WATTest, 8., oder eigenes Werkzeug):
 Befund in drei Stufen:
 
 - bestätigt: alle Schritte erfüllt.
-- nicht bestätigbar (keine Fälschung belegt, aber auch keine Herkunft): keine Signaturen; Einträge vor dem ersten Schlüssel oder nach einem Eintrag nicht_verfuegbar; ein Zertifikat war zum Zeitpunkt der Erzeugung nach der Geräteuhr nicht gültig (die Uhr des Geräts kann falsch gegangen sein); verifiedBootState nicht Verified oder deviceLocked false (entsperrter Bootloader oder verändertes System: Android kann dann nicht für die App bürgen); Sicherheitsstufe Software (Emulator, sehr alte Geräte); Sperrliste nicht erreichbar.
+- nicht bestätigbar (keine Fälschung belegt, aber auch keine Herkunft): keine Signaturen; Einträge vor dem ersten Schlüssel oder nach einem Eintrag nicht_verfuegbar; ein Zertifikat war zum Bezugszeitpunkt aus Schritt 1 (Zeitpunkt der Erzeugung nach der Geräteuhr) nicht gültig (die Uhr des Geräts kann falsch gegangen sein); verifiedBootState nicht Verified oder deviceLocked false (entsperrter Bootloader oder verändertes System: Android kann dann nicht für die App bürgen); Sicherheitsstufe Software (Emulator, sehr alte Geräte); Sperrliste nicht erreichbar.
 - widerlegt: falsche Signatur oder Signatur mit dem falschen Schlüssel; falsche Challenge; anderer Paketname oder anderes Signaturzertifikat der App; fingerabdruck oder zertifikateSha256 passen nicht zu den Zertifikaten; ein Zertifikat ist nicht vom nächsten signiert oder steht auf der Sperrliste; die Kette führt nicht zu einer Wurzel von Google.
 
 WATT prüft unter „Mehr → Integrität“ die Signaturen und zeigt Sicherheitsstufe, Bootloader, Android-Version und Sicherheitsupdate aus der Bestätigung; die Kette bis zur Wurzel und die Sperrliste prüft erst WATTest (8.).

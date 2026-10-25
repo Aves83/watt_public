@@ -1,4 +1,4 @@
-Stand: 2026-10-22 (YYYY-MM-DD)
+Stand: 2026-10-25 (YYYY-MM-DD)
 
 # Datenformat `watt-daten`
 
@@ -8,9 +8,12 @@ WATT exportiert die erfassten Daten im Format `watt-daten` als JSON oder als XML
 
 | Version | Schemata | Genutzt von | JSON einlesbar bis |
 | --- | --- | --- | --- |
+| 19 (Vorabfassung) | `watt-daten-19.schema.json`, `watt-daten-19.xsd` | noch keine ausgelieferte Fassung | – |
 | 18 | `watt-daten-18.schema.json`, `watt-daten-18.xsd` | WATT 0.8.109 „Cherimoya“ | WATT 0.8.109 „Cherimoya“ |
 | 17 | `watt-daten-17.schema.json` | WATT 0.8.100 „Bergamotte“ | WATT 0.8.109 „Cherimoya“ |
 | 16 | `watt-daten-16.schema.json` | WATT 0.8.94 „Apfel“ | WATT 0.8.109 „Cherimoya“ |
+
+Version 19 ist eine Vorabfassung für die nächste Fassung von WATT; sie ist noch nicht ausgeliefert und kann sich bis dahin ändern. Erst mit der Auslieferung gilt sie als veröffentlicht und unveränderlich.
 
 „Genutzt von“ nennt die Fassungen von WATT, die diese Version schreiben, „JSON einlesbar bis“ die neueste Fassung, die eine JSON-Datei dieser Version einlesen kann.
 
@@ -42,6 +45,16 @@ xmllint --noout --schema watt-daten-<Version>.xsd <Datei>.xml
 ```
 
 ## Änderungen je Version
+
+### Version 19 (Vorabfassung)
+
+- `nachweise.anzeigen[].anhaenge`: fremde PDFs und Fotos zur Anzeige (`id`, `art`, `name`, `groesse`, `erstelltAm`, optional `teil` bzw. `dateiname`); im XML `anhang`.
+- Änderungs-Glieder von `eintrag` und `abwesenheit` tragen das optionale Feld `begruendung` (Kommentar zur Änderung) in `daten`.
+- `protokoll[].neustarts` und `protokoll[].autoZeit` (Uhrstand, nur bei neuen Gliedern; gehen in die Prüfsumme ein).
+- Neue Gliedarten `uhr_verstellt` und `schluessel`; das Glied `wiederherstellung` nennt `signaturen` und gegebenenfalls `signaturenUngueltigAb`.
+- Neue Listen `kettenschluessel` (Fingerabdruck, Zertifikatskette) und `kettensignaturen` (seq, Fingerabdruck, Signatur); im XML `schluessel`, `zertifikat`, `signatur`.
+
+Einzelheiten: [Technische Erläuterung](https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md), Abschnitt 4.7, und [Datenformat](https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md).
 
 ### Version 18
 
