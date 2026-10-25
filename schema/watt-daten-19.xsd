@@ -712,7 +712,7 @@
 
   <xs:complexType name="Kettenschluesselliste">
     <xs:sequence>
-      <xs:element name="schluessel" type="Kettenschluessel" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="schluessel" type="Kettenschluessel" minOccurs="0" maxOccurs="256"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -722,7 +722,7 @@
       <xs:element name="zertifikate">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="zertifikat" type="xs:base64Binary" maxOccurs="unbounded"/>
+            <xs:element name="zertifikat" type="Kettenzertifikat" maxOccurs="8"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -737,11 +737,33 @@
 
   <xs:complexType name="Kettensignatur">
     <xs:sequence>
-      <xs:element name="seq" type="xs:long"/>
+      <xs:element name="seq" type="Gliednummer"/>
       <xs:element name="fingerabdruck" type="Hash"/>
-      <xs:element name="signatur" type="xs:base64Binary"/>
+      <xs:element name="signatur" type="Kettensignaturwert"/>
     </xs:sequence>
   </xs:complexType>
+
+  <!-- Grenzen beim Lesen (seit 25.10.2026, E-756): Zertifikat höchstens 8192 Bytes, Signatur höchstens 128 Bytes -->
+
+  <xs:simpleType name="Kettenzertifikat">
+    <xs:restriction base="xs:base64Binary">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="8192"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Kettensignaturwert">
+    <xs:restriction base="xs:base64Binary">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="128"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Gliednummer">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
 
   <xs:complexType name="KalenderEntscheidungen">
     <xs:sequence>

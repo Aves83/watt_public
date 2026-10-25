@@ -49,10 +49,11 @@ xmllint --noout --schema watt-daten-<Version>.xsd <Datei>.xml
 ### Version 19 (Vorabfassung)
 
 - `nachweise.anzeigen[].anhaenge`: fremde PDFs und Fotos zur Anzeige (`id`, `art`, `name`, `groesse`, `erstelltAm`, optional `teil` bzw. `dateiname`); im XML `anhang`.
-- Änderungs-Glieder von `eintrag` und `abwesenheit` tragen das optionale Feld `begruendung` (Kommentar zur Änderung) in `daten`.
+- Änderungs-Glieder tragen in `daten` den Kommentar zur Änderung `begruendung`: bei `eintrag` immer (ohne Kommentar `null`), bei `abwesenheit` nur mit Kommentar.
 - `protokoll[].neustarts` und `protokoll[].autoZeit` (Uhrstand, nur bei neuen Gliedern; gehen in die Prüfsumme ein).
-- Neue Gliedarten `uhr_verstellt` und `schluessel`; das Glied `wiederherstellung` nennt `signaturen` und gegebenenfalls `signaturenUngueltigAb`.
-- Neue Listen `kettenschluessel` (Fingerabdruck, Zertifikatskette) und `kettensignaturen` (seq, Fingerabdruck, Signatur); im XML `schluessel`, `zertifikat`, `signatur`.
+- Neue Gliedarten `uhr_verstellt` und `schluessel`; das Glied `wiederherstellung` nennt `signaturen` (`GEPRUEFT`, `UNGUELTIG`, `WIDERLEGT`, `KEINE`, `NICHT_PRUEFBAR`) und gegebenenfalls `signaturenUngueltigAb`.
+- Das Glied `neubeginn` nennt `bestandsform` (2: Bestandsprüfsummen mit `importiertAm`).
+- Neue Listen `kettenschluessel` (Fingerabdruck, Zertifikatskette) und `kettensignaturen` (seq, Fingerabdruck, Signatur); im XML `schluessel`, `zertifikat`, `signatur`. Grenzen beim Lesen: höchstens 256 Schlüssel, je Schlüssel 1 bis 8 Zertifikate zu höchstens 8 KB, Signaturen 1 bis 128 Bytes, `seq` von 1 bis zum letzten Glied.
 
 Einzelheiten: [Technische Erläuterung](https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md), Abschnitt 4.7, und [Datenformat](https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md).
 

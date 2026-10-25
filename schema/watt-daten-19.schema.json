@@ -27,7 +27,7 @@
     "kalenderlink": { "type": ["string", "null"], "default": null, "description": "Kalenderlink des Stundenplans (seit Version 17); im Klartext-Export immer null, der Link selbst steht nur in der verschlüsselten Sicherung" },
     "kalenderZuordnungen": { "type": "array", "items": { "$ref": "#/$defs/kalenderZuordnung" }, "default": [], "description": "Zuordnung je Fach aus dem Kalenderlink (seit Version 17)" },
     "kalenderEntscheidungen": { "type": "array", "items": { "$ref": "#/$defs/kalenderEntscheidung" }, "default": [], "description": "Entscheidungen zu Vorschlägen aus dem Kalenderlink (seit Version 17)" },
-    "kettenschluessel": { "type": "array", "items": { "$ref": "#/$defs/kettenschluessel" }, "default": [], "description": "Schlüssel der Arbeitszeitkette mit der Zertifikatskette der Attestierung (F-243, seit 24.10.2026); fehlt ohne Schlüssel und in Buchungsdaten" },
+    "kettenschluessel": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/kettenschluessel" }, "default": [], "description": "Schlüssel der Arbeitszeitkette mit der Zertifikatskette der Attestierung (F-243, seit 24.10.2026); fehlt ohne Schlüssel und in Buchungsdaten; höchstens 256 (E-756)" },
     "kettensignaturen": { "type": "array", "items": { "$ref": "#/$defs/kettensignatur" }, "default": [], "description": "Signaturen von Köpfen der Arbeitszeitkette (F-243, seit 24.10.2026); fehlt ohne Signaturen und in Buchungsdaten" }
   },
   "if": { "properties": { "umfang": { "const": "BUCHUNGEN" } }, "required": ["umfang"] },
@@ -348,7 +348,7 @@
       "description": "Schlüssel der Arbeitszeitkette (F-243); der private Schlüssel steht nirgends",
       "properties": {
         "fingerabdruck": { "$ref": "#/$defs/hash", "description": "SHA-256 über die SubjectPublicKeyInfo des öffentlichen Schlüssels" },
-        "zertifikate": { "type": "array", "minItems": 1, "items": { "type": "string", "contentEncoding": "base64" }, "description": "Zertifikatskette der Attestierung, je Zertifikat Base64 (DER), Blatt zuerst" }
+        "zertifikate": { "type": "array", "minItems": 1, "maxItems": 8, "items": { "type": "string", "contentEncoding": "base64", "minLength": 1, "maxLength": 10924, "pattern": "^[A-Za-z0-9+/]+={0,2}$" }, "description": "Zertifikatskette der Attestierung, je Zertifikat Base64 (DER, genau ein Element, höchstens 8192 Bytes, E-756), Blatt zuerst" }
       }
     },
     "kettensignatur": {
@@ -357,9 +357,9 @@
       "required": ["seq", "fingerabdruck", "signatur"],
       "description": "Signatur des Kopfs seq (F-243): SHA256withECDSA über die ASCII-Nachricht watt-kopf-1:<hash des Glieds>",
       "properties": {
-        "seq": { "type": "integer", "minimum": 1 },
+        "seq": { "type": "integer", "minimum": 1, "description": "Glied der Kette dieser Datei, höchstens die seq des letzten Glieds (seit 25.10.2026)" },
         "fingerabdruck": { "$ref": "#/$defs/hash" },
-        "signatur": { "type": "string", "contentEncoding": "base64", "description": "DER-kodiertes ECDSA, Base64" }
+        "signatur": { "type": "string", "contentEncoding": "base64", "minLength": 1, "maxLength": 172, "pattern": "^[A-Za-z0-9+/]+={0,2}$", "description": "DER-kodiertes ECDSA, Base64, höchstens 128 Bytes (E-756)" }
       }
     },
     "timer": {
