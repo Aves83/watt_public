@@ -74,10 +74,13 @@ ul.material{margin:.2rem 0 .6rem 1.3rem;padding-left:1.1rem;color:var(--leise)}
 ul.material li{margin:.3rem 0}
 .hinweis a{color:inherit;font-weight:600}
 footer{max-width:760px;margin:2.4rem auto 0;padding:18px 16px 36px;border-top:1px solid var(--linie);color:var(--leise);font-size:.92rem}
-footer nav{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:.8rem}
+footer nav{margin-bottom:.8rem}
+footer .gruppe{display:flex;flex-wrap:wrap;align-items:center;column-gap:20px}
+footer .gruppe .titel{font-weight:600;color:var(--text)}
 footer nav a{min-height:44px;display:inline-flex;align-items:center}
 footer p{margin:.3rem 0}
 @media (max-width:480px){
+  footer .gruppe .titel{flex-basis:100%;margin-top:.4rem}
   .kopf-innen{flex-direction:column;align-items:flex-start;gap:16px;padding-top:24px}
   .logo{width:76px;height:76px}
   .schritt{padding-left:18px;padding-top:66px}
@@ -152,14 +155,18 @@ footer p{margin:.3rem 0}
 </main>
 
 <footer>
-  <nav aria-label="Rechtliches und Technisches">
-    <a href="doc/license.txt" target="_blank" rel="noopener">Nutzungsbedingungen</a>
-    <a href="doc/privacy.txt" target="_blank" rel="noopener">Datenschutzerklärung</a>
-    <a href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a>
-    <a href="https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md" target="_blank" rel="noopener">Datenformat</a>
-    <a href="https://github.com/Aves83/watt_public/tree/main/schema" target="_blank" rel="noopener">Schemas</a>
-    <a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a>
-    <a href="doc/impressum.html" target="_blank" rel="noopener">Impressum</a>
+  <nav aria-label="Rechtliches und Unterlagen für Prüfende">
+    <div class="gruppe"><span class="titel">Rechtliches:</span>
+      <a href="doc/license.txt" target="_blank" rel="noopener">Nutzungsbedingungen</a>
+      <a href="doc/privacy.txt" target="_blank" rel="noopener">Datenschutzerklärung</a>
+      <a href="doc/impressum.html" target="_blank" rel="noopener">Impressum</a>
+    </div>
+    <div class="gruppe"><span class="titel">Für Prüfende:</span>
+      <a href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a>
+      <a href="https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md" target="_blank" rel="noopener">Datenformat</a>
+      <a href="https://github.com/Aves83/watt_public/tree/main/schema" target="_blank" rel="noopener">Schemas</a>
+      <a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a>
+    </div>
   </nav>
   <p>WATT ersetzt keine Rechtsberatung. Durch die Teilnahme am Test entstehen keine Rechte, Ansprüche oder Vorteile.</p>
   <p>© 2026 Hans-Joachim Steudel. WATT ist proprietär; es gelten die Nutzungsbedingungen.</p>
