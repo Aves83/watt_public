@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WATT – Arbeitszeiterfassung für Lehrkräfte (kostenlose Beta)</title>
-<meta name="description" content="Kostenlose Android-App zur Arbeitszeiterfassung für verbeamtete Lehrkräfte: lokal auf dem Gerät, ohne Konto und Server, mit 48-Stunden-Prüfung nach dem Maßstab der EU und, wo vorhanden, deines Landes. Jetzt Tester:in werden.">
+<title>WATT – Arbeitszeit-App für Lehrerinnen und Lehrer (kostenlose Beta)</title>
+<meta name="description" content="Kostenlose Android-App für verbeamtete Lehrerinnen und Lehrer: Arbeitszeit erfassen, Soll nach den Regeln deines Landes, 48-Stunden-Grenze, Überlastungsanzeige mit Nachweis. Lokal und verschlüsselt, ohne Konto.">
 <meta name="google-site-verification" content="5AS0NQAuqOqj9fVq1jMRTQENyp5FyQGmeCDpcSjxA7g" />
 <meta name="color-scheme" content="light dark">
 <style>
@@ -73,6 +73,7 @@ details.falt a{color:var(--text);font-weight:600}
 ul.material{margin:.2rem 0 .6rem 1.3rem;padding-left:1.1rem;color:var(--leise)}
 ul.material li{margin:.3rem 0}
 .hinweis a{color:inherit;font-weight:600}
+p.laender{color:var(--leise);margin:.4rem 0 1.4rem}
 footer{max-width:760px;margin:2.4rem auto 0;padding:18px 16px 36px;border-top:1px solid var(--linie);color:var(--leise);font-size:.92rem}
 footer nav{margin-bottom:.8rem}
 footer .gruppe{display:flex;flex-wrap:wrap;align-items:center;column-gap:20px}
@@ -100,7 +101,7 @@ footer p{margin:.3rem 0}
 </header>
 
 <main>
-  <p class="einleitung"><span class="beta">BETA</span>WATT erfasst die Arbeitszeit von verbeamteten Lehrkräften in allen Ländern außer Hamburg und stellt sie dem persönlichen Soll gegenüber – lokal und verschlüsselt auf deinem Android-Gerät, ohne Konto und ohne Server. Gerade läuft der geschlossene Test bei Google Play. So machst du mit:</p>
+  <p class="einleitung"><span class="beta">BETA</span>WATT erfasst die Arbeitszeit von verbeamteten Lehrerinnen und Lehrern in allen Ländern außer Hamburg und stellt sie dem persönlichen Soll gegenüber – lokal und verschlüsselt auf deinem Android-Gerät, ohne Konto und ohne Server. Gerade läuft der geschlossene Test bei Google Play. So machst du mit:</p>
 
   <div class="hinweis">
     <strong>Bevor du anfängst</strong>
@@ -149,6 +150,17 @@ footer p{margin:.3rem 0}
     <li><strong>Nachweise prüfen.</strong> Wer von dir einen vollständigen Export (JSON oder XML) oder einen Aktenauszug aus WATT bekommt, kann ihn mit <a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a> im Browser prüfen: ob die Aufzeichnungen in sich stimmig sind und zu den Prüfvermerken passen. Die Datei verlässt dabei den Rechner nicht.</li>
     <li><strong>Aussteigen</strong> kannst du jederzeit: auf der Testseite „Test verlassen“ wählen und die Gruppe verlassen.</li>
   </ul>
+
+  <h2>Was WATT kann</h2>
+  <ul class="liste">
+    <li><strong>Schnell erfassen.</strong> Ein Tipp auf eine Tätigkeit startet den Timer, Vergessenes trägst du nach. Den Unterricht übernimmt WATT aus deinem Stundenplan – von Hand eingetragen, als Kalenderdatei oder automatisch über den Kalenderlink, etwa von WebUntis.</li>
+    <li><strong>Dein Soll nach den Regeln deines Landes.</strong> Wochenarbeitszeit, Pflichtstunden, Teilzeit, Ermäßigungen nach Alter und Schwerbehinderung, Urlaub und Ferien: WATT rechnet dein persönliches Soll und zeigt den Saldo.</li>
+    <li><strong>48-Stunden-Grenze im Blick.</strong> Der Durchschnitt nach dem Maßstab der EU-Arbeitszeitrichtlinie und, wo vorhanden, nach dem deines Dienstherrn.</li>
+    <li><strong>Überlastungsanzeige mit Nachweis.</strong> Anschreiben und Einzelnachweis als PDF; eine Hash-Kette macht jede spätere Änderung an deinen Aufzeichnungen sichtbar.</li>
+    <li><strong>Deputat und Vorbereitungsdienst.</strong> Das Deputatskonto zeigt Mehr- und Minderstunden; Referendarinnen und Referendare rechnen mit der Arbeitszeit im Vorbereitungsdienst.</li>
+    <li><strong>Auswerten und exportieren.</strong> Überblick nach Tätigkeiten, Bericht als PDF, Tabellen für Excel und CSV.</li>
+  </ul>
+  <p class="laender">WATT kennt die Regeln für Lehrerinnen und Lehrer aller Schularten in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, dem Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein und Thüringen.</p>
 
   <h2>Feedback</h2>
   <p>Fehler, Wünsche, Fragen? Schreib mir gern: <a href="mailto:hans-joachim.steudel@tum.de">hans-joachim.steudel@tum.de</a></p>
