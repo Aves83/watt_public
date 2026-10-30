@@ -1,0 +1,54 @@
+WATT – Quellen zum Vergleich in watt-ueberblick.pdf (Folie 11 „Andere Lösungen im Überblick“)
+
+Stand: 30.10.2026. Alle Seiten am 30.10.2026 abgerufen (Deutschland, Sprache Deutsch).
+Zeichen: ● ja (auch als Beta) · ◐ teilweise · – nein · ? nicht bekannt (vom Anbieter nicht genannt) · n. a. nicht anwendbar
+
+Ohne Gewähr: Die Angaben stammen aus öffentlich zugänglichen Quellen. Anbieter entwickeln ihre Produkte weiter – bitte selbst prüfen. Hinweise auf Fehler gern an hans-joachim.steudel@tum.de.
+
+
+QUELLEN
+
+[1] LehrZeit, Produktseite – https://info.lehrzeit.app/
+[2] LehrZeit, Google Play – https://play.google.com/store/apps/details?id=app.lehrzeit
+[3] GEW, „Mit diesen Apps erfassen Lehrkräfte ihre Arbeitszeit selbst“, 18.08.2026 – https://www.gew.de/aktuelles/detailseite/mit-diesen-apps-erfassen-lehrkraefte-ihre-arbeitszeit-selbst
+[4] Stundenwart, Produktseite – https://www.stundenwart.de/
+[5] MiZei, Seite für Lehrkräfte – https://mizei.de/lehrer/
+[6] MiZei, Google Play – https://play.google.com/store/apps/details?id=com.mizei.app.mizei_app
+[7] MiZei, App Store – https://apps.apple.com/de/app/mizei/id6448945057
+[8] Senat der Freien Hansestadt Bremen, Vorlage „Pilotprojekt Lehrkräftearbeitszeiterfassung“, 21.10.2025 – https://www.rathaus.bremen.de/sixcms/media.php/13/20251021_Pilotprojekt_Lehrkraeftearbeitszeiterfassung.pdf
+[9] Untis, „Wie Untis die Arbeitszeiterfassung von Lehrkräften neu denkt“ – https://www.untis.at/news/wie-untis-die-arbeitszeiterfassung-von-lehrkraeften-neu-denkt
+[10] News4teachers, „Arbeitszeit von Lehrkräften: Bremen erkennt als erstes Bundesland Erfassungspflicht ausdrücklich an – Pilotprojekt startet nach den Sommerferien“, Juni 2026 – https://www.news4teachers.de/2026/06/arbeitszeit-von-lehrkraeften-bremen-erkennt-als-erstes-bundesland-erfassungspflicht-ausdruecklich-an-pilotprojekt-startet-nach-den-sommerferien/
+
+
+BEWERTUNGEN UND IHRE HERKUNFT
+
+WATT
+- App: Android / Apple / Web ● (Beta) / – / –: geschlossener Test bei Google Play
+
+LehrZeit
+- Daten nur auf dem Gerät –: „Server in Deutschland“; App und Browser zeigen dieselben Zeiten [1][2]
+- Zugriff nur durch dich selbst ●: „Kein Schulleitungs-Zugriff, keine Leistungskontrolle“, „ausschließlich die Lehrkraft selbst“ [1]
+- Selbst wählbar ●: Einzellizenz für die einzelne Lehrkraft [1][2]
+- Kostenlos für die Lehrkraft –: Einzellizenz 4,00 € im Monat, 14 Tage kostenlos testen [1][2]; für Mitglieder der GEW Hessen kostenlos, GEW Berlin und Baden-Württemberg stellen Mitgliedern einen Zugang bereit [3]
+- App: Android / Apple / Web ● / – / ●: Google Play [2]; iPhone-App „folgt in Kürze im App Store“ [1]; Browser auf PC, Tablet und Smartphone [1]
+
+Stundenwart
+- Daten nur auf dem Gerät ●: „offline-first … kein Backend, kein Konto“, „lokale Datenbank auf deinem Gerät“ [4]
+- Zugriff nur durch dich selbst ●: „Deine Daten gehen nie an uns oder an Dritte“ [4]
+- Selbst wählbar ●: Beta-Teilnahme per E-Mail, danach App Store und Google Play [4]
+- Kostenlos für die Lehrkraft –: 30 Tage kostenlos, danach 2,99 € im Monat oder 24,99 € im Jahr [4]
+- App: Android / Apple / Web ● (Beta) / ● (Beta) / –: Beta für iPhone (TestFlight) und Android, Start in den Stores danach; keine Web-Version genannt [4]
+
+MiZei
+- Daten nur auf dem Gerät –: „cloudbasiert“, „Speicherung in Deutschland“ [6][7]
+- Zugriff nur durch dich selbst ◐: als Einzelnutzer:in nur selbst; mit Lizenz über Schule oder Ministerium „ermöglicht [die Benutzerverwaltung] es deiner Organisation, … Abwesenheiten einzusehen, Überstunden auszuwerten“ [6][7]; ein Dashboard mit „detaillierte[m] Überblick über alle Daten“ für Schulleitung und Ministerium ist „demnächst verfügbar“ [5]
+- Selbst wählbar ●: Einzelnutzung möglich [5][6][7]
+- Kostenlos für die Lehrkraft –: 1 € im Monat bzw. 10 € im Jahr, 4 Wochen kostenlos testen [5][6]; GEW Bayern übernimmt für Mitglieder die Kosten für ein Schuljahr [3]
+- App: Android / Apple / Web ● / ● / ●: Google Play [6], App Store [7], Web-App [5]
+
+Untis Arbeitszeit (Pilot Bremen 2026/27; Name nach [10])
+- Daten nur auf dem Gerät –: Bereitstellung und Betrieb der technischen Infrastruktur durch den Anbieter; Dashboard für Schulleitungen [8][9]
+- Zugriff nur durch dich selbst –: Schulleitungen erhalten ein Dashboard mit aggregierten und nicht-aggregierten Daten [8]; „Für Schulleitungen ist zusätzlich ein Dashboard geplant“ [9]
+- Selbst wählbar –: nur an ausgewählten Pilotschulen (neun Bremer Schulen, August 2026 bis Juli 2027), eingeführt vom Land [8][9][10]
+- Kostenlos für die Lehrkraft n. a.: vom Dienstherrn gestellt [8]
+- App: Android / Apple / Web ? / ● / ?: App für die dienstlichen iPads [8]; Android und Web nicht genannt [8][9]
