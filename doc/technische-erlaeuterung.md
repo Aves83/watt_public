@@ -1,8 +1,8 @@
-Stand: 2026-10-27 (YYYY-MM-DD)
+Stand: 2026-11-01 (YYYY-MM-DD)
 
 # Technische Erläuterung: Nachvollziehbarkeit und Fälschungssicherheit in WATT
 
-WATT-Version: Vorabfassung · Stand: 27.10.2026
+WATT-Version: 0.8.111 · Stand: 01.11.2026
 
 ## 1. Zweck
 
