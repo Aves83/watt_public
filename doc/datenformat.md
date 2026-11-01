@@ -1,4 +1,4 @@
-Stand: 2026-10-26 (YYYY-MM-DD)
+Stand: 2026-11-01 (YYYY-MM-DD)
 
 # Datenformat von WATT
 
