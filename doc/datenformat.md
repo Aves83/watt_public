@@ -1,8 +1,8 @@
-Stand: 2026-11-01 (YYYY-MM-DD)
+Stand: 2026-11-03 (YYYY-MM-DD)
 
 # Datenformat von WATT
 
-Stand: 01.11.2026 · Format `watt-daten`, Version 19, als JSON und XML · verschlüsselte Sicherung im Container der Version 3 · Schemas in `docs/schnittstelle/`, veröffentlicht in watt_public unter `schema/`
+Stand: 02.11.2026 · Format `watt-daten`, Version 19, als JSON und XML · verschlüsselte Sicherung im Container der Version 3 · Schemas in `docs/schnittstelle/`, veröffentlicht in watt_public unter `schema/`
 
 | Version | Datum | Änderung |
 | --- | --- | --- |
@@ -57,6 +57,7 @@ Die Sicherung entsteht unter „Mehr → Daten, Sicherheit & Export → Sicherun
 - Der Export enthält alle Felder, auch leere (`null`).
 - Beim Einlesen werden unbekannte Felder übergangen. Fehlt ein Pflichtfeld oder ist ein Wert ungültig, wird die Datei abgelehnt und nichts geändert.
 - Eine Datei mit höherer `version` wird abgelehnt; die App muss dann aktualisiert werden.
+- Eine Datei mit `version` unter 16 wird abgelehnt (seit 02.11.2026, E-851): WATT liest Dateien ab Formatversion 16, die WATT 0.8.94 „Apfel“ als erste Fassung für Testende schrieb; ältere stammen aus Vorabversionen. Die Tabelle oben nennt für die Versionen 1 bis 15 die damaligen Lesewege; sie gelten nicht mehr.
 
 ## Aufbau
 
@@ -70,14 +71,14 @@ Die Sicherung entsteht unter „Mehr → Daten, Sicherheit & Export → Sicherun
 | `profil` | Objekt oder `null` | Soll-Parameter; `null` bei `BUCHUNGEN` |
 | `kategorien` | Liste | Oberkategorien in der Reihenfolge der Anzeige, jeweils mit Unterkategorien |
 | `ferien` | Liste | Ferienzeiträume |
-| `sonderTage` | Liste | unterrichtsfreie Tage (Tagesmarkierung); bis Version 4 auch dienstfreie Tage |
+| `sonderTage` | Liste | unterrichtsfreie Tage (Tagesmarkierung) |
 | `stundenplan` | Objekt oder `null` | Zeitraster, Plan-Einträge, Blöcke, Einstellungen; `null` bei `BUCHUNGEN` |
 | `eintraege` | Liste | erfasste Tätigkeiten |
 | `abwesenheiten` | Liste | Abwesenheitstage |
 | `protokoll` | Liste | Änderungsprotokoll mit Hash-Kette |
 | `laufenderTimer` | Objekt oder `null` | laufender Timer zum Zeitpunkt des Exports |
 | `einstellungen` | Objekt oder `null` | Einstellungen der Oberfläche; `null` bei `BUCHUNGEN` |
-| `nachweise` | Objekt | Nachweise mit Nachweiskette (seit Version 4); fehlt in älteren Dateien. Seit 19.10.2026 lehnt WATT eine vollständige Datei ab Version 4 ohne `nachweise` ab (B-6); in Buchungsdaten ist es `null` |
+| `nachweise` | Objekt | Nachweise mit Nachweiskette (seit Version 4); WATT lehnt eine vollständige Datei ohne `nachweise` ab (B-6); in Buchungsdaten ist es `null` |
 | `funktionen` | Liste | Funktionen mit Gültigkeit und Anrechnungsstunden (seit Version 12, F-155); fehlt in älteren Dateien |
 | `kalenderlink` | Text oder `null` | Kalenderlink des Stundenplans (seit Version 17, F-211); fehlt in älteren Dateien. Nur die verschlüsselte Sicherung enthält ihn; der Klartext-Export (JSON und XML) schreibt immer `null`, und das Einlesen eines Klartexts lässt den Link des Geräts unverändert |
 | `kalenderZuordnungen` | Liste aus `fach`, `kategorieId`, `unterkategorieId` (Text oder `null`), `nurVorschlag` (Wahrheitswert) | Zuordnung je Fach aus dem Kalenderlink (seit Version 17, F-212) |
@@ -91,15 +92,15 @@ Die Sicherung entsteht unter „Mehr → Daten, Sicherheit & Export → Sicherun
 | --- | --- | --- |
 | `wochenstunden`, `urlaubstage` | Zahl | nur bis Version 14: Wochenarbeitszeit und Urlaubstage; seit Version 15 kommen sie aus den Regeldaten des Landes und werden ignoriert (F-169) |
 | `beschaeftigung` | Liste | Zeilen des Beschäftigungsumfangs ab einem Tag (`ab`): `pflichtstunden` (Zahl oder `null`, gewählte Pflichtstunden vor Ermäßigungen), `pflichtstundenMinuten` (Stundenlänge, Standard 45), `teilzeitStunden` (Zahl oder `null` für Vollzeit), `altersteilzeit` (Wahrheitswert), seit Version 15 (F-176). Seit Version 16 `pflichtstundenAnderer` (Wahrheitswert): die Pflichtstunden sind ein frei eingegebener „Anderer Wert“ (1 bis 40 in halben Stunden, F-191). Bis Version 14 `prozent` (0 bis 100); es wird ignoriert |
-| `regionaleFeiertage` | Liste von Kennungen, z. B. `MARIAE_HIMMELFAHRT` | Eingeschaltete regionale Feiertage des Landes (seit Version 16, F-195); fehlt das Feld, gelten die beiden folgenden Felder bzw. der Standard des Landes |
-| `mariaeHimmelfahrt`, `augsburgerFriedensfest` | Wahrheitswert | nur bis Version 15: 15. bzw. 8. August ist Feiertag (Bayern); seit Version 16 in `regionaleFeiertage`, nur gelesen |
+| `regionaleFeiertage` | Liste von Kennungen, z. B. `MARIAE_HIMMELFAHRT` | Eingeschaltete regionale Feiertage des Landes (seit Version 16, F-195); fehlt das Feld, gilt der Standard des Landes |
+| `mariaeHimmelfahrt`, `augsburgerFriedensfest` | Wahrheitswert | nur bis Version 15: 15. bzw. 8. August ist Feiertag (Bayern); seit Version 16 in `regionaleFeiertage`; nicht mehr gelesen (seit 02.11.2026, E-851) |
 | `bezugszeitraumWochen` | Zahl | nur bis Version 7: Bezugszeitraum des 48-Stunden-Schnitts; seit Version 8 entfällt das Feld, ältere Dateien werden ohne es gelesen (F-125) |
 | `deputat` | Zahl | nur bis Version 8: Unterrichtsstunden je Woche; seit Version 9 entfällt das Feld und wird ignoriert (F-138) |
 | `bundesland` | `BADEN_WUERTTEMBERG`, `BAYERN`, `BERLIN`, … `THUERINGEN` (Namen der Länder in Großbuchstaben, Umlaute als AE, OE, UE) | Land der Regeldaten (seit Version 16 jedes Land außer Hamburg wählbar, F-187); fehlt das Feld, gilt `BAYERN` |
-| `schulart` | Kennung einer Schulart des Landes, z. B. `GYMNASIUM`, oder `null` | Seit Version 16 je Land (F-188); Schulart (seit Version 9, F-135); bestimmt die sichtbaren vorgepflegten Unterkategorien. Bis Version 8 eine einzelne berufliche Schulart oder `null`; beim Einlesen ergibt jeder andere Wert `BERUFLICHE_SCHULEN` |
+| `schulart` | Kennung einer Schulart des Landes, z. B. `GYMNASIUM`, oder `null` | Seit Version 16 je Land (F-188); Schulart (seit Version 9, F-135); bestimmt die sichtbaren vorgepflegten Unterkategorien. Bis Version 8 eine einzelne berufliche Schulart oder `null`. Eine Kennung, die das Land nicht kennt, entfällt beim Einlesen; dann fragt der Pflichtdialog die Schulart |
 | `unterart` | Kennung einer Unterart der Schulart oder `null` | Seit Version 16 je Land und Schulart (F-188); Unterart der beruflichen Schulen, nur Angabe (seit Version 9); passt sie nicht zur Schulart, wird sie ignoriert |
 | `amt` | Kennung eines Amts des Landes, `SONSTIGES` oder `null` | Seit Version 16 je Land (F-189); Amt (seit Version 12, F-154); `null`, solange nicht gewählt (Pflichtangabe, F-153) |
-| `amtsform` | `WEIBLICH`, `MAENNLICH`, `NEUTRAL` oder `null` | Form der Amtsbezeichnung in Anschreiben (seit Version 12): einmal gewählt, gilt sie für jedes Amt und bleibt beim Wechsel des Amts erhalten; bei `SONSTIGES` gilt `amtBezeichnung` (seit Version 13, F-160). Bis Version 12 `DOPPELPUNKT` statt `NEUTRAL` |
+| `amtsform` | `WEIBLICH`, `MAENNLICH`, `NEUTRAL` oder `null` | Form der Amtsbezeichnung in Anschreiben (seit Version 12): einmal gewählt, gilt sie für jedes Amt und bleibt beim Wechsel des Amts erhalten; bei `SONSTIGES` gilt `amtBezeichnung` (seit Version 13, F-160). Bis Version 12 `DOPPELPUNKT` statt `NEUTRAL`; unbekannte Werte ergeben `null` |
 | `amtBezeichnung` | Text | Bezeichnung bei `SONSTIGES`, sonst leer (seit Version 12) |
 | `funktionenBestaetigt` | Wahrheitswert | Die Funktionen wurden einmal bestätigt, auch „keine Funktion“ (seit Version 12, F-153); fehlt das Feld, gilt `false` |
 | `vorbereitungsdienstBeginn` | Tag oder `null` | Beginn des Vorbereitungsdienstes bei `STUDIENREFERENDAR` (seit Version 13, F-159): ein Einstellungstermin des Landes (F-194); sonst `null`. Nach „Ja“ auf „Ist dein Vorbereitungsdienst beendet?“ stellt WATT das Amt auf das Eingangsamt des Landes um und leert das Feld (F-181, F-189) |
@@ -108,7 +109,7 @@ Die Sicherung entsteht unter „Mehr → Daten, Sicherheit & Export → Sicherun
 | `gdbAnfang` | `KEINER`, `GDB_30_40`, `GDB_30_40_GLEICHGESTELLT`, `GDB_50` bis `GDB_100` (in Zehnerschritten), `KEINE_ANGABE` oder `null` | GdB-Stufe ohne Datum („schon immer“, seit Version 15, F-171) |
 | `gdbAenderungen` | Liste aus `seit` (`JJJJ-MM`) und `stufe` | Änderungen der GdB-Stufe ab einem Monat (seit Version 15) |
 | `antworten` | Objekt aus Kennung und Zahl | Antworten zu Regeln des Landes (seit Version 16): Urlaubszuschläge auf Antrag (Tage) bzw. mit Bestandsschutz (0 oder 1), Ja/Nein-Fragen der Ermäßigungen (1 = Ja) und Stunden der Ermäßigungen auf Antrag (F-190, F-192); bei der Kennung `SB_BESCHEID` (Eintragung laut Bescheid, F-209) zählt die Zahl halbe Stunden |
-| `urlaubWahl` | Objekt aus Regel-Kennung und Zahl | nur Version 15: Antworten zu Urlaubszuschlägen; seit Version 16 in `antworten`, nur gelesen |
+| `urlaubWahl` | Objekt aus Regel-Kennung und Zahl | nur Version 15: Antworten zu Urlaubszuschlägen; seit Version 16 in `antworten`; nicht mehr gelesen (seit 02.11.2026, E-851) |
 | `unterrichtVd` | Liste aus `ab` (Tag) und `stunden` (0 bis 20 in halben Stunden) | Unterricht je Woche im Vorbereitungsdienst (seit Version 15, F-182) |
 | `deputatStartwert` | Zahl | Startwert des Deputatskontos in Einzelstunden zum Erfassungsbeginn (seit Version 15, F-175) |
 | `deputatAusgleiche` | Liste aus `id`, `tag`, `einzelstunden` (mit Vorzeichen), `notiz` | Eingetragene Ausgleiche des Deputatskontos (seit Version 15, F-175) |
@@ -153,11 +154,11 @@ Seit Version 12 (F-155). Jeder Eintrag ist ein Abschnitt einer Funktion; mehrere
 | `ferien[].art` | `SOMMER`, `ALLERHEILIGEN`, `WEIHNACHTEN`, `WINTER`, `FRUEHJAHR`, `OSTERN`, `PFINGSTEN`, `EINZELTAG`, `SONSTIGE` | Art der Ferien; `WINTER` und `EINZELTAG` (bewegliche Ferientage, F-197) schrieb WATT seit Version 16, die Beschreibung nennt sie seit 20.10.2026 (K-M06) |
 | `ferien[].von`, `bis` | Tag | erster und letzter Ferientag |
 | `ferien[].name` | Text oder `null` | eigene Bezeichnung |
-| `ferien[].quelle` | `KMK`, `ICS` oder leerer Text | Herkunft (seit Version 5, F-96): Abruf bei der KMK bzw. mitgeliefert, iCal-Datei, leer für manuell. Bis Version 4 `VORBELEGUNG` oder `EIGEN` |
+| `ferien[].quelle` | `KMK`, `ICS` oder leerer Text | Herkunft (seit Version 5, F-96): Abruf bei der KMK bzw. mitgeliefert, iCal-Datei, leer für manuell. Bis Version 4 `VORBELEGUNG` oder `EIGEN`; jeder andere Wert gilt als manuell |
 | `sonderTage[].tag` | Tag | Datum |
-| `sonderTage[].art` | `UNTERRICHTSFREI` | Art; bis Version 4 auch `DIENSTFREI`, seit Version 5 eine Abwesenheit |
+| `sonderTage[].art` | `UNTERRICHTSFREI` | Art; bis Version 4 auch `DIENSTFREI`, seit Version 5 eine Abwesenheit. Eine Tagesmarkierung mit anderer Art macht die Datei ungültig |
 | `sonderTage[].name` | Text oder `null` | eigene Bezeichnung |
-| `sonderTage[].grund` | `PAEDAGOGISCHER_TAG`, `PRUEFUNGSTAG`, `SCHULVERANSTALTUNG`, `SONSTIGES`, `SCHULFAHRT` | Art des unterrichtsfreien Tages (seit Version 5, F-100); fehlt das Feld in älteren Dateien, gilt `SONSTIGES`. `SCHULFAHRT` (seit Version 18, F-230) markiert jeden Kalendertag einer Schulfahrt, auch Wochenende und Ferien; zusammenhängende Tage bilden eine Fahrt |
+| `sonderTage[].grund` | `PAEDAGOGISCHER_TAG`, `PRUEFUNGSTAG`, `SCHULVERANSTALTUNG`, `SONSTIGES`, `SCHULFAHRT` | Art des unterrichtsfreien Tages (seit Version 5, F-100); fehlt das Feld, ist keine Art angegeben (`null`). `SCHULFAHRT` (seit Version 18, F-230) markiert jeden Kalendertag einer Schulfahrt, auch Wochenende und Ferien; zusammenhängende Tage bilden eine Fahrt |
 
 ### stundenplan
 
@@ -229,7 +230,7 @@ Die Nachtrag-Kennzeichnung wird nicht gespeichert. Sie ergibt sich aus `ende` (b
 | Feld | Typ | Bedeutung |
 | --- | --- | --- |
 | `seq` | Zahl | laufende Nummer ab 1 |
-| `zeitpunkt` | Zeitpunkt | Zeitpunkt der Änderung |
+| `zeitpunkt` | Zeitpunkt | Zeitpunkt der Änderung, in ganzen Millisekunden; ein Glied mit feinerem Zeitpunkt macht die Datei ungültig (seit 02.11.2026) |
 | `aktion` | `ANGELEGT`, `GEAENDERT`, `GELOESCHT` | Art der Änderung |
 | `objektArt` | Text | seit Version 13 (F-162) nur `eintrag`, `abwesenheit` (ohne dienstfreie Tage), `wiederherstellung`, `neubeginn`, `uhr_ruecksprung`, seit 20.10.2026 auch `uhr_abweichung` (F-239: Beginn eines Timer-Laufs nach der Monotonuhr korrigiert oder Neustart während des Laufs; `objektId` `timer`, `daten` `{"art":"korrektur"|"neustart","beginnUhr":…,"beginnMonoton":…|null,"zeitpunkt":…,"abweichungSekunden":n|null}`; `uhr_ruecksprung` mit `objektId` `timer` bei einem Timer (Start, Stopp, Wechsel, Vorverlegen, Höchstdauer) mit zurückgestellter Uhr, `nachweis` beim Festhalten eines Nachweises, seit dem 24.10.2026 ohne Anker auch `start` (Öffnen der App oder einer Seite) und `zeitsignal` (Android meldet eine Änderung der Uhrzeit); sonst die laufende Nummer des auslösenden Glieds; ein Vermerk zur Uhr erklärt seinen eigenen Rücksprung gegenüber dem vorigen Glied, gleich mit welcher `objektId`): Die Kette schützt das Ist, Einstellungen stehen nicht darin. Bis Version 12 außerdem `profil`, `funktion` (seit Version 12, F-155), `ferien`, `sondertag`, `kategorie`, `unterkategorie`, `stundenplan`; solche Glieder bleiben gültig und werden wie alle anderen geprüft. Seit dem 24.10.2026 auch `uhr_verstellt` (F-242: Änderung des Versatzes zwischen Wanduhr und Monotonuhr um mehr als 2 Minuten seit dem letzten Vermerk, am festen Anker je Gerätestart, seit 25.10.2026 E-753; `objektId` `glied` (vor dem folgenden Glied; nach „Sofort wieder löschen“ kann es fehlen), die laufende Nummer eines Glieds `neubeginn` bzw. `wiederherstellung` (der Vermerk folgt diesem), `zeitsignal`, `timer`, `nachweis` oder `start`; `daten` `{"vorher":…,"nachher":…,"abweichungSekunden":n,"richtung":"vor"|"zurueck"}`; `abweichungSekunden` mit Vorzeichen, negativ bei `zurueck`: `nachher` − `vorher` in ganzen Sekunden, zur Null hin gekürzt, also die Änderung des Versatzes seit dem letzten Vermerk; dazu `schritte`, wenn sich die Verstellung aus mehreren Messungen ergibt (Zahl der Messungen seit dem letzten Vermerk mit einer Änderung des Versatzes um mindestens eine Sekunde, ohne nachgeführte Netzzeit, ganze Zahl größer als 1; fehlt bei einem einzelnen Sprung), und `timerBeginnVorher`/`timerBeginnNachher`, wenn ein laufender Timer korrigiert wurde; bei leerer Kette kein Vermerk) und `schluessel` (F-243: `objektId` Fingerabdruck bzw. leer; `daten` `{"status":"verfuegbar","fingerabdruck":…,"zertifikateSha256":…,"sicherheitsstufe":"SOFTWARE"|"TEE"|"STRONGBOX"}`, bei leerer Kette dazu `challenge` (32 Bytes hexadezimal), bzw. `{"status":"nicht_verfuegbar","grund":…}`); `uhr_abweichung` mit `art` `neustart` entsteht seitdem nicht mehr |
 | `objektId` | Text | Kennung des Objekts |
@@ -294,7 +295,7 @@ Seit Version 4 (F-90). Enthält alles aus dem Bereich „Nachweise“ (F-61 bis 
 | `gespraeche[].nachtraege` | Liste aus `id` (`<ID der Notiz>:<Kennung>`), `text`, `erfasstAm`, `pruefsumme` | Nachträge (F-78) |
 | `kette` | Liste | Nachweiskette (F-64), alle Glieder in Reihenfolge |
 | `kette[].seq` | Zahl | laufende Nummer ab 1 |
-| `kette[].zeitpunkt` | Zeitpunkt | Zeitpunkt des Eintrags |
+| `kette[].zeitpunkt` | Zeitpunkt | Zeitpunkt des Eintrags, in ganzen Millisekunden wie beim Änderungsprotokoll |
 | `kette[].ereignis` | `ANZEIGE_GESENDET`, `ANZEIGE_GELOESCHT`, `GESPRAECHSNOTIZ_GESPEICHERT`, `NACHTRAG`, `GESPRAECHSNOTIZ_GELOESCHT`, `WIEDERHERSTELLUNG`, `WIEDERHERSTELLUNG_UNTERBROCHEN` | Ereignis |
 | `kette[].referenzId` | Text | ID des Eintrags; bei Wiederherstellungen der Zeitpunkt des Backups, bei unterbrochener Kette in der Datei `<Zeitpunkt>#<Nummer des Glieds>` |
 | `kette[].pruefsumme` | Text | Prüfsumme des Inhalts; bei Wiederherstellungen der SHA-256 der eingespielten Datei (verschlüsselt oder Klartext, wie gewählt) |
