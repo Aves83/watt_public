@@ -1,4 +1,4 @@
-Stand: 2026-11-01 (YYYY-MM-DD)
+Stand: 2026-11-03 (YYYY-MM-DD)
 
 # Datenformat `watt-daten`
 
@@ -13,7 +13,7 @@ WATT exportiert die erfassten Daten im Format `watt-daten` als JSON oder als XML
 | 17 | `watt-daten-17.schema.json` | WATT 0.8.100 „Bergamotte“ | WATT 0.8.111 „Drachenfrucht“ |
 | 16 | `watt-daten-16.schema.json` | WATT 0.8.94 „Apfel“ | WATT 0.8.111 „Drachenfrucht“ |
 
-„Genutzt von“ nennt die Fassungen von WATT, die diese Version schreiben, „JSON einlesbar bis“ die neueste Fassung, die eine JSON-Datei dieser Version einlesen kann.
+„Genutzt von“ nennt die Fassungen von WATT, die diese Version schreiben, „JSON einlesbar bis“ die neueste Fassung, die eine JSON-Datei dieser Version einlesen kann. Die kleinste lesbare Formatversion ist 16. Dateien der Versionen 1 bis 15 stammen aus Vorabversionen vor WATT 0.8.94 „Apfel“; WATT lehnt sie ab („Diese Datei ist zu alt.“), Schemas gibt es für sie nicht.
 
 Nachfolgend die allgemeinen Regeln für beide Formate und die Änderungen je Version.
 
