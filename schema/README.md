@@ -1,4 +1,4 @@
-Stand: 2026-11-07 (YYYY-MM-DD)
+Stand: 2026-11-14 (YYYY-MM-DD)
 
 # Datenformat `watt-daten`
 
@@ -8,10 +8,11 @@ WATT exportiert die erfassten Daten im Format `watt-daten` als JSON oder als XML
 
 | Version | Schemata | Genutzt von | JSON einlesbar bis |
 | --- | --- | --- | --- |
-| 19 | `watt-daten-19.schema.json`, `watt-daten-19.xsd` | WATT 0.8.111 „Drachenfrucht“, WATT 0.8.118 „Erdbeere“ | WATT 0.8.118 „Erdbeere“ |
-| 18 | `watt-daten-18.schema.json`, `watt-daten-18.xsd` | WATT 0.8.109 „Cherimoya“ | WATT 0.8.118 „Erdbeere“ |
-| 17 | `watt-daten-17.schema.json` | WATT 0.8.100 „Bergamotte“ | WATT 0.8.118 „Erdbeere“ |
-| 16 | `watt-daten-16.schema.json` | WATT 0.8.94 „Apfel“ | WATT 0.8.118 „Erdbeere“ |
+| 20 | `watt-daten-20.schema.json`, `watt-daten-20.xsd` | WATT 0.8.126 „Felsenbirne“ | WATT 0.8.126 „Felsenbirne“ |
+| 19 | `watt-daten-19.schema.json`, `watt-daten-19.xsd` | WATT 0.8.111 „Drachenfrucht“, WATT 0.8.118 „Erdbeere“ | WATT 0.8.126 „Felsenbirne“ |
+| 18 | `watt-daten-18.schema.json`, `watt-daten-18.xsd` | WATT 0.8.109 „Cherimoya“ | WATT 0.8.126 „Felsenbirne“ |
+| 17 | `watt-daten-17.schema.json` | WATT 0.8.100 „Bergamotte“ | WATT 0.8.126 „Felsenbirne“ |
+| 16 | `watt-daten-16.schema.json` | WATT 0.8.94 „Apfel“ | WATT 0.8.126 „Felsenbirne“ |
 
 „Genutzt von“ nennt die Fassungen von WATT, die diese Version schreiben, „JSON einlesbar bis“ die neueste Fassung, die eine JSON-Datei dieser Version einlesen kann. Die kleinste lesbare Formatversion ist 16. Dateien der Versionen 1 bis 15 stammen aus Vorabversionen vor WATT 0.8.94 „Apfel“; WATT lehnt sie ab („Diese Datei ist zu alt.“), Schemas gibt es für sie nicht.
 
@@ -43,6 +44,12 @@ xmllint --noout --schema watt-daten-<Version>.xsd <Datei>.xml
 ```
 
 ## Änderungen je Version
+
+### Version 20
+
+- `nachweise.anzeigen[].art` (`UEBERLASTUNGSANZEIGE` oder `ZEITAUSGLEICH`): Art des Schreibens, Überlastungsanzeige oder Antrag auf Zeitausgleich nach einer mehrtägigen Fahrt bei Teilzeit; fehlt das Feld, gilt `UEBERLASTUNGSANZEIGE`. Im XML `art` mit dem Typ `Anzeigeart`.
+- Beim Antrag auf Zeitausgleich ist `stufe` immer `AUSSAGE` und ohne Bedeutung; `zeitraumVon` und `zeitraumBis` sind trotzdem gesetzt (erster und letzter Fahrttag), `kopien` ist leer, einziges Dokument ist das Anschreiben.
+- Die Art geht nicht in die Prüfsumme der Anzeige ein; die Glieder `ANZEIGE_GESENDET` und `ANZEIGE_GELOESCHT` der Nachweiskette gelten für beide Arten.
 
 ### Version 19
 
