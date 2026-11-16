@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Für Prüfende – Nachweise aus WATT unabhängig prüfen</title>
+<meta name="description" content="Nachweise aus der App WATT unabhängig prüfen: mit WATTest im Browser, als Einzeldatei ohne Netz oder mit eigenen Werkzeugen nach der Technischen Erläuterung.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="../bild/logo.png">
+<link rel="stylesheet" href="../stil.css">
+</head>
+<body class="unter">
+<header class="kopf" id="oben">
+<div class="innen kopf-zeile">
+<a class="marke" href="../"><img src="../bild/logo.png" alt="Logo von WATT: Tacho auf einer Kreidetafel" width="44" height="44"><span>WATT</span></a>
+<nav aria-label="Hauptnavigation">
+<a class="nav-link" href="../">Startseite</a>
+<a class="nav-link" href="#oben" aria-current="page">Für Prüfende</a>
+<a class="knopf knopf-gelb" href="../#mitmachen">Jetzt mitmachen</a>
+</nav>
+</div>
+<nav class="innen nav-mobil" aria-label="Bereiche der Seite">
+<a href="../">Startseite</a>
+<a href="#oben" aria-current="page">Für Prüfende</a>
+</nav>
+</header>
+
+<main>
+<section class="abschnitt tafel pruef-einstieg">
+<div class="innen">
+<p class="kicker">Für Prüfende</p>
+<h1>Nachweise aus WATT unabhängig prüfen</h1>
+<p class="lead">Du hast von einer Lehrkraft einen Export, ein Dokument mit Prüfvermerk oder einen Aktenauszug aus WATT bekommen? Hier steht, was sich daran prüfen lässt – und wie.</p>
+<div class="knoepfe" style="margin-top:6px">
+<a class="knopf knopf-gelb knopf-gross" href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest öffnen</a>
+<a class="knopf knopf-rand" href="../info/watt-nachweise-sichern.pdf" target="_blank" rel="noopener">Wie WATT Nachweise sichert (PDF)</a>
+</div>
+</div>
+</section>
+
+<section class="abschnitt">
+<div class="innen stapel abstand-32">
+<h2>Was die Technik belegt – und was nicht</h2>
+<div class="raster raster-280">
+<div class="karte"><h3>Unverändert?</h3><p style="flex-grow:1">Wurde nach der Erfassung etwas geändert, gelöscht oder eingefügt?</p><p class="belegt">Hash-Kette und Anker</p></div>
+<div class="karte"><h3>Echt aus WATT?</h3><p style="flex-grow:1">Stammen die Daten aus der offiziellen WATT-App – mit ihrem bekannten, dokumentierten Verhalten?</p><p class="belegt">Signatur</p></div>
+<div class="karte"><h3>Wann erfasst?</h3><p style="flex-grow:1">Wurde zeitnah erfasst, und ging die Uhr des Handys richtig?</p><p class="belegt">Zeitstempel und Uhrprüfung</p></div>
+</div>
+<div class="kasten"><p><strong>Eine Frage beantwortet keine Technik:</strong> Hat die Lehrkraft ihre Tätigkeiten richtig erfasst? WATT ist eine Selbstaufzeichnung. Die Technik belegt, wann die Tätigkeiten erfasst wurden und dass danach nichts unbemerkt verändert wurde – nicht, ob die Angaben stimmen.</p></div>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
+
+<section class="abschnitt weiss">
+<div class="innen stapel abstand-32">
+<h2>Drei Wege zum Prüfen</h2>
+<ol class="schritte raster raster-280">
+<li class="schritt"><span class="nummer" aria-hidden="true">1</span><h3>Im Browser mit WATTest</h3><p>WATTest prüft Kette, Daten, Anker und Signaturen. Die Dateien verlassen den Rechner nicht.</p><a class="knopf knopf-voll" href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest öffnen</a></li>
+<li class="schritt"><span class="nummer" aria-hidden="true">2</span><h3>Ohne Netz, als einzelne Datei</h3><p>WATTest gibt es auch als einzelne Datei mit Prüfsumme – zum Herunterladen und Prüfen ohne Internetverbindung.</p><a class="knopf knopf-voll" href="https://github.com/Aves83/wattest/releases" target="_blank" rel="noopener">WATTest als Einzeldatei (GitHub)</a></li>
+<li class="schritt"><span class="nummer" aria-hidden="true">3</span><h3>Mit eigenen Werkzeugen</h3><p>Die Technische Erläuterung beschreibt jede Rechenregel vollständig, mit Rechenbeispielen – nachrechenbar mit sha256sum, PowerShell, Python oder OpenSSL.</p><a class="knopf knopf-voll" href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a></li>
+</ol>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
+
+<section class="abschnitt">
+<div class="innen stapel abstand-28">
+<div class="intro">
+<h2>Unterlagen</h2>
+<p class="lead" style="font-size:18px">Alle Unterlagen beschreiben die zuletzt ausgelieferte Fassung von WATT.</p>
+</div>
+<ul class="liste-unterlagen">
+<li><a href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a><span>Prüfsummen, Ketten, Signatur und Prüfvermerk im Einzelnen, mit Rechenbeispielen.</span></li>
+<li><a href="https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md" target="_blank" rel="noopener">Datenformat</a><span>Aufbau des vollständigen Exports als JSON und XML.</span></li>
+<li><a href="https://github.com/Aves83/watt_public/tree/main/schema" target="_blank" rel="noopener">Schemas</a><span>JSON-Schema und XSD je Formatversion – mit der Übersicht, welche Fassung von WATT welche Version schreibt.</span></li>
+<li><a href="../info/watt-nachweise-sichern.pdf" target="_blank" rel="noopener">Wie WATT Nachweise sichert (PDF)</a><span>Hash-Kette, Anker und Signatur einfach erklärt, mit den Grenzen.</span></li>
+<li><a href="https://github.com/Aves83/wattest" target="_blank" rel="noopener">Quelltext von WATTest</a><span>Quelloffen (EUPL-1.2), ohne Code von WATT allein nach den veröffentlichten Unterlagen entwickelt.</span></li>
+</ul>
+<p class="leise" style="font-size:16px"><strong style="color:var(--text)">Über WATT.</strong> WATT ist eine kostenlose Android-App (Beta), mit der verbeamtete Lehrkräfte ihre Arbeitszeit erfassen und nachweisen. <a href="../" style="font-weight:600">Mehr zu WATT</a></p>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
+</main>
+
+<footer class="fuss">
+<div class="innen">
+<div class="fuss-reihe">
+<div class="fuss-marke">
+<div><img src="../bild/logo.png" alt="" width="36" height="36"><span>WATT</span></div>
+<p>Workload Analysis &amp; Time-Tracking for Teachers</p>
+</div>
+<nav aria-label="Inhalt, Rechtliches und Unterlagen">
+<div>
+<span class="titel">Inhalt</span>
+<a href="../#warum">Deine Arbeit</a>
+<a href="../#funktionen">Funktionen</a>
+<a href="../#daten">Deine Daten</a>
+<a href="../#laender">Länder</a>
+<a href="../#mitmachen">Mitmachen</a>
+<a href="../#unterlagen">Unterlagen</a>
+<a href="../#fragen">Fragen</a>
+<a href="../#kontakt">Kontakt</a>
+</div>
+<div>
+<span class="titel">Diese Seite</span>
+<a href="../doc/impressum.html">Impressum</a>
+<a href="../doc/datenschutz.html" aria-label="Datenschutz dieser Seite">Datenschutz</a>
+</div>
+<div>
+<span class="titel">App WATT</span>
+<a href="../doc/license.txt" target="_blank" rel="noopener" aria-label="Nutzungsbedingungen der App WATT">Nutzungsbedingungen</a>
+<a href="../doc/privacy.txt" target="_blank" rel="noopener" aria-label="Datenschutzerklärung der App WATT">Datenschutzerklärung</a>
+</div>
+<div>
+<span class="titel">Für Prüfende</span>
+<a href="#oben" aria-current="page">Nachweise prüfen</a>
+<a href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a>
+<a href="https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md" target="_blank" rel="noopener">Datenformat</a>
+<a href="https://github.com/Aves83/watt_public/tree/main/schema" target="_blank" rel="noopener">Schemas</a>
+<a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a>
+</div>
+</nav>
+</div>
+<div class="fuss-klein">
+<p>WATT ersetzt keine Rechtsberatung. Durch die Teilnahme am Test entstehen keine Rechte, Ansprüche oder Vorteile.</p>
+<p>© 2026 Hans-Joachim Steudel. WATT ist proprietär; es gelten die Nutzungsbedingungen.</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

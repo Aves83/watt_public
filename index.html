@@ -7,186 +7,298 @@
 <meta name="description" content="Kostenlose Android-App für verbeamtete Lehrerinnen und Lehrer: Arbeitszeit erfassen, Soll nach den Regeln deines Landes, 48-Stunden-Grenze, Überlastungsanzeige mit Nachweis. Lokal und verschlüsselt, ohne Konto.">
 <meta name="google-site-verification" content="5AS0NQAuqOqj9fVq1jMRTQENyp5FyQGmeCDpcSjxA7g" />
 <meta name="color-scheme" content="light dark">
-<style>
-:root{
-  --tafel:#2F4A3E; --tafel-dunkel:#243a31; --holz:#8C5E36; --holz-dunkel:#6B4527;
-  --kreide:#ECE9DF; --rot:#D9573A; --gelb:#E3A33B;
-  --grund:#F6F3EA; --karte:#FFFFFF; --text:#1F2A25; --leise:#55625B; --linie:#DDD6C6;
-  --knopf:#2F4A3E; --knopf-text:#FFFFFF; --hinweis:#FBF1DE; --hinweis-rand:#E3A33B;
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --grund:#16201C; --karte:#1F2C26; --text:#ECE9DF; --leise:#B3BDB6; --linie:#34443C;
-    --knopf:#ECE9DF; --knopf-text:#1F2A25; --hinweis:#2E2A1E; --hinweis-rand:#B98323;
-  }
-}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--grund);color:var(--text);
-  font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
-a{color:inherit}
-.kopf{background:var(--tafel);color:var(--kreide);border-bottom:10px solid var(--holz);
-  box-shadow:inset 0 -3px 0 var(--holz-dunkel)}
-.kopf-innen{max-width:760px;margin:0 auto;padding:32px 16px 28px;display:flex;gap:22px;align-items:center}
-.logo{width:96px;height:96px;flex:none;border-radius:26%;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.35)}
-.logo img{display:block;width:100%;height:100%}
-.kopf h1{margin:0;font-size:clamp(1.7rem,6vw,2.4rem);letter-spacing:.06em;line-height:1.1}
-.kopf .lang{margin:.25rem 0 0;font-size:.95rem;opacity:.85}
-.kopf .motto{margin:.6rem 0 0;font-style:italic;color:var(--gelb)}
-main{max-width:760px;margin:0 auto;padding:28px 16px 8px}
-.einleitung{font-size:1.05rem;margin:0 0 1.6rem}
-.beta{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.08em;
-  color:#fff;background:var(--rot);border-radius:6px;padding:.1rem .45rem;vertical-align:.15em;margin-right:.35rem}
-h2{font-size:1.25rem;margin:2rem 0 .9rem}
-ol.schritte{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.schritt{background:var(--karte);border:1px solid var(--linie);border-radius:14px;padding:18px 18px 18px 70px;position:relative}
-.schritt::before{counter-increment:schritt;content:counter(schritt);position:absolute;left:18px;top:18px;
-  width:36px;height:36px;border-radius:50%;background:var(--tafel);color:var(--kreide);
-  display:grid;place-items:center;font-weight:700;border:2px solid var(--holz)}
-ol.schritte{counter-reset:schritt}
-.schritt h3{margin:0 0 .3rem;font-size:1.08rem}
-.schritt p{margin:0 0 .8rem;color:var(--leise)}
-.schrittbereich{display:grid;gap:18px}
-.teaser{margin:0;justify-self:center;width:170px;text-align:center}
-.teaser img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
-.teaser figcaption{margin-top:.5rem;font-size:.85rem;color:var(--leise)}
-@media (min-width:720px){
-  .schrittbereich{grid-template-columns:1fr 200px;align-items:start}
-  .teaser{order:2;width:200px;position:sticky;top:16px}
-}
-.knopf{display:inline-flex;align-items:center;gap:.5rem;min-height:48px;padding:.65rem 1.1rem;border-radius:12px;
-  background:var(--knopf);color:var(--knopf-text);text-decoration:none;font-weight:600;word-break:break-word}
-.knopf:hover,.knopf:focus-visible{outline:3px solid var(--gelb);outline-offset:2px}
-.knopf.zweit{background:transparent;color:var(--text);border:2px solid var(--linie)}
-.knoepfe{display:flex;flex-wrap:wrap;gap:10px}
-.hinweis{background:var(--hinweis);border-left:5px solid var(--hinweis-rand);border-radius:10px;padding:14px 16px;margin:0 0 1.4rem}
-.hinweis strong{display:block;margin-bottom:.2rem}
-ul.liste{margin:0;padding-left:1.2rem}
-ul.liste li{margin:.35rem 0}
-details.falt{margin:0 0 .4rem}
-details.falt summary{cursor:pointer;padding-left:.15rem;min-height:44px;display:flex;align-items:center;gap:.5rem;font-weight:600;list-style:none}
-details.falt summary::-webkit-details-marker{display:none}
-details.falt summary::before{content:"";flex:none;width:.5rem;height:.5rem;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin-right:.2rem}
-details.falt[open] summary::before{transform:rotate(45deg)}
-details.falt p{margin:.2rem 0 .6rem 1.3rem;color:var(--leise)}
-details.falt a{color:var(--text);font-weight:600}
-ul.material{margin:.2rem 0 .6rem 1.3rem;padding-left:1.1rem;color:var(--leise)}
-ul.material li{margin:.3rem 0}
-.hinweis a{color:inherit;font-weight:600}
-p.laender{color:var(--leise);margin:.4rem 0 1.4rem}
-footer{max-width:760px;margin:2.4rem auto 0;padding:18px 16px 36px;border-top:1px solid var(--linie);color:var(--leise);font-size:.92rem}
-footer nav{margin-bottom:.8rem}
-footer .gruppe{display:flex;flex-wrap:wrap;align-items:center;column-gap:20px}
-footer .gruppe .titel{font-weight:600;color:var(--text)}
-footer nav a{min-height:44px;display:inline-flex;align-items:center}
-footer p{margin:.3rem 0}
-@media (max-width:480px){
-  footer .gruppe .titel{flex-basis:100%;margin-top:.4rem}
-  .kopf-innen{flex-direction:column;align-items:flex-start;gap:16px;padding-top:24px}
-  .logo{width:76px;height:76px}
-  .schritt{padding-left:18px;padding-top:66px}
-}
-</style>
+<link rel="icon" type="image/png" href="bild/logo.png">
+<link rel="stylesheet" href="stil.css">
 </head>
-<body>
-<header class="kopf">
-  <div class="kopf-innen">
-    <div class="logo"><img src="data:image/webp;base64,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" width="96" height="96" alt="Logo von WATT: Tacho auf einer Kreidetafel"></div>
-    <div>
-      <h1>WATT</h1>
-      <p class="lang">Workload Analysis &amp; Time-Tracking for Teachers</p>
-      <p class="motto">Leistung misst man in WATT!</p>
-    </div>
-  </div>
+<body class="start">
+<header class="kopf" id="oben">
+<div class="innen kopf-zeile">
+<a class="marke" href="./"><img src="bild/logo.png" alt="Logo von WATT: Tacho auf einer Kreidetafel" width="44" height="44"><span>WATT</span></a>
+<nav aria-label="Hauptnavigation">
+<a class="nav-link" href="#funktionen">Funktionen</a>
+<a class="nav-link" href="#daten">Deine Daten</a>
+<a class="nav-link" href="#unterlagen">Unterlagen</a>
+<a class="nav-link" href="#fragen">Fragen</a>
+<a class="nav-link" href="pruefen/">Für Prüfende</a>
+<a class="knopf knopf-gelb" href="#mitmachen">Jetzt mitmachen</a>
+</nav>
+</div>
+<nav class="innen nav-mobil" aria-label="Bereiche der Seite">
+<a href="#funktionen">Funktionen</a>
+<a href="#daten">Daten</a>
+<a href="#unterlagen">Unterlagen</a>
+<a href="#fragen">Fragen</a>
+<a href="pruefen/">Für Prüfende</a>
+</nav>
 </header>
 
 <main>
-  <p class="einleitung"><span class="beta">BETA</span>WATT erfasst die Arbeitszeit von verbeamteten Lehrerinnen und Lehrern in allen Ländern außer Hamburg und stellt sie dem persönlichen Soll gegenüber – lokal und verschlüsselt auf deinem Android-Gerät, ohne Konto und ohne Server. Gerade läuft der geschlossene Test bei Google Play. So machst du mit:</p>
+<section class="abschnitt tafel einstieg">
+<div class="innen einstieg-reihe">
+<div class="einstieg-text">
+<div class="marken"><span class="beta">BETA · ANDROID</span><span class="motto">Leistung misst man in WATT!</span></div>
+<h1>Du weißt, was du leistest – und kannst es belegen.</h1>
+<p class="lead">WATT ist die Arbeitszeit-App für verbeamtete Lehrerinnen und Lehrer. Du erfasst deine Arbeit mit einem Tipp, siehst Ist und Soll nach den Regeln deines Landes und hast Nachweise, wenn es zu viel wird.</p>
+<div class="knoepfe">
+<a class="knopf knopf-gelb knopf-gross" href="#mitmachen">Jetzt mitmachen</a>
+<a class="knopf knopf-rand" href="#funktionen">Was WATT kann</a>
+</div>
+<ul class="haken">
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Kostenlos</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Ohne Konto, ohne Server</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Verschlüsselt auf deinem Gerät</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Ohne Werbung und Tracking</span></li>
+</ul>
+<p class="klein-tafel">Für Android 8 oder neuer. Fürs iPhone gibt es WATT noch nicht.</p>
+</div>
+<figure class="handy foto">
+<div class="rahmen"><img src="bild/shot-buchungen.jpg" alt="Bildschirmfoto: Buchungen in WATT mit dem Wochenband, 45:10 Stunden von 40 Stunden Soll" width="600" height="960"></div>
+<figcaption>Buchungen in WATT mit Beispieldaten</figcaption>
+</figure>
+</div>
+</section>
 
-  <div class="hinweis">
-    <strong>Bevor du anfängst</strong>
-    Verwende überall dasselbe Google-Konto, mit dem du auf deinem Handy den Play Store nutzt. Du brauchst Android 8 oder neuer.<br>Fürs iPhone gibt es WATT leider noch nicht. Ist das Interesse groß genug, ziehen wir eine iPhone-Version in Betracht – <a href="mailto:hans-joachim.steudel@tum.de?subject=WATT%20f%C3%BCrs%20iPhone">schreib uns gern</a>.
-  </div>
+<section id="warum" class="abschnitt">
+<div class="innen stapel abstand-40">
+<div class="intro">
+<h2>Unterricht ist nur ein Teil deiner Arbeit.</h2>
+<p class="lead">Vorbereitung, Korrektur, Konferenzen, Elterngespräche und Schulfahrten kommen dazu – und werden bis heute kaum erfasst. WATT macht deine ganze Arbeitszeit sichtbar. Für dich, nicht für andere.</p>
+</div>
+<div class="raster raster-280">
+<div class="karte"><h3>Fakten statt Gefühl</h3><p>Du siehst schwarz auf weiß, wie viel du arbeitest und wofür deine Zeit draufgeht. Das hilft gegen Selbstzweifel und gegen Vorurteile.</p></div>
+<div class="karte"><h3>Deine Gesundheit</h3><p>Du erkennst, wann es zu viel wird – und kannst dir guten Gewissens Feierabend gönnen, wenn dein Soll erfüllt ist.</p></div>
+<div class="karte"><h3>Handeln, wenn es zu viel ist</h3><p>WATT unterstützt dich bei einer Überlastungsanzeige: mit dem Anschreiben und, wenn du willst, mit Nachweisen.</p></div>
+</div>
+<p class="unterzeile">Noch mehr Gründe, kurz und knapp: <a href="info/watt-warum.pdf" target="_blank" rel="noopener">Warum WATT? (PDF)</a></p>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
 
-  <details class="falt">
-    <summary>Watt is WATT denn überhaupt?</summary>
-    <ul class="material">
-      <li><a href="info/watt-ueberblick.pdf" target="_blank" rel="noopener">Warum WATT?</a> (PDF, 13 Folien) – Hintergrund, Grundsätze und was WATT von anderen Apps unterscheidet (<a href="info/quellen.txt" target="_blank" rel="noopener">Quellen zum Vergleich</a>).</li>
-      <li><a href="info/watt-funktionen.pdf" target="_blank" rel="noopener">Funktionsüberblick</a> (PDF, 13 Folien) – alle Bereiche der App mit Bildschirmfotos.</li>
-      <li><a href="info/handbuch.pdf" target="_blank" rel="noopener">Handbuch</a> (PDF, 27 Seiten) – alle Funktionen Schritt für Schritt, mit Bildern und häufigen Fragen; dasselbe Handbuch steht in der App unter „Mehr → Hilfe“.</li>
-      <li><a href="info/watt-onepager-a3.pdf" target="_blank" rel="noopener">WATT auf einen Blick</a> (PDF, A3, 2 Seiten) – zum Ausdrucken und Aushängen.</li>
-      <li><a href="info/watt-nachweise-sichern.pdf" target="_blank" rel="noopener">Wie WATT Nachweise sichert</a> (PDF, 18 Folien) – Hash-Kette, Anker und Signatur einfach erklärt, mit den Grenzen.</li>
-    </ul>
-  </details>
+<section id="funktionen" class="abschnitt weiss">
+<div class="innen stapel abstand-40">
+<div class="intro">
+<p class="kicker">Funktionen</p>
+<h2>Was WATT kann</h2>
+<p class="lead">Erfassen, auswerten, dokumentieren, handeln – alles in einer App.</p>
+</div>
+<div class="raster raster-240">
+<article class="funktion">
+<div class="foto"><img src="bild/shot-erfassen.jpg" alt="Bildschirmfoto: Erfassen in WATT mit Kacheln je Tätigkeit" width="600" height="720"></div>
+<div class="text">
+<h3>Erfassen</h3>
+<ul class="punkte">
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Timer mit einem Tipp, Vergessenes trägst du nach</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Unterricht bucht sich aus deinem Stundenplan – auch per Kalenderlink, etwa von WebUntis</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Widget und Kurzbefehle, ohne die App zu öffnen</span></li>
+</ul>
+</div>
+</article>
+<article class="funktion">
+<div class="foto"><img src="bild/shot-ueberblick.jpg" alt="Bildschirmfoto: Überblick in WATT mit dem Tortendiagramm der Tätigkeiten" width="600" height="720"></div>
+<div class="text">
+<h3>Auswerten</h3>
+<ul class="punkte">
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Ist gegen dein persönliches Soll – je Woche, Monat und Schuljahr</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Wofür geht deine Zeit drauf? Nach Tätigkeit, Fach und Klasse</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>48-Stunden-Grenze nach EU-Maßstab und, wo vorhanden, nach dem deines Landes</span></li>
+</ul>
+</div>
+</article>
+<article class="funktion">
+<div class="foto"><img src="bild/shot-integritaet.jpg" alt="Bildschirmfoto: Integrität in WATT mit der Prüfung der Protokolle" width="600" height="720"></div>
+<div class="text">
+<h3>Dokumentieren</h3>
+<ul class="punkte">
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Ein gesichertes Protokoll macht jede spätere Änderung an deinen Aufzeichnungen sichtbar</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Bericht als PDF, Tabellen für Excel und CSV, alle Daten als JSON oder XML</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Wer deine Unterlagen bekommt, kann sie unabhängig prüfen</span></li>
+</ul>
+</div>
+</article>
+<article class="funktion">
+<div class="foto"><img src="bild/shot-anzeige.jpg" alt="Bildschirmfoto: Überlastungsanzeige erzeugen, Auswahl des Inhalts in drei Stufen" width="600" height="720"></div>
+<div class="text">
+<h3>Handeln</h3>
+<ul class="punkte">
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Assistent für Überlastungsanzeigen: einfache Aussage, Zusammenfassung oder Nachweis</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Bei Teilzeit: Zeitausgleich nach einer mehrtägigen Klassenfahrt beantragen, mit Anschreiben als PDF</span></li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>Gesprächs- und Telefonnotizen halten Absprachen fest, die Wiedervorlage erinnert an offene Antworten</span></li>
+</ul>
+</div>
+</article>
+</div>
+<p class="unterzeile">Alle Funktionen Schritt für Schritt: <a href="info/handbuch.pdf" target="_blank" rel="noopener">Handbuch (PDF)</a> · <a href="info/watt-funktionen.pdf" target="_blank" rel="noopener">Funktionsüberblick (PDF)</a></p>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
 
-  <h2>In drei Schritten zur Teilnahme</h2>
-  <div class="schrittbereich">
-  <figure class="teaser">
-    <img src="data:image/webp;base64,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" width="360" height="703" alt="Bildschirmfoto: Überblick in WATT mit dem Tortendiagramm der Tätigkeiten einer Woche">
-    <figcaption>Überblick in WATT mit Beispieldaten</figcaption>
-  </figure>
-  <ol class="schritte">
-    <li class="schritt">
-      <h3>Gruppe beitreten</h3>
-      <p>Öffne die Gruppe „WATT Tester“ und tippe auf „Gruppe beitreten“. Bestätige im nächsten Fenster noch einmal. Andere Mitglieder sehen weder deinen Namen noch deine Adresse.</p>
-      <a class="knopf" href="https://groups.google.com/g/watt-tester" target="_blank" rel="noopener">Zur Gruppe „WATT Tester“</a>
-    </li>
-    <li class="schritt">
-      <h3>Tester:in werden</h3>
-      <p>Öffne die Testseite bei Google Play und tippe auf „Tester werden“.</p>
-      <a class="knopf" href="https://play.google.com/apps/testing/de.achim.watt" target="_blank" rel="noopener">Zur Testseite bei Google Play</a>
-    </li>
-    <li class="schritt">
-      <h3>App installieren</h3>
-      <p>Installiere WATT aus dem Play Store. Taucht die App noch nicht auf, warte ein paar Minuten und öffne den Link noch einmal.</p>
-      <a class="knopf" href="https://play.google.com/store/apps/details?id=de.achim.watt" target="_blank" rel="noopener">WATT im Play Store</a>
-    </li>
-  </ol>
-  </div>
+<section id="daten" class="abschnitt tafel">
+<div class="innen stapel abstand-40">
+<div class="intro">
+<p class="kicker">Deine Daten</p>
+<h2>Deine Daten bleiben bei dir.</h2>
+<p class="lead">Was du in WATT erfasst, liegt verschlüsselt auf deinem Gerät. Niemand sonst bekommt es zu sehen – auch der Entwickler nicht.</p>
+</div>
+<div class="daten-raster">
+<div><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"></rect><path d="M11 18h2"></path></svg>
+<h3>Nur auf deinem Gerät</h3><p>Kein Konto, kein Server, keine Werbung, kein Tracking.</p></div>
+<div><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7.5a4 4 0 0 1 8 0V11"></path></svg>
+<h3>Verschlüsselt und gesperrt</h3><p>Zugang nur per Fingerabdruck, Gesicht oder Gerätesperre. Auf dem Sperrbildschirm erscheinen nie Tätigkeiten oder Werte.</p></div>
+<div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"></path><circle cx="12" cy="12" r="2.8"></circle><path d="M4 4l16 16"></path></svg>
+<h3>Keine Leistungskontrolle</h3><p>Keine Vergleiche, keine Rankings, kein Dashboard für die Schulleitung. WATT ist für dich – nicht für Dienstgeräte und nicht auf Anordnung.</p></div>
+<div><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.8 2.6 4 5.6 4 9s-1.2 6.4-4 9c-2.8-2.6-4-5.6-4-9s1.2-6.4 4-9z"></path></svg>
+<h3>Internet nur, wenn du willst</h3><p>Ferientermine von der KMK und dein Stundenplan per Kalenderlink. Aus WATT werden dabei keine Daten übertragen.</p></div>
+</div>
+<p class="schluss">Was das Gerät verlässt – Sicherung, Export oder Anzeige – entscheidest du. <a href="doc/privacy.txt" target="_blank" rel="noopener">Datenschutzerklärung der App</a></p>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
 
-  <h2>Gut zu wissen</h2>
-  <ul class="liste">
-    <li><strong>Deine Daten bleiben bei dir.</strong> Was du in WATT erfasst, liegt verschlüsselt auf deinem Gerät. Ich bekomme davon nichts zu sehen.</li>
-    <li><strong>Beta heißt Beta.</strong> Funktionen können sich ändern, entfallen oder bisher fehlen oder fehlerhaft sein. Wir freuen uns über deine Hinweise!</li>
-    <li><strong>Nachweise prüfen.</strong> Wer von dir einen vollständigen Export (JSON oder XML) oder einen Aktenauszug aus WATT bekommt, kann ihn mit <a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a> im Browser prüfen: ob die Aufzeichnungen in sich stimmig sind und zu den Prüfvermerken passen. Die Datei verlässt dabei den Rechner nicht.</li>
-    <li><strong>Aussteigen</strong> kannst du jederzeit: auf der Testseite „Test verlassen“ wählen und die Gruppe verlassen.</li>
-  </ul>
+<section id="laender" class="abschnitt">
+<div class="innen laender-reihe">
+<div>
+<h2>Rechnet nach den Regeln deines Landes</h2>
+<p class="lead">Wochenarbeitszeit, Pflichtstunden, Teilzeit, Ermäßigungen nach Alter und Schwerbehinderung, Urlaub, Ferien und Feiertage: WATT rechnet dein persönliches Soll – für verbeamtete Lehrkräfte aller Schularten. Der Vorbereitungsdienst wird auch unterstützt.</p>
+</div>
+<div>
+<ul class="chips" aria-label="Länder mit Regeldaten">
+<li>Baden-Württemberg</li>
+<li>Bayern</li>
+<li>Berlin</li>
+<li>Brandenburg</li>
+<li>Bremen</li>
+<li>Hessen</li>
+<li>Mecklenburg-Vorpommern</li>
+<li>Niedersachsen</li>
+<li>Nordrhein-Westfalen</li>
+<li>Rheinland-Pfalz</li>
+<li>Saarland</li>
+<li>Sachsen</li>
+<li>Sachsen-Anhalt</li>
+<li>Schleswig-Holstein</li>
+<li>Thüringen</li>
+</ul>
+<p class="leise" style="font-size:15px">Hamburg ist nicht dabei.</p>
+</div>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
 
-  <h2>Was WATT kann</h2>
-  <ul class="liste">
-    <li><strong>Schnell erfassen.</strong> Ein Tipp auf eine Tätigkeit startet den Timer, Vergessenes trägst du nach. Den Unterricht übernimmt WATT aus deinem Stundenplan – von Hand eingetragen, als Kalenderdatei oder automatisch über den Kalenderlink, etwa von WebUntis.</li>
-    <li><strong>Dein Soll nach den Regeln deines Landes.</strong> Wochenarbeitszeit, Pflichtstunden, Teilzeit, Ermäßigungen nach Alter und Schwerbehinderung, Urlaub und Ferien: WATT rechnet dein persönliches Soll und zeigt den Saldo.</li>
-    <li><strong>48-Stunden-Grenze im Blick.</strong> Der Durchschnitt nach dem Maßstab der EU-Arbeitszeitrichtlinie und, wo vorhanden, nach dem deines Dienstherrn.</li>
-    <li><strong>Überlastungsanzeige mit Nachweis.</strong> Anschreiben und Einzelnachweis als PDF; eine Hash-Kette macht jede spätere Änderung an deinen Aufzeichnungen sichtbar.</li>
-    <li><strong>Deputat und Vorbereitungsdienst.</strong> Das Deputatskonto zeigt Mehr- und Minderstunden; Referendarinnen und Referendare rechnen mit der Arbeitszeit im Vorbereitungsdienst.</li>
-    <li><strong>Auswerten und exportieren.</strong> Überblick nach Tätigkeiten, Bericht als PDF, Tabellen für Excel und CSV.</li>
-  </ul>
-  <p class="laender">WATT kennt die Regeln für Lehrerinnen und Lehrer aller Schularten in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, dem Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein und Thüringen.</p>
+<!-- Abschnitt „Mitmachen“: gilt für den geschlossenen Test; mit Produktionszugriff bzw. offenem Test als Ganzes austauschen. -->
+<section id="mitmachen" class="abschnitt weiss">
+<div class="innen stapel abstand-36">
+<div class="intro">
+<p class="kicker">Mitmachen</p>
+<h2>In drei Schritten dabei</h2>
+<p class="lead">WATT läuft als Beta im geschlossenen Test bei Google Play. Mitmachen kann jede Lehrkraft. Verwende überall dasselbe Google-Konto, mit dem du auf deinem Handy den Play Store nutzt.</p>
+</div>
+<ol class="schritte raster raster-280">
+<li class="schritt"><span class="nummer" aria-hidden="true">1</span><h3>Gruppe beitreten</h3>
+<p>Öffne die Gruppe „WATT Tester“ und tippe auf „Gruppe beitreten“. Bestätige im nächsten Fenster noch einmal. Andere Mitglieder sehen weder deinen Namen noch deine Adresse.</p>
+<a class="knopf knopf-voll" href="https://groups.google.com/g/watt-tester" target="_blank" rel="noopener">Zur Gruppe „WATT Tester“</a></li>
+<li class="schritt"><span class="nummer" aria-hidden="true">2</span><h3>Tester:in werden</h3>
+<p>Öffne die Testseite bei Google Play und tippe auf „Tester werden“.</p>
+<a class="knopf knopf-voll" href="https://play.google.com/apps/testing/de.achim.watt" target="_blank" rel="noopener">Zur Testseite bei Google Play</a></li>
+<li class="schritt"><span class="nummer" aria-hidden="true">3</span><h3>App installieren</h3>
+<p>Installiere WATT aus dem Play Store. Taucht die App noch nicht auf, warte ein paar Minuten und öffne den Link noch einmal.</p>
+<a class="knopf knopf-voll" href="https://play.google.com/store/apps/details?id=de.achim.watt" target="_blank" rel="noopener">WATT im Play Store</a></li>
+</ol>
+<div class="hinweise">
+<p><strong>Beta heißt Beta.</strong> Funktionen können sich ändern, entfallen oder bisher fehlen oder fehlerhaft sein. Hinweise sind willkommen!</p>
+<p><strong>Aussteigen geht jederzeit:</strong> auf der Testseite „Test verlassen“ wählen und die Gruppe verlassen.</p>
+<p><strong>iPhone?</strong> Gibt es leider noch nicht. Ist das Interesse groß genug, kommt eine iPhone-Version in Betracht – <a href="mailto:hans-joachim.steudel@tum.de?subject=WATT%20f%C3%BCrs%20iPhone">schreib gern eine E-Mail</a>.</p>
+</div>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
 
-  <h2>Feedback</h2>
-  <p>Fehler, Wünsche, Fragen? Schreib mir gern: <a href="mailto:hans-joachim.steudel@tum.de">hans-joachim.steudel@tum.de</a></p>
+<section id="unterlagen" class="abschnitt">
+<div class="innen stapel abstand-36">
+<div class="intro">
+<p class="kicker">Unterlagen</p>
+<h2>Zum Lesen und Weitergeben</h2>
+</div>
+<div class="raster raster-240" style="gap:20px">
+<div class="karte-link"><span class="art">PDF · FOLIEN</span><h3 class="titel"><a href="info/watt-warum.pdf" target="_blank" rel="noopener" aria-label="Warum WATT? (PDF)">Warum WATT?</a></h3><p class="text">Gute Gründe, die eigene Arbeitszeit zu erfassen – kurz und knapp, eine Aussage je Folie.</p><p class="aktionen"><a href="info/watt-warum-aushang.pdf" target="_blank" rel="noopener">Aushang A3 (PDF)</a></p></div>
+<div class="karte-link"><span class="art">PDF</span><h3 class="titel"><a href="info/handbuch.pdf" target="_blank" rel="noopener" aria-label="Handbuch (PDF)">Handbuch</a></h3><p class="text">Alle Funktionen Schritt für Schritt, mit Bildern und häufigen Fragen. Dasselbe Handbuch steht in der App unter „Mehr → Hilfe“.</p></div>
+<div class="karte-link"><span class="art">PDF · FOLIEN</span><h3 class="titel"><a href="info/watt-funktionen.pdf" target="_blank" rel="noopener" aria-label="Funktionsüberblick (PDF)">Funktionsüberblick</a></h3><p class="text">Alle Bereiche der App mit Bildschirmfotos.</p></div>
+<div class="karte-link dunkel"><span class="art">FÜR PRÜFENDE</span><h3 class="titel"><a href="pruefen/">Nachweise prüfen</a></h3><p class="text">Du hast einen Export oder Aktenauszug aus WATT bekommen? So prüfst du ihn unabhängig.</p></div>
+</div>
+<div class="ausserdem">
+<span class="titel">Außerdem:</span>
+<span><a class="haupt" href="info/watt-onepager-a3.pdf" target="_blank" rel="noopener">WATT auf einen Blick</a><span>(PDF, A3, zum Aushängen)</span></span>
+<span><a class="haupt" href="info/watt-ueberblick.pdf" target="_blank" rel="noopener">WATT im Überblick</a><span>(PDF, Folien) ·</span><a href="info/quellen.txt" target="_blank" rel="noopener">Quellen zum Vergleich</a></span>
+</div>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
+
+<section id="fragen" class="abschnitt weiss">
+<div class="innen stapel abstand-36">
+<h2>Häufige Fragen</h2>
+<div class="fragen">
+<div><h3>Für wen ist WATT gedacht?</h3><p>Für verbeamtete Lehrerinnen und Lehrer aller Schularten in 15 Ländern; der Vorbereitungsdienst wird auch unterstützt. Hamburg ist nicht dabei. Angestellte Lehrkräfte können WATT nutzen; Rechenregeln und Anschreiben folgen aber dem Beamtenrecht, für sie gilt der Tarifvertrag (TV-L).</p></div>
+<div><h3>Darf meine Schule mir WATT vorschreiben?</h3><p>WATT ist für deine private Aufzeichnung auf deinem eigenen Gerät gedacht, nicht für Dienstgeräte. Eine Nutzung auf Anordnung von Dienstherr oder Schule ist nur mit Genehmigung des Anbieters in Textform erlaubt. Näheres steht in den <a href="doc/license.txt" target="_blank" rel="noopener">Nutzungsbedingungen</a>.</p></div>
+<div><h3>Wird meine Aufzeichnung anerkannt?</h3><p>Das können wir nicht zusagen. WATT ist eine Selbstaufzeichnung: Die Technik macht sichtbar, wann erfasst wurde und ob danach etwas geändert wurde – nicht, ob die Angaben stimmen. WATT ersetzt keine Rechtsberatung.</p></div>
+<div><h3>Ist WATT quelloffen?</h3><p>WATT selbst nicht. Quelloffen ist die Prüf-App WATTest; Datenformat, Schemas und die Technische Erläuterung sind veröffentlicht. Mehr dazu unter <a href="pruefen/">Für Prüfende</a>.</p></div>
+</div>
+<p class="nach-oben"><a href="#oben">Nach oben<span aria-hidden="true"> ↑</span></a></p>
+</div>
+</section>
+
+<section id="kontakt" class="abschnitt kontakt">
+<div class="innen kontakt-reihe">
+<div><h2>Fehler, Wünsche, Fragen?</h2><p class="leise">Schreib gern.</p></div>
+<a class="knopf knopf-rahmen" href="mailto:hans-joachim.steudel@tum.de">hans-joachim.steudel@tum.de</a>
+</div>
+</section>
 </main>
 
-<footer>
-  <nav aria-label="Rechtliches und Unterlagen">
-    <div class="gruppe"><span class="titel">Diese Seite:</span>
-      <a href="doc/impressum.html" target="_blank" rel="noopener">Impressum</a>
-      <a href="doc/datenschutz.html" target="_blank" rel="noopener" aria-label="Datenschutz dieser Seite">Datenschutz</a>
-    </div>
-    <div class="gruppe"><span class="titel">App WATT:</span>
-      <a href="doc/license.txt" target="_blank" rel="noopener" aria-label="Nutzungsbedingungen der App WATT">Nutzungsbedingungen</a>
-      <a href="doc/privacy.txt" target="_blank" rel="noopener" aria-label="Datenschutzerklärung der App WATT">Datenschutzerklärung</a>
-    </div>
-    <div class="gruppe"><span class="titel">Für Prüfende:</span>
-      <a href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a>
-      <a href="https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md" target="_blank" rel="noopener">Datenformat</a>
-      <a href="https://github.com/Aves83/watt_public/tree/main/schema" target="_blank" rel="noopener">Schemas</a>
-      <a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a>
-    </div>
-  </nav>
-  <p>WATT ersetzt keine Rechtsberatung. Durch die Teilnahme am Test entstehen keine Rechte, Ansprüche oder Vorteile.</p>
-  <p>© 2026 Hans-Joachim Steudel. WATT ist proprietär; es gelten die Nutzungsbedingungen.</p>
+<footer class="fuss">
+<div class="innen">
+<div class="fuss-reihe">
+<div class="fuss-marke">
+<div><img src="bild/logo.png" alt="" width="36" height="36"><span>WATT</span></div>
+<p>Workload Analysis &amp; Time-Tracking for Teachers</p>
+</div>
+<nav aria-label="Inhalt, Rechtliches und Unterlagen">
+<div>
+<span class="titel">Inhalt</span>
+<a href="#warum">Deine Arbeit</a>
+<a href="#funktionen">Funktionen</a>
+<a href="#daten">Deine Daten</a>
+<a href="#laender">Länder</a>
+<a href="#mitmachen">Mitmachen</a>
+<a href="#unterlagen">Unterlagen</a>
+<a href="#fragen">Fragen</a>
+<a href="#kontakt">Kontakt</a>
+</div>
+<div>
+<span class="titel">Diese Seite</span>
+<a href="doc/impressum.html">Impressum</a>
+<a href="doc/datenschutz.html" aria-label="Datenschutz dieser Seite">Datenschutz</a>
+</div>
+<div>
+<span class="titel">App WATT</span>
+<a href="doc/license.txt" target="_blank" rel="noopener" aria-label="Nutzungsbedingungen der App WATT">Nutzungsbedingungen</a>
+<a href="doc/privacy.txt" target="_blank" rel="noopener" aria-label="Datenschutzerklärung der App WATT">Datenschutzerklärung</a>
+</div>
+<div>
+<span class="titel">Für Prüfende</span>
+<a href="pruefen/">Nachweise prüfen</a>
+<a href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a>
+<a href="https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md" target="_blank" rel="noopener">Datenformat</a>
+<a href="https://github.com/Aves83/watt_public/tree/main/schema" target="_blank" rel="noopener">Schemas</a>
+<a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a>
+</div>
+</nav>
+</div>
+<div class="fuss-klein">
+<p>WATT ersetzt keine Rechtsberatung. Durch die Teilnahme am Test entstehen keine Rechte, Ansprüche oder Vorteile.</p>
+<p>© 2026 Hans-Joachim Steudel. WATT ist proprietär; es gelten die Nutzungsbedingungen.</p>
+</div>
+</div>
 </footer>
-<img src="https://github.com/Aves83/watt_public/releases/download/zaehler/p.gif" width="1" height="1" alt="" referrerpolicy="no-referrer" style="position:absolute;left:0;bottom:0;opacity:0;pointer-events:none">
+<img class="zaehler" src="https://github.com/Aves83/watt_public/releases/download/zaehler/p.gif" width="1" height="1" alt="" referrerpolicy="no-referrer">
 </body>
 </html>

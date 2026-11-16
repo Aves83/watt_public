@@ -2,22 +2,33 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Impressum – WATT</title>
-<style>
-:root{--bg:#fff;--fg:#1d1d1f;--leise:#555}
-@media (prefers-color-scheme:dark){:root{--bg:#16171a;--fg:#e8e8ea;--leise:#aaa}}
-body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;max-width:640px;margin:0 auto;padding:24px 16px}
-h1{font-size:1.4rem;margin:0 0 1rem}
-p{margin:0 0 1rem}
-a{color:inherit}
-.leise{color:var(--leise);font-size:.92rem}
-</style>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="../bild/logo.png">
+<link rel="stylesheet" href="../stil.css">
 </head>
-<body>
+<body class="unter">
+<header class="kopf" id="oben">
+<div class="innen kopf-zeile">
+<a class="marke" href="../"><img src="../bild/logo.png" alt="Logo von WATT: Tacho auf einer Kreidetafel" width="44" height="44"><span>WATT</span></a>
+<nav aria-label="Hauptnavigation">
+<a class="nav-link" href="../">Startseite</a>
+<a class="nav-link" href="../pruefen/">Für Prüfende</a>
+<a class="knopf knopf-gelb" href="../#mitmachen">Jetzt mitmachen</a>
+</nav>
+</div>
+<nav class="innen nav-mobil" aria-label="Bereiche der Seite">
+<a href="../">Startseite</a>
+<a href="../pruefen/">Für Prüfende</a>
+</nav>
+</header>
+
+<main class="recht">
+<div class="innen">
 <h1>Impressum</h1>
-<p class="leise">Angaben gemäß § 5 DDG</p>
+<p class="klein">Angaben gemäß § 5 DDG</p>
 <p>Hans-Joachim Steudel<br>
 Manzostr. 34<br>
 80997 München</p>
@@ -25,6 +36,54 @@ Manzostr. 34<br>
 E-Mail: <a href="mailto:hans-joachim.steudel@tum.de">hans-joachim.steudel@tum.de</a></p>
 <p>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:<br>
 Hans-Joachim Steudel, Anschrift wie oben</p>
-<p class="leise"><a href="../">Zurück zur Startseite</a></p>
+<p class="klein"><a href="../">Zurück zur Startseite</a></p>
+</div>
+</main>
+
+<footer class="fuss">
+<div class="innen">
+<div class="fuss-reihe">
+<div class="fuss-marke">
+<div><img src="../bild/logo.png" alt="" width="36" height="36"><span>WATT</span></div>
+<p>Workload Analysis &amp; Time-Tracking for Teachers</p>
+</div>
+<nav aria-label="Inhalt, Rechtliches und Unterlagen">
+<div>
+<span class="titel">Inhalt</span>
+<a href="../#warum">Deine Arbeit</a>
+<a href="../#funktionen">Funktionen</a>
+<a href="../#daten">Deine Daten</a>
+<a href="../#laender">Länder</a>
+<a href="../#mitmachen">Mitmachen</a>
+<a href="../#unterlagen">Unterlagen</a>
+<a href="../#fragen">Fragen</a>
+<a href="../#kontakt">Kontakt</a>
+</div>
+<div>
+<span class="titel">Diese Seite</span>
+<a href="#oben" aria-current="page">Impressum</a>
+<a href="../doc/datenschutz.html" aria-label="Datenschutz dieser Seite">Datenschutz</a>
+</div>
+<div>
+<span class="titel">App WATT</span>
+<a href="../doc/license.txt" target="_blank" rel="noopener" aria-label="Nutzungsbedingungen der App WATT">Nutzungsbedingungen</a>
+<a href="../doc/privacy.txt" target="_blank" rel="noopener" aria-label="Datenschutzerklärung der App WATT">Datenschutzerklärung</a>
+</div>
+<div>
+<span class="titel">Für Prüfende</span>
+<a href="../pruefen/">Nachweise prüfen</a>
+<a href="https://github.com/Aves83/watt_public/blob/main/doc/technische-erlaeuterung.md" target="_blank" rel="noopener">Technische Erläuterung</a>
+<a href="https://github.com/Aves83/watt_public/blob/main/doc/datenformat.md" target="_blank" rel="noopener">Datenformat</a>
+<a href="https://github.com/Aves83/watt_public/tree/main/schema" target="_blank" rel="noopener">Schemas</a>
+<a href="https://aves83.github.io/wattest/" target="_blank" rel="noopener">WATTest</a>
+</div>
+</nav>
+</div>
+<div class="fuss-klein">
+<p>WATT ersetzt keine Rechtsberatung. Durch die Teilnahme am Test entstehen keine Rechte, Ansprüche oder Vorteile.</p>
+<p>© 2026 Hans-Joachim Steudel. WATT ist proprietär; es gelten die Nutzungsbedingungen.</p>
+</div>
+</div>
+</footer>
 </body>
 </html>
