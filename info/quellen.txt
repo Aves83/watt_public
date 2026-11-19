@@ -1,6 +1,6 @@
 WATT – Quellen zum Vergleich in watt-ueberblick.pdf (Folie 11 „Andere Lösungen im Überblick“)
 
-Stand: 30.10.2026. Alle Seiten am 30.10.2026 abgerufen (Deutschland, Sprache Deutsch).
+Stand: 30.10.2026. Alle Seiten am 30.10.2026 abgerufen und am 18. und 19.11.2026 erneut geprüft, ohne Änderung der Bewertungen (Deutschland, Sprache Deutsch).
 Zeichen: ● ja (auch als Beta) · ◐ teilweise · – nein · ? nicht bekannt (vom Anbieter nicht genannt) · n. a. nicht anwendbar
 
 Ohne Gewähr: Die Angaben stammen aus öffentlich zugänglichen Quellen. Anbieter entwickeln ihre Produkte weiter – bitte selbst prüfen. Hinweise auf Fehler gern an hans-joachim.steudel@tum.de.
@@ -23,13 +23,13 @@ QUELLEN
 BEWERTUNGEN UND IHRE HERKUNFT
 
 WATT
-- App: Android / Apple / Web ● (Beta) / – / –: geschlossener Test bei Google Play
+- App: Android / Apple / Web ● / – / –: bei Google Play
 
 LehrZeit
 - Daten nur auf dem Gerät –: „Server in Deutschland“; App und Browser zeigen dieselben Zeiten [1][2]
 - Zugriff nur durch dich selbst ●: „Kein Schulleitungs-Zugriff, keine Leistungskontrolle“, „ausschließlich die Lehrkraft selbst“ [1]
 - Selbst wählbar ●: Einzellizenz für die einzelne Lehrkraft [1][2]
-- Kostenlos für die Lehrkraft –: Einzellizenz 4,00 € im Monat, 14 Tage kostenlos testen [1][2]; für Mitglieder der GEW Hessen kostenlos, GEW Berlin und Baden-Württemberg stellen Mitgliedern einen Zugang bereit [3]
+- Kostenlos für die Lehrkraft –: Einzellizenz 4,00 € im Monat [1], 14 Tage kostenlos testen [2]; für Mitglieder der GEW Hessen kostenlos, GEW Berlin und Baden-Württemberg stellen Mitgliedern einen Zugang bereit [3]
 - App: Android / Apple / Web ● / – / ●: Google Play [2]; iPhone-App „folgt in Kürze im App Store“ [1]; Browser auf PC, Tablet und Smartphone [1]
 
 Stundenwart
@@ -43,7 +43,7 @@ MiZei
 - Daten nur auf dem Gerät –: „cloudbasiert“, „Speicherung in Deutschland“ [6][7]
 - Zugriff nur durch dich selbst ◐: als Einzelnutzer:in nur selbst; mit Lizenz über Schule oder Ministerium „ermöglicht [die Benutzerverwaltung] es deiner Organisation, … Abwesenheiten einzusehen, Überstunden auszuwerten“ [6][7]; ein Dashboard mit „detaillierte[m] Überblick über alle Daten“ für Schulleitung und Ministerium ist „demnächst verfügbar“ [5]
 - Selbst wählbar ●: Einzelnutzung möglich [5][6][7]
-- Kostenlos für die Lehrkraft –: 1 € im Monat bzw. 10 € im Jahr, 4 Wochen kostenlos testen [5][6]; GEW Bayern übernimmt für Mitglieder die Kosten für ein Schuljahr [3]
+- Kostenlos für die Lehrkraft –: 1 € im Monat bzw. 10 € im Jahr [5], 4 Wochen kostenlos testen [6][7]; GEW Bayern übernimmt für Mitglieder die Kosten für ein Schuljahr [3]
 - App: Android / Apple / Web ● / ● / ●: Google Play [6], App Store [7], Web-App [5]
 
 Untis Arbeitszeit (Pilot Bremen 2026/27; Name nach [10])
