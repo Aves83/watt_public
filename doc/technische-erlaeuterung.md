@@ -1,8 +1,8 @@
-Stand: 2026-11-12 (YYYY-MM-DD)
+Stand: 2026-11-14 (YYYY-MM-DD)
 
 # Technische Erläuterung: Nachvollziehbarkeit und Fälschungssicherheit in WATT
 
-WATT-Version: 0.8.126 · Stand: 13.11.2026
+WATT-Version: 0.99.131 · Stand: 19.11.2026
 
 ## 1. Zweck
 
@@ -911,8 +911,8 @@ Version  Fassung                     Neu für die Prüfung
                                      Schlüssel im Abschnitt (4.7); Aufbau des
                                      ZIPs mit Ordnern, Dateinamen, „ (n)“ bei
                                      gleichen Namen, SHA256SUMS.txt (6.3)
-20       WATT „F“, noch nicht        Antrag auf Zeitausgleich als zweite Art von
-         ausgeliefert                Schreiben neben der Überlastungsanzeige
+20       WATT „Felsenbirne“,         Antrag auf Zeitausgleich als zweite Art von
+         13.11.2026                  Schreiben neben der Überlastungsanzeige
                                      (art); Einträge der Nachweiskette und
                                      Prüfsumme unverändert, Inhaltsstufe beim
                                      Antrag immer AUSSAGE mit Zeitraum (5., 5.1)
