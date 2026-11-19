@@ -1,4 +1,4 @@
-Stand: 2026-11-14 (YYYY-MM-DD)
+Stand: 2026-11-19 (YYYY-MM-DD)
 
 # Datenformat `watt-daten`
 
@@ -8,11 +8,11 @@ WATT exportiert die erfassten Daten im Format `watt-daten` als JSON oder als XML
 
 | Version | Schemata | Genutzt von | JSON einlesbar bis |
 | --- | --- | --- | --- |
-| 20 | `watt-daten-20.schema.json`, `watt-daten-20.xsd` | WATT 0.8.126 „Felsenbirne“ | WATT 0.8.126 „Felsenbirne“ |
-| 19 | `watt-daten-19.schema.json`, `watt-daten-19.xsd` | WATT 0.8.111 „Drachenfrucht“, WATT 0.8.118 „Erdbeere“ | WATT 0.8.126 „Felsenbirne“ |
-| 18 | `watt-daten-18.schema.json`, `watt-daten-18.xsd` | WATT 0.8.109 „Cherimoya“ | WATT 0.8.126 „Felsenbirne“ |
-| 17 | `watt-daten-17.schema.json` | WATT 0.8.100 „Bergamotte“ | WATT 0.8.126 „Felsenbirne“ |
-| 16 | `watt-daten-16.schema.json` | WATT 0.8.94 „Apfel“ | WATT 0.8.126 „Felsenbirne“ |
+| 20 | `watt-daten-20.schema.json`, `watt-daten-20.xsd` | WATT 0.8.126 „Felsenbirne“, WATT 0.99.131 „Granatapfel“ | WATT 0.99.131 „Granatapfel“ |
+| 19 | `watt-daten-19.schema.json`, `watt-daten-19.xsd` | WATT 0.8.111 „Drachenfrucht“, WATT 0.8.118 „Erdbeere“ | WATT 0.99.131 „Granatapfel“ |
+| 18 | `watt-daten-18.schema.json`, `watt-daten-18.xsd` | WATT 0.8.109 „Cherimoya“ | WATT 0.99.131 „Granatapfel“ |
+| 17 | `watt-daten-17.schema.json` | WATT 0.8.100 „Bergamotte“ | WATT 0.99.131 „Granatapfel“ |
+| 16 | `watt-daten-16.schema.json` | WATT 0.8.94 „Apfel“ | WATT 0.99.131 „Granatapfel“ |
 
 „Genutzt von“ nennt die Fassungen von WATT, die diese Version schreiben, „JSON einlesbar bis“ die neueste Fassung, die eine JSON-Datei dieser Version einlesen kann. Die kleinste lesbare Formatversion ist 16. Dateien der Versionen 1 bis 15 stammen aus Vorabversionen vor WATT 0.8.94 „Apfel“; WATT lehnt sie ab („Diese Datei ist zu alt.“), Schemas gibt es für sie nicht.
 
