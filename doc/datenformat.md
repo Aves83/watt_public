@@ -1,4 +1,4 @@
-Stand: 2026-11-14 (YYYY-MM-DD)
+Stand: 2026-11-19 (YYYY-MM-DD)
 
 # Datenformat von WATT
 
@@ -30,13 +30,13 @@ WATT speichert alle Daten verschlüsselt auf dem Gerät. Damit sie der Lehrkraft
 
 ## Projektstatus und Kompatibilität
 
-Derzeit **private Beta** (F-108).
+Veröffentlicht seit **Fassung G** (0.99, Produktion bei Google Play, November 2026). Nach F-108 ist die Kompatibilität des Datenformats und der Datenbank seitdem verbindlich:
 
-Kompatibilität des Datenformats und der Datenbank nach Projektstatus (F-108):
+- Jede veröffentlichte Formatversion ab 16 bleibt dauerhaft einlesbar.
+- Datenbank-Migrationen von jeder veröffentlichten Version ab Schema 21 (erste über Google Play verteilte Fassung) laufen ohne Datenverlust.
+- Zu jeder ausgelieferten AAB liegt eine Beispieldatei im Repository, die ein Test einliest (siehe unten, F-224).
 
-- Private Beta: keine Zusage.
-- Öffentliche Beta: Wir bemühen uns um Kompatibilität, ohne Zusage.
-- Nach der öffentlichen Beta (stabile Version) verbindlich: Jede veröffentlichte Formatversion bleibt dauerhaft einlesbar, Datenbank-Migrationen von jeder veröffentlichten Version laufen ohne Datenverlust, und je veröffentlichter Formatversion liegt eine Beispieldatei im Repository, die ein Test einliest.
+Bis Fassung F galt die private Beta ohne Zusage; eine öffentliche Beta gab es nicht.
 
 ## Dateien
 
@@ -336,7 +336,7 @@ Seit dem 16.10.2026 (F-223) exportiert WATT den Klartext wahlweise als XML (`Xml
 
 Die öffentliche Beschreibung des Formats liegt in `docs/schnittstelle/` (Lizenz CC BY 4.0, F-223): je Formatversion ab 16 ein JSON Schema (Draft 2020-12) `watt-daten-<Version>.schema.json`, je Formatversion ab 17 das XML Schema `watt-daten-<Version>.xsd` (veröffentlicht ab 18, siehe „XML-Darstellung“; jede bleibt dauerhaft liegen, E-544) und `README.md`. Die Schemas beschreiben genau die Felder, die WATT schreibt; Pflichtfelder sind die, ohne die WATT eine Datei ablehnt. `SchnittstellenTest` prüft den JSON- und den XML-Export gegen die Schemas, veröffentlicht sind nur die Formatversionen ausgelieferter AABs und dort genau die Dateien der Spalte „Schemata“ der Tabelle „Versionen“ in der README (E-574); ihre öffentliche Kopie liegt im Repository watt_public im Ordner `schema/` (https://github.com/Aves83/watt_public/tree/main/schema, `scripts/schnittstelle-oeffentlich.ps1`). Dort liegen genau die veröffentlichten Versionen mit ihrer README, im Stand der zuletzt ausgelieferten AAB (`.claude/rules/oeffentliche-dateien.md`). Die App verweist unter „Mehr → Hilfe → Schnittstellen (JSON, XML)“ darauf.
 
-Zu jeder an Testende ausgelieferten AAB (`docs/RELEASES.md`) liegt unter `core/data/src/test/resources/formate/` eine Beispieldatei als Klartext `<name>-<version>.json` und als Sicherung `<name>-<version>.wattbak` (Passphrase `beispiel-<name>`), erzeugt mit dem Code des ausgelieferten Commits; jedes Listenfeld darin ist in mindestens einem Vorkommen belegt (F-224, F-108, E-879). `FormatbeispieleTest` liest alle Dateien mit dem aktuellen Code, prüft Version, Elementzahlen, beide Ketten, das JSON gegen das Schema seiner Version und ab Version 17 die XML-Darstellung gegen die XSD ihrer Version. Vorhanden: `apfel-16` (Commit 297ea40), `bergamotte-17` (Commit 32581af), `cherimoya-18` (Commit c3ff686; mit Arztbesuch, Schulfahrt, Ferien jeder Art, Geburtsmonat, eingelesenen Einträgen und dem Glied `uhr_abweichung`) und `drachenfrucht-19` (Commit f466532; dazu Uhrstand je Glied, das Glied `uhr_verstellt`, `kettenschluessel` und `kettensignaturen` der signierten Kette sowie Anhänge an der Anzeige; die Zertifikatskette stammt aus der Testumgebung, nicht aus der Attestierung eines Geräts), `erdbeere-19` (Commit d0fb4a6; derselbe Umfang ohne Schulfahrt, Geburtsmonat und Ferien von Hand, mit dem Code von 0.8.118 „Erdbeere“) und `felsenbirne-20` (Commit b64e648; der Umfang von `drachenfrucht-19` mit dem Code von 0.8.126 „Felsenbirne“, dazu eine dreitägige Schulfahrt und ein gesendeter Antrag auf Zeitausgleich für sie, `art` `ZEITAUSGLEICH`, Stufe `AUSSAGE`, Zeitraum gesetzt, ohne Kopien, Notizen und Anhänge, einziges Dokument das Anschreiben; die Nachweiskette hat vier Glieder: `ANZEIGE_GESENDET` für die Überlastungsanzeige, `GESPRAECHSNOTIZ_GESPEICHERT`, `NACHTRAG` und `ANZEIGE_GESENDET` für den Antrag).
+Zu jeder ausgelieferten AAB (`docs/RELEASES.md`) liegt unter `core/data/src/test/resources/formate/` eine Beispieldatei als Klartext `<name>-<version>.json` und als Sicherung `<name>-<version>.wattbak` (Passphrase `beispiel-<name>`), erzeugt mit dem Code des ausgelieferten Commits; jedes Listenfeld darin ist in mindestens einem Vorkommen belegt (F-224, F-108, E-879). `FormatbeispieleTest` liest alle Dateien mit dem aktuellen Code, prüft Version, Elementzahlen, beide Ketten, das JSON gegen das Schema seiner Version und ab Version 17 die XML-Darstellung gegen die XSD ihrer Version. Vorhanden: `apfel-16` (Commit 297ea40), `bergamotte-17` (Commit 32581af), `cherimoya-18` (Commit c3ff686; mit Arztbesuch, Schulfahrt, Ferien jeder Art, Geburtsmonat, eingelesenen Einträgen und dem Glied `uhr_abweichung`) und `drachenfrucht-19` (Commit f466532; dazu Uhrstand je Glied, das Glied `uhr_verstellt`, `kettenschluessel` und `kettensignaturen` der signierten Kette sowie Anhänge an der Anzeige; die Zertifikatskette stammt aus der Testumgebung, nicht aus der Attestierung eines Geräts), `erdbeere-19` (Commit d0fb4a6; derselbe Umfang ohne Schulfahrt, Geburtsmonat und Ferien von Hand, mit dem Code von 0.8.118 „Erdbeere“), `felsenbirne-20` (Commit b64e648; der Umfang von `drachenfrucht-19` mit dem Code von 0.8.126 „Felsenbirne“, dazu eine dreitägige Schulfahrt und ein gesendeter Antrag auf Zeitausgleich für sie, `art` `ZEITAUSGLEICH`, Stufe `AUSSAGE`, Zeitraum gesetzt, ohne Kopien, Notizen und Anhänge, einziges Dokument das Anschreiben; die Nachweiskette hat vier Glieder: `ANZEIGE_GESENDET` für die Überlastungsanzeige, `GESPRAECHSNOTIZ_GESPEICHERT`, `NACHTRAG` und `ANZEIGE_GESENDET` für den Antrag) und `granatapfel-20` (Commit 992de56; derselbe Umfang wie `felsenbirne-20` mit dem Code von 0.99.131 „Granatapfel“, ebenfalls mit gesendeter Überlastungsanzeige, gesendetem Antrag auf Zeitausgleich und denselben vier Gliedern der Nachweiskette). Teilen sich zwei AABs eine Formatversion, prüft der byteweise Rundlauf jede Beispieldatei dieser Version.
 
 ## Verschlüsselte Sicherung
 
